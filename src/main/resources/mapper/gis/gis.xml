@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gis.dao.IGisDao">
+
+	<select id="selectCarNum" resultType="String">
+		SELECT
+			DISTINCT(car)
+		FROM
+			temp.temp_gps
+	</select>
+	
+	<select id="selectTempGpsData" resultType="com.gis.dto.GpsTempData">
+		SELECT
+			x,
+			y
+		FROM
+			temp.temp_gps
+		WHERE
+			car = #{carNum}	
+	</select>
+	
+	<select id="selectTempNoiseData" resultType="com.gis.dto.NoiseTempData">
+		SELECT
+			noise_level AS noiseLevel
+		FROM
+			temp.temp_noise
+		WHERE
+			car = #{carNum}
+	</select>
+	
+	<select id="selectTempRpmData" resultType="com.gis.dto.RpmTempData">
+		SELECT
+			rpm_level AS rpmLevel
+		FROM
+			temp.temp_rpm
+		WHERE
+			car = #{carNum}
+	</select>
+	
+	<insert id="insertLocalData">
+		INSERT INTO 
+			public.local_data (id, car, date, time, x, y, noise_level, rpm_level, geom, is_done)
+		VALUES
+			(nextval('local_sequence'), #{localData.car},#{localData.date},#{localData.time},#{localData.x},#{localData.y},#{localData.noiseLevel},#{localData.rpmLevel}, ST_SetSRID(ST_MakePoint(#{localData.x},#{localData.y}), 4326), #{localData.is_done})
+	</insert>
+	
+	<delete id="deleteTempGpsTable">
+		DELETE FROM temp.temp_gps
+	</delete>
+	
+	<delete id="deleteTempNoiseTable">
+		DELETE FROM temp.temp_noise
+	</delete>
+	
+	<delete id="deleteTempRpmTable">
+		DELETE FROM temp.temp_rpm
+	</delete>
+	
+	<insert id="insertGpsTempData">
+		INSERT INTO TEMP_GPS (id, car, date, time, x,y)
+		VALUES ( nextval('temp_gps_sequence'), #{gtd.car}, #{gtd.date}, #{gtd.time}, #{gtd.x}, #{gtd.y})
+	</insert>
+	
+	<insert id="insertNoiseTempData">
+		INSERT INTO TEMP_NOISE (id, car, date, time, noise_level)
+		VALUES ( nextval('temp_noise_sequence'), #{ntd.car}, #{ntd.date}, #{ntd.time}, #{ntd.noiseLevel})
+	</insert>
+	
+	<insert id="insertRpmTempData">
+		INSERT INTO TEMP_RPM (id, car, date, time, rpm_level)
+		VALUES ( nextval('temp_rpm_sequence'), #{rtd.car}, #{rtd.date}, #{rtd.time}, #{rtd.rpmLevel})
+	</insert>
+	
+</mapper>
