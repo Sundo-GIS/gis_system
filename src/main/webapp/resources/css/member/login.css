@@ -1,0 +1,26 @@
+body {
+    background-color: #f6f6f6;
+}
+.signup-btn, .login-btn {
+    width: 48%;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+.login-btn {
+    background-color: #bd445b;
+    color: white;
+}
+.login-btn:hover {
+    background-color: #a73147;
+    color: white;
+}
+.signup-btn {
+    margin-left: auto;
+    background-color: #293661;
+    color: white;
+}
+.signup-btn:hover {
+    background-color: #161d33;
+    color: white;
+}

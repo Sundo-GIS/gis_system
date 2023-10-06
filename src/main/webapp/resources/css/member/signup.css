@@ -1,0 +1,16 @@
+body {
+    background-color: #f6f6f6;
+}
+.signup-btn {
+	cursor: pointer;
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+    border: none;
+    background-color: #bd445b;
+    color: white;
+}
+.signup-btn:hover {
+    background-color: #a73147;
+    color: white;
+}

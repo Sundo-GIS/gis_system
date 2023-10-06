@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gis.dao.member.IMemberDao">
+
+	<!-- 로그인 아이디로 회원 찾기 -->
+    <select id="findByLoginId" resultType="com.gis.dto.member.MemberDto">
+        SELECT * FROM member WHERE login_id = #{loginId}
+    </select>
+    
+    <!-- 회원가입 -->
+    <insert id="insertMember" parameterType="com.gis.dto.member.MemberDto">
+    	INSERT INTO member(login_id, password, salt) VALUES (#{loginId}, #{password}, #{salt})
+    </insert>
+    
+</mapper>
