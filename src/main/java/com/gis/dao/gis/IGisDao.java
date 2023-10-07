@@ -1,14 +1,15 @@
-package com.gis.dao;
+package com.gis.dao.gis;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.gis.dto.GpsTempData;
-import com.gis.dto.LocalData;
-import com.gis.dto.NoiseTempData;
-import com.gis.dto.RpmTempData;
+import com.gis.dto.gis.DateCoord;
+import com.gis.dto.gis.GpsTempData;
+import com.gis.dto.gis.LocalData;
+import com.gis.dto.gis.NoiseTempData;
+import com.gis.dto.gis.RpmTempData;
 
 @Mapper
 public interface IGisDao {
@@ -51,4 +52,29 @@ public interface IGisDao {
 	public void insertGpsTempData(GpsTempData gtd);
 	public void insertNoiseTempData(NoiseTempData ntd);
 	public void insertRpmTempData(RpmTempData rtd);
+	/**
+	 * 달력 날짜 누르면 운행 시간 계산
+	 * @author 여수한
+	 */
+	public String selectCleanTime(@Param("date") String date);
+	/**
+	 * 달력 날짜 누르면 청소 비율 계산
+	 * @author 여수한
+	 */
+	public int selectCleanRatio();
+	/**
+	 * 달력 날짜 누르면 전체 운행거리 계산
+	 * @author 여수한
+	 */
+	public int selectTotalDistance();
+	/**
+	 * 달력 날짜 누르면 청소 운행거리 계산
+	 * @author 여수한
+	 */
+	public int selectCleanDistance();
+	/**
+	 * 달력 날짜 누르면 해당 날짜의 좌표 데이터 조회
+	 * @author 여수한
+	 */
+	public DateCoord selectDateCoord(@Param("date")String date, @Param("carNum")String carNum);
 }

@@ -14,6 +14,11 @@
     
 	<button type="button" class="start">스케줄러 시작</button>
 	<button type="button" class="stop">스케줄러 종료</button>
+	
+	<button type="button" class="cleanTime">날짜계산</button>
+	
+	<button type="button" class="coord">좌표 계산</button>
+	
 	<script>
 	$(".start").click(function() {
 		var hour = document.getElementById("hour").value*60*60*1000;
@@ -26,7 +31,7 @@
 		}
 		$.ajax({
 			type : "GET",
-			url : "/scheduled/start", // 시작 요청을 보낼 엔드포인트 URL
+			url : "/gis/start", // 시작 요청을 보낼 엔드포인트 URL
 			data: { time: time },
 			success : function() {
 				alert("스케줄러가 시작되었습니다.");
@@ -41,12 +46,41 @@
 	$(".stop").click(function() {
 		$.ajax({
 			type : "GET",
-			url : "/scheduled/stop", // 종료 요청을 보낼 엔드포인트 URL
+			url : "/gis/stop", // 종료 요청을 보낼 엔드포인트 URL
 			success : function() {
 				alert("스케줄러가 종료되었습니다.");
 			},
 			error : function() {
 				alert("스케줄러 종료에 실패했습니다.");
+			}
+		});
+	});
+	
+	$(".cleanTime").click(function() {
+		$.ajax({
+			type : "GET",
+			url : "/gis/statistics", // 시작 요청을 보낼 엔드포인트 URL
+			success : function() {
+				alert("스케줄러가 시작되었습니다.");
+			},
+			error : function() {
+				alert("스케줄러 시작에 실패했습니다.");
+			}
+		});
+	});
+	
+	$(".coord").click(function() {
+		// 날짜 데이터
+		// 차량 데이터
+		
+		$.ajax({
+			type : "GET",
+			url : "/gis/coord", // 시작 요청을 보낼 엔드포인트 URL
+			success : function(data) {
+				alert(data.x + " " + data.y);
+			},
+			error : function() {
+				alert("스케줄러 시작에 실패했습니다.");
 			}
 		});
 	});
