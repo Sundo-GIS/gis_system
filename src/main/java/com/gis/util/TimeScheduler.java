@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Component;
 
-import com.gis.service.IGisService;
+import com.gis.service.gis.IGisService;
 
 import lombok.RequiredArgsConstructor;
 

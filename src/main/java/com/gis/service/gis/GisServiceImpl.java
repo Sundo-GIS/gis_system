@@ -1,4 +1,4 @@
-package com.gis.service;
+package com.gis.service.gis;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,17 +7,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.gis.dao.IGisDao;
-import com.gis.dto.GpsTempData;
-import com.gis.dto.LocalData;
-import com.gis.dto.NoiseTempData;
-import com.gis.dto.RpmTempData;
+import com.gis.dao.gis.IGisDao;
+import com.gis.dto.gis.DateCoord;
+import com.gis.dto.gis.GpsTempData;
+import com.gis.dto.gis.LocalData;
+import com.gis.dto.gis.NoiseTempData;
+import com.gis.dto.gis.RpmTempData;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class GisServiceImpl implements IGisService {
 
 	private final IGisDao gisDao;
@@ -67,18 +69,30 @@ public class GisServiceImpl implements IGisService {
 		List<NoiseTempData> tnd = gisDao.selectTempNoiseData(carNum);
 		int totalNoise = 0;
 		int avgNoise = 0;
+		int tndSize = 0;
+		int lowNoise = 60;
+		int highNoise = 140;
 		for(int i=0; i<tnd.size(); i++) {
-			totalNoise += tnd.get(i).getNoiseLevel();
+			if(tnd.get(i).getNoiseLevel()>lowNoise&&tnd.get(i).getNoiseLevel()<highNoise) {
+				totalNoise += tnd.get(i).getNoiseLevel();	
+				tndSize++;
+			}
 		}
-		avgNoise = totalNoise/tnd.size();
+		avgNoise = totalNoise/tndSize;
 		// 진동 데이터 추출
 		List<RpmTempData> trd = gisDao.selectTempRpmData(carNum);
 		int totalRpm = 0;
 		int avgRpm = 0;
+		int trdSize = 0;
+		int lowRpm = 1000;
+		int highRpm = 2500;
 		for(int i=0; i<trd.size(); i++) {
-			totalRpm += trd.get(i).getRpmLevel();
+			if(trd.get(i).getRpmLevel()>lowRpm && trd.get(i).getRpmLevel() < highRpm) {
+				totalRpm += trd.get(i).getRpmLevel();
+				trdSize++;
+			}
 		}
-		avgRpm = totalRpm/trd.size();
+		avgRpm = totalRpm/trdSize;
 		// 소음 80이상 and 진동 1500이상 = true
 		boolean is_done = false;
 		if(avgNoise>=80&&avgRpm>=1500) {
@@ -107,31 +121,79 @@ public class GisServiceImpl implements IGisService {
 		gisDao.deleteTempRpmTable();
 	}
 	/**
-	 * Temp Table에 데이터 넣기
+	 * Temp Table에 GPS, Noise, Rpm 데이터 넣기
 	 * @author 여수한
 	 */
 	@Override
 	public void insertGpsTempData(GpsTempData gtd) {
-		String date = getCurrentDateFormatted();
-		String time = getCurrentTimeFormatted();
-		gtd.setDate(date);
-		gtd.setTime(time);
+//		String date = getCurrentDateFormatted();
+//		String time = getCurrentTimeFormatted();
+//		gtd.setDate(date);
+//		gtd.setTime(time);
 		gisDao.insertGpsTempData(gtd);
 	}
 	@Override
 	public void insertNoiseTempData(NoiseTempData ntd) {
-		String date = getCurrentDateFormatted();
-		String time = getCurrentTimeFormatted();
-		ntd.setDate(date);
-		ntd.setTime(time);
+//		String date = getCurrentDateFormatted();
+//		String time = getCurrentTimeFormatted();
+//		ntd.setDate(date);
+//		ntd.setTime(time);
 		gisDao.insertNoiseTempData(ntd);
 	}
 	@Override
 	public void insertRpmTempData(RpmTempData rtd) {
-		String date = getCurrentDateFormatted();
-		String time = getCurrentTimeFormatted();
-		rtd.setDate(date);
-		rtd.setTime(time);
+//		String date = getCurrentDateFormatted();
+//		String time = getCurrentTimeFormatted();
+//		rtd.setDate(date);
+//		rtd.setTime(time);
 		gisDao.insertRpmTempData(rtd);
+	}
+	/**
+	 * 달력 날짜 누르면 운행 시간 계산
+	 * @author 여수한
+	 */
+	@Override
+	public String selectDateCleanTime(String date) {
+		String cleanTime = gisDao.selectCleanTime(date);
+		log.info(cleanTime);
+		return cleanTime;
+	}
+	/**
+	 * 달력 날짜 누르면 청소 비율 계산
+	 * @author 여수한
+	 */
+	@Override
+	public int selectDateCleanRatio(String date) {
+		int cleanRatio = gisDao.selectCleanRatio();
+		return cleanRatio;
+	}
+	/**
+	 * 달력 날짜 누르면 전체 운행거리 계산
+	 * @author 여수한
+	 */
+	@Override
+	public int selectDateTotalDistance(String date) {
+		int totalDistance = gisDao.selectTotalDistance();
+		return totalDistance;
+	}
+	/**
+	 * 달력 날짜 누르면 청소 운행거리 계산
+	 * @author 여수한
+	 */
+	@Override
+	public int selectDateCleanDistance(String date) {
+		int cleanDistance = gisDao.selectCleanDistance();
+		return cleanDistance;
+	}
+	/**
+	 * 달력 날짜 누르면 해당 날짜의 좌표 데이터 조회
+	 * @author 여수한
+	 */
+	@Override
+	public DateCoord selectDateCoord(String date, String carNum) {
+		log.info(date + carNum);
+		DateCoord dc = gisDao.selectDateCoord(date, carNum);
+		log.info(dc);
+		return dc;
 	}
 }

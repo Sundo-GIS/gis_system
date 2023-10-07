@@ -1,4 +1,4 @@
-package com.gis.dto;
+package com.gis.dto.gis;
 
 import lombok.Data;
 

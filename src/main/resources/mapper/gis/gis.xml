@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gis.dao.IGisDao">
+<mapper namespace="com.gis.dao.gis.IGisDao">
 
 	<select id="selectCarNum" resultType="String">
 		SELECT
@@ -9,7 +9,7 @@
 			temp.temp_gps
 	</select>
 	
-	<select id="selectTempGpsData" resultType="com.gis.dto.GpsTempData">
+	<select id="selectTempGpsData" resultType="com.gis.dto.gis.GpsTempData">
 		SELECT
 			x,
 			y
@@ -19,7 +19,7 @@
 			car = #{carNum}	
 	</select>
 	
-	<select id="selectTempNoiseData" resultType="com.gis.dto.NoiseTempData">
+	<select id="selectTempNoiseData" resultType="com.gis.dto.gis.NoiseTempData">
 		SELECT
 			noise_level AS noiseLevel
 		FROM
@@ -28,7 +28,7 @@
 			car = #{carNum}
 	</select>
 	
-	<select id="selectTempRpmData" resultType="com.gis.dto.RpmTempData">
+	<select id="selectTempRpmData" resultType="com.gis.dto.gis.RpmTempData">
 		SELECT
 			rpm_level AS rpmLevel
 		FROM
@@ -71,4 +71,83 @@
 		VALUES ( nextval('temp_rpm_sequence'), #{rtd.car}, #{rtd.date}, #{rtd.time}, #{rtd.rpmLevel})
 	</insert>
 	
+	<select id="selectCleanTime">
+		WITH min_max_times AS (
+		  SELECT
+		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
+		     FROM gps_data
+		     WHERE date = #{date}
+		     ORDER BY time ASC
+		     LIMIT 1) AS min_time,
+		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
+		     FROM gps_data
+		     WHERE date = #{date}
+		     ORDER BY time DESC
+		     LIMIT 1) AS max_time
+		)
+		SELECT
+		  max_time - min_time AS time_difference
+		FROM min_max_times
+	</select>
+	
+	<select id="selectCleanRatio" resultType="int">
+		SELECT
+		
+		FROM
+		
+		WHERE
+		
+	</select>
+	
+	<select id="selectTotalDistance" resultType="int">
+		SELECT
+		
+		FROM
+		
+		WHERE
+		
+	</select>
+	
+	<select id="selectCleanDistance" resultType="int">
+		SELECT
+		
+		FROM
+		
+		WHERE
+		
+	</select>
+	
+	<select id="selectDateCoord" resultType="com.gis.dto.gis.DateCoord">
+	WITH date_coord AS (
+	  SELECT
+		(SELECT x
+	    FROM gps_data
+	    WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+		AND car_num = #{carNum}
+	    ORDER BY x ASC
+	    LIMIT 1) AS min_x,
+	    (SELECT x
+	     FROM gps_data
+	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+		 AND car_num = #{carNum}
+	     ORDER BY x DESC
+	     LIMIT 1) AS max_x,
+		 (SELECT y
+	     FROM gps_data
+	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+		 AND car_num = #{carNum}
+	     ORDER BY y ASC
+	     LIMIT 1) AS min_y,
+	    (SELECT y
+	     FROM gps_data
+	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+		 AND car_num = #{carNum}
+	     ORDER BY y DESC
+	     LIMIT 1) AS max_y
+	)
+	SELECT
+	  (max_x + min_x)/2 AS x,
+	  (max_y + min_y)/2 AS y
+	FROM date_coord
+	</select>
 </mapper>

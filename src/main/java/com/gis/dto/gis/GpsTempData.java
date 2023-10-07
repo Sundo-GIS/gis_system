@@ -1,11 +1,12 @@
-package com.gis.dto;
+package com.gis.dto.gis;
 
 import lombok.Data;
 
 @Data
-public class NoiseTempData {
+public class GpsTempData {
 	private String car;
 	private String date;
 	private String time;
-	private int noiseLevel;
+	private double x;
+	private double y;
 }
