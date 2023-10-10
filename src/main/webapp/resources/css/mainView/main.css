@@ -1,0 +1,101 @@
+body {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    font-size : 13px;
+}
+
+#map {
+    height: 100vh;
+    position: absolute;
+}
+
+.hide-btn{
+    display: none;
+}
+
+/* Live 버튼 애니메이션 정의 */
+@keyframes blinkAnimation {
+    0%, 100% {
+        background-color: red;
+    }
+    50% {
+        background-color: orange;
+    }
+}
+/* 버튼에 애니메이션 */
+.blinkin-btn {
+    animation: blinkAnimation 1s infinite;
+    color: white;
+}
+
+.ol-control {
+    /* margin-top : 50px; */
+    transform: translateY(50px);
+    font-size : 20px;
+}
+
+#menu-show-btn {
+    z-index: 100;
+    position: absolute;
+}
+
+#download-btn {
+    background-color: white;
+    z-index: 100;
+    position: absolute;
+    font-weight: 700;
+    right: 10px;
+}
+#download-btn:hover {
+    background-color: royalblue;
+}
+
+#live-btn{
+    z-index: 100;
+    position: absolute;
+    font-weight: 700;
+    background-color: white;
+    left: 70px;
+}
+.live-btn:hover{
+    background-color: royalblue;
+}
+
+.info-view{
+    height: 100vh;
+}
+
+/* calendar */
+.datepicker-inline {
+    width: 100%;
+}
+.datepicker table {
+    margin: auto;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 모달창 (데이터추가, 차량추가) */
+.modal-backdrop {
+    --bs-backdrop-zindex: 1;
+    --bs-backdrop-bg: #000;
+    --bs-backdrop-opacity: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--bs-backdrop-zindex);
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bs-backdrop-bg);
+}
+
+.modal-backdrop.show {
+    opacity: var(--bs-backdrop-opacity);
+}
