@@ -28,7 +28,7 @@ public class StartController {
 	
     @GetMapping
     public String main() {
-    	return "index";
+    	return "prac";
     }
     
     @ResponseBody
@@ -62,8 +62,9 @@ public class StartController {
     }
     @ResponseBody
     @GetMapping("coord")
-    public DateCoord DateCoord(){
-    	log.info("contoller 시작");
-    	return gisService.selectDateCoord("2023-08-29", "103하2414");
+    public DateCoord DateCoord(@RequestParam("date") String date, @RequestParam("carNum") String carNum){
+    	log.info(date+" "+carNum);
+    	log.info("asdsd");
+    	return gisService.selectDateCoord(date, carNum);
     }
 }
