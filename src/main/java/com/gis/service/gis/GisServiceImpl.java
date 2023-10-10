@@ -63,8 +63,8 @@ public class GisServiceImpl implements IGisService {
 		String time = getCurrentTimeFormatted();
 		// gps 데이터 추출 
 		List<GpsTempData> tgd = gisDao.selectTempGpsData(carNum);
-		double avgX = (tgd.get(0).getX()+tgd.get(tgd.size()-1).getX())/ 2;
-		double avgY = (tgd.get(0).getY()+tgd.get(tgd.size()-1).getY())/ 2;
+		double avgX = (tgd.get(0).getLon()+tgd.get(tgd.size()-1).getLon())/ 2;
+		double avgY = (tgd.get(0).getLat()+tgd.get(tgd.size()-1).getLat())/ 2;
 		// 소음 데이터 추출
 		List<NoiseTempData> tnd = gisDao.selectTempNoiseData(carNum);
 		int totalNoise = 0;
@@ -100,11 +100,11 @@ public class GisServiceImpl implements IGisService {
 		}
 		// GPS, 소음, 진동 데이터들 로컬DB에 넣기
 		LocalData localData = new LocalData();
-		localData.setCar(carNum);
+		localData.setCarNum(carNum);
 		localData.setDate(date);
 		localData.setTime(time);
-		localData.setX(avgX);
-		localData.setY(avgY);
+		localData.setLon(avgX);
+		localData.setLat(avgY);
 		localData.setNoiseLevel(avgNoise);
 		localData.setRpmLevel(avgRpm);
 		localData.set_done(is_done);
@@ -153,9 +153,8 @@ public class GisServiceImpl implements IGisService {
 	 * @author 여수한
 	 */
 	@Override
-	public String selectDateCleanTime(String date) {
-		String cleanTime = gisDao.selectCleanTime(date);
-		log.info(cleanTime);
+	public String selectDateCleanTime(String date, String carNum) {
+		String cleanTime = gisDao.selectCleanTime(date,carNum);
 		return cleanTime;
 	}
 	/**
@@ -163,8 +162,8 @@ public class GisServiceImpl implements IGisService {
 	 * @author 여수한
 	 */
 	@Override
-	public int selectDateCleanRatio(String date) {
-		int cleanRatio = gisDao.selectCleanRatio();
+	public double selectDateCleanRatio(String date, String carNum) {
+		double cleanRatio = gisDao.selectCleanRatio(date, carNum);
 		return cleanRatio;
 	}
 	/**
@@ -172,18 +171,28 @@ public class GisServiceImpl implements IGisService {
 	 * @author 여수한
 	 */
 	@Override
-	public int selectDateTotalDistance(String date) {
-		int totalDistance = gisDao.selectTotalDistance();
-		return totalDistance;
+	public double selectDateTotalDistance(String date, String carNum) {
+		List<DateCoord> cleanDistanceGeom = gisDao.selectCleanDistanceGeom(date, carNum);
+		double totalDistance = 0;
+		for(int i=0; i<cleanDistanceGeom.size()-1; i++) {
+			totalDistance += gisDao.selectCleanDistance(cleanDistanceGeom.get(i), cleanDistanceGeom.get(i+1));
+		}
+		return totalDistance/1000;
 	}
 	/**
 	 * 달력 날짜 누르면 청소 운행거리 계산
 	 * @author 여수한
 	 */
 	@Override
-	public int selectDateCleanDistance(String date) {
-		int cleanDistance = gisDao.selectCleanDistance();
-		return cleanDistance;
+	public double selectDateCleanDistance(String date, String carNum) {
+		List<DateCoord> cleanDistanceGeom = gisDao.selectCleanDistanceGeom(date, carNum);
+		double cleanDistance = 0;
+		for(int i=0; i<cleanDistanceGeom.size()-1; i++) {
+			if(!(cleanDistanceGeom.get(i).is_done() == false && cleanDistanceGeom.get(i+1).is_done() == false)) {
+				cleanDistance += gisDao.selectCleanDistance(cleanDistanceGeom.get(i), cleanDistanceGeom.get(i+1));
+			}
+		}
+		return cleanDistance/1000;
 	}
 	/**
 	 * 달력 날짜 누르면 해당 날짜의 좌표 데이터 조회
@@ -191,9 +200,7 @@ public class GisServiceImpl implements IGisService {
 	 */
 	@Override
 	public DateCoord selectDateCoord(String date, String carNum) {
-		log.info(date + carNum);
 		DateCoord dc = gisDao.selectDateCoord(date, carNum);
-		log.info(dc);
 		return dc;
 	}
 }

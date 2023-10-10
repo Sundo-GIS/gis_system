@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class DateCoord {
-	private double x;
-	private double y;
+	private double lon;
+	private double lat;
+	private boolean is_done;
 }

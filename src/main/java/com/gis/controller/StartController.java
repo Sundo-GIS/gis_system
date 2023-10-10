@@ -11,6 +11,7 @@ import com.gis.dto.gis.DateCoord;
 import com.gis.dto.gis.GpsTempData;
 import com.gis.dto.gis.NoiseTempData;
 import com.gis.dto.gis.RpmTempData;
+import com.gis.dto.gis.Statistics;
 import com.gis.service.gis.IGisService;
 import com.gis.util.TimeScheduler;
 
@@ -30,7 +31,6 @@ public class StartController {
     public String main() {
     	return "index";
     }
-    
     @ResponseBody
     @GetMapping("/start")
     public String startScheduler(@RequestParam("time") int time) {
@@ -56,12 +56,25 @@ public class StartController {
         return "";
     }
     @ResponseBody
-    @GetMapping("statistics")
-    public String DateStatistics(){
-    	return gisService.selectDateCleanTime("2023-08-29");
+    @GetMapping("/statistics")
+    public Statistics DateStatistics(){
+    	// 청소 시간
+    	String DateCleanTime = gisService.selectDateCleanTime("2023-08-29", "103하2414");
+    	// 청소 비율
+    	double DateCleanRatio = gisService.selectDateCleanRatio("2023-08-29", "103하2414");
+    	// 총 운행거리
+    	double DateTotalDistance = gisService.selectDateTotalDistance("2023-08-29", "103하2414");
+    	// 청소한 운행거리
+    	double DateCleanDistance = gisService.selectDateCleanDistance("2023-08-30", "103하2414");
+    	Statistics statistics = new Statistics();
+    	statistics.setCleanTime(DateCleanTime);
+    	statistics.setCleanDistance(DateCleanDistance);
+    	statistics.setCleanRatio(DateCleanRatio);
+    	statistics.setTotalDistance(DateTotalDistance);
+    	return statistics;
     }
     @ResponseBody
-    @GetMapping("coord")
+    @GetMapping("/coord")
     public DateCoord DateCoord(){
     	log.info("contoller 시작");
     	return gisService.selectDateCoord("2023-08-29", "103하2414");

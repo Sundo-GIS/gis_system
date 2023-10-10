@@ -34,22 +34,22 @@ public interface IGisService {
 	 * 달력 날짜 누르면 청소 운행거리 계산
 	 * @author 여수한
 	 */
-	int selectDateCleanDistance(String date);
+	double selectDateCleanDistance(String date,String carNum);
 	/**
 	 * 달력 날짜 누르면 전체 운행거리 계산
 	 * @author 여수한
 	 */
-	int selectDateTotalDistance(String date);
+	double selectDateTotalDistance(String date,String carNum);
 	/**
 	 * 달력 날짜 누르면 청소 비율 계산
 	 * @author 여수한
 	 */
-	int selectDateCleanRatio(String date);
+	double selectDateCleanRatio(String date,String carNum);
 	/**
 	 * 달력 날짜 누르면 운행 시간 계산
 	 * @author 여수한
 	 */
-	String selectDateCleanTime(String date);
+	String selectDateCleanTime(String date,String carNum);
 	/**
 	 * 달력 날짜 누르면 해당 날짜의 좌표 데이터 조회
 	 * @author 여수한

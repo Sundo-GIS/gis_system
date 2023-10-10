@@ -39,7 +39,7 @@
 	
 	<insert id="insertLocalData">
 		INSERT INTO 
-			public.local_data (id, car, date, time, x, y, noise_level, rpm_level, geom, is_done)
+			public.coord (id, car, date, time, x, y, noise_level, rpm_level, geom, is_done)
 		VALUES
 			(nextval('local_sequence'), #{localData.car},#{localData.date},#{localData.time},#{localData.x},#{localData.y},#{localData.noiseLevel},#{localData.rpmLevel}, ST_SetSRID(ST_MakePoint(#{localData.x},#{localData.y}), 4326), #{localData.is_done})
 	</insert>
@@ -74,14 +74,16 @@
 	<select id="selectCleanTime">
 		WITH min_max_times AS (
 		  SELECT
-		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
-		     FROM gps_data
-		     WHERE date = #{date}
+		    (SELECT time
+		     FROM coord
+		     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+		     AND car_num = #{carNum}
 		     ORDER BY time ASC
 		     LIMIT 1) AS min_time,
-		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
-		     FROM gps_data
-		     WHERE date = #{date}
+		    (SELECT time
+		     FROM coord
+		     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+		     AND car_num = #{carNum}
 		     ORDER BY time DESC
 		     LIMIT 1) AS max_time
 		)
@@ -90,56 +92,70 @@
 		FROM min_max_times
 	</select>
 	
-	<select id="selectCleanRatio" resultType="int">
-		SELECT
-		
-		FROM
-		
-		WHERE
+	<select id="selectCleanRatio">
+		with clean_avg as(
+			select
+			(
+				select count(*)
+				from coord
+				where date = TO_DATE(#{date}, 'YYYY-MM-DD')
+				AND car_num = #{carNum}
+			) as total,
+			(
+				select count(*)
+				from coord
+				where date = TO_DATE(#{date}, 'YYYY-MM-DD')
+				AND car_num = #{carNum}
+				and is_done = true
+			) as is_true
+		)
+		select
+			trunc((is_true::numeric/total::numeric*100),2) as cleanRatio
+		from clean_avg
 		
 	</select>
 	
-	<select id="selectTotalDistance" resultType="int">
+	<select id="selectCleanDistanceGeom">
 		SELECT
-		
+			lon,lat, is_done
 		FROM
-		
+			COORD
 		WHERE
-		
+			DATE = TO_DATE(#{date}, 'YYYY-MM-DD')
+		AND
+			CAR_NUM = #{carNum}
 	</select>
 	
-	<select id="selectCleanDistance" resultType="int">
-		SELECT
-		
-		FROM
-		
-		WHERE
-		
+	<select id="selectCleanDistance" resultType="double" parameterType="double">
+		SELECT  
+    		ST_DistanceSphere(
+    			ST_MakePoint(#{start.lon}, #{start.lat}),
+    			ST_MakePoint(#{end.lon}, #{end.lat}))
 	</select>
 	
 	<select id="selectDateCoord" resultType="com.gis.dto.gis.DateCoord">
 	WITH date_coord AS (
 	  SELECT
 		(SELECT x
-	    FROM gps_data
+	    FROM coord
 	    WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		AND car_num = #{carNum}
 	    ORDER BY x ASC
 	    LIMIT 1) AS min_x,
 	    (SELECT x
-	     FROM gps_data
+	     FROM coord
 	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		 AND car_num = #{carNum}
 	     ORDER BY x DESC
 	     LIMIT 1) AS max_x,
 		 (SELECT y
-	     FROM gps_data
+	     FROM coord
 	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		 AND car_num = #{carNum}
 	     ORDER BY y ASC
 	     LIMIT 1) AS min_y,
 	    (SELECT y
-	     FROM gps_data
+	     FROM coord
 	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		 AND car_num = #{carNum}
 	     ORDER BY y DESC

@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class LocalData {
-	private String car;
+	private String carNum;
 	private String date;
 	private String time;
-	private double x;
-	private double y;
+	private double lon;
+	private double lat;
 	private int noiseLevel;
 	private int rpmLevel;
 	private boolean is_done;
