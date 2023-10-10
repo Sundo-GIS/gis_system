@@ -63,8 +63,8 @@ public class GisServiceImpl implements IGisService {
 		String time = getCurrentTimeFormatted();
 		// gps 데이터 추출 
 		List<GpsTempData> tgd = gisDao.selectTempGpsData(carNum);
-		double avgX = (tgd.get(0).getX()+tgd.get(tgd.size()-1).getX())/ 2;
-		double avgY = (tgd.get(0).getY()+tgd.get(tgd.size()-1).getY())/ 2;
+		double avgX = (tgd.get(0).getLon()+tgd.get(tgd.size()-1).getLon())/ 2;
+		double avgY = (tgd.get(0).getLat()+tgd.get(tgd.size()-1).getLat())/ 2;
 		// 소음 데이터 추출
 		List<NoiseTempData> tnd = gisDao.selectTempNoiseData(carNum);
 		int totalNoise = 0;
@@ -100,11 +100,11 @@ public class GisServiceImpl implements IGisService {
 		}
 		// GPS, 소음, 진동 데이터들 로컬DB에 넣기
 		LocalData localData = new LocalData();
-		localData.setCar(carNum);
+		localData.setCarNum(carNum);
 		localData.setDate(date);
 		localData.setTime(time);
-		localData.setX(avgX);
-		localData.setY(avgY);
+		localData.setLon(avgX);
+		localData.setLat(avgY);
 		localData.setNoiseLevel(avgNoise);
 		localData.setRpmLevel(avgRpm);
 		localData.set_done(is_done);
