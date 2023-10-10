@@ -23,7 +23,7 @@ const boundary = new ol.layer.Tile({
     source: new ol.source.TileWMS({
         url: 'http://localhost:8080/geoserver/wms',
         params: {
-            'LAYERS': 'lsmd_cont_ldreg_41460',
+            'LAYERS': 'sig',
             'TILED': true,
 
         },
