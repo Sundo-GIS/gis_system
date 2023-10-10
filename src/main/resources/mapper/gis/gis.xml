@@ -136,29 +136,29 @@
 	<select id="selectDateCoord" resultType="com.gis.dto.gis.DateCoord">
 	WITH date_coord AS (
 	  SELECT
-		(SELECT x
+		(SELECT lon
 	    FROM coord
 	    WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		AND car_num = #{carNum}
-	    ORDER BY x ASC
+	    ORDER BY lon ASC
 	    LIMIT 1) AS min_x,
-	    (SELECT x
+	    (SELECT lon
 	     FROM coord
 	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		 AND car_num = #{carNum}
-	     ORDER BY x DESC
+	     ORDER BY lon DESC
 	     LIMIT 1) AS max_x,
-		 (SELECT y
+		 (SELECT lat
 	     FROM coord
 	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		 AND car_num = #{carNum}
-	     ORDER BY y ASC
+	     ORDER BY lat ASC
 	     LIMIT 1) AS min_y,
-	    (SELECT y
+	    (SELECT lat
 	     FROM coord
 	     WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
 		 AND car_num = #{carNum}
-	     ORDER BY y DESC
+	     ORDER BY lat DESC
 	     LIMIT 1) AS max_y
 	)
 	SELECT
