@@ -4,15 +4,15 @@
 
 	<select id="selectCarNum" resultType="String">
 		SELECT
-			DISTINCT(car)
+			DISTINCT(car_num)
 		FROM
 			temp.temp_gps
 	</select>
 	
 	<select id="selectTempGpsData" resultType="com.gis.dto.gis.GpsTempData">
 		SELECT
-			x,
-			y
+			lon,
+			lat
 		FROM
 			temp.temp_gps
 		WHERE
@@ -21,27 +21,27 @@
 	
 	<select id="selectTempNoiseData" resultType="com.gis.dto.gis.NoiseTempData">
 		SELECT
-			noise_level AS noiseLevel
+			noise
 		FROM
 			temp.temp_noise
 		WHERE
-			car = #{carNum}
+			car_num = #{carNum}
 	</select>
 	
 	<select id="selectTempRpmData" resultType="com.gis.dto.gis.RpmTempData">
 		SELECT
-			rpm_level AS rpmLevel
+			rpm
 		FROM
 			temp.temp_rpm
 		WHERE
-			car = #{carNum}
+			car_num = #{carNum}
 	</select>
 	
 	<insert id="insertLocalData">
 		INSERT INTO 
-			public.local_data (id, car, date, time, x, y, noise_level, rpm_level, geom, is_done)
+			public.coord (id, car_num, date, time, lon, lat, noise, rpm, geom, is_done
 		VALUES
-			(nextval('local_sequence'), #{localData.car},#{localData.date},#{localData.time},#{localData.x},#{localData.y},#{localData.noiseLevel},#{localData.rpmLevel}, ST_SetSRID(ST_MakePoint(#{localData.x},#{localData.y}), 4326), #{localData.is_done})
+			(nextval('coord_id_seq'), #{localData.carNum},#{localData.date},#{localData.time},#{localData.lon},#{localData.lat},#{localData.noise},#{localData.rpm}, ST_SetSRID(ST_MakePoint(#{localData.lon},#{localData.lat}), 4326), #{localData.is_done})
 	</insert>
 	
 	<delete id="deleteTempGpsTable">
@@ -57,30 +57,30 @@
 	</delete>
 	
 	<insert id="insertGpsTempData">
-		INSERT INTO TEMP_GPS (id, car, date, time, x,y)
-		VALUES ( nextval('temp_gps_sequence'), #{gtd.car}, #{gtd.date}, #{gtd.time}, #{gtd.x}, #{gtd.y})
+		INSERT INTO TEMP_GPS (date, time, car_num, lon, lat)
+		VALUES (#{gtd.date}, #{gtd.time}, #{gtd.carNum}, #{gtd.lon}, #{gtd.lat})
 	</insert>
 	
 	<insert id="insertNoiseTempData">
-		INSERT INTO TEMP_NOISE (id, car, date, time, noise_level)
-		VALUES ( nextval('temp_noise_sequence'), #{ntd.car}, #{ntd.date}, #{ntd.time}, #{ntd.noiseLevel})
+		INSERT INTO TEMP_NOISE (date, time, car_num, noise)
+		VALUES (#{ntd.carNum}, #{ntd.date}, #{ntd.time}, #{ntd.noise})
 	</insert>
 	
 	<insert id="insertRpmTempData">
-		INSERT INTO TEMP_RPM (id, car, date, time, rpm_level)
-		VALUES ( nextval('temp_rpm_sequence'), #{rtd.car}, #{rtd.date}, #{rtd.time}, #{rtd.rpmLevel})
+		INSERT INTO TEMP_RPM (date, time, car_num, rpm)
+		VALUES (#{rtd.date}, #{rtd.time}, #{rtd.carNum}, #{rtd.rpm})
 	</insert>
 	
 	<select id="selectCleanTime">
 		WITH min_max_times AS (
 		  SELECT
 		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
-		     FROM gps_data
+		     FROM coord
 		     WHERE date = #{date}
 		     ORDER BY time ASC
 		     LIMIT 1) AS min_time,
 		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
-		     FROM gps_data
+		     FROM coord
 		     WHERE date = #{date}
 		     ORDER BY time DESC
 		     LIMIT 1) AS max_time
@@ -88,33 +88,6 @@
 		SELECT
 		  max_time - min_time AS time_difference
 		FROM min_max_times
-	</select>
-	
-	<select id="selectCleanRatio" resultType="int">
-		SELECT
-		
-		FROM
-		
-		WHERE
-		
-	</select>
-	
-	<select id="selectTotalDistance" resultType="int">
-		SELECT
-		
-		FROM
-		
-		WHERE
-		
-	</select>
-	
-	<select id="selectCleanDistance" resultType="int">
-		SELECT
-		
-		FROM
-		
-		WHERE
-		
 	</select>
 	
 	<select id="selectDateCoord" resultType="com.gis.dto.gis.DateCoord">
@@ -146,8 +119,8 @@
 	     LIMIT 1) AS max_y
 	)
 	SELECT
-	  (max_x + min_x)/2 AS x,
-	  (max_y + min_y)/2 AS y
+	  (max_x + min_x)/2 AS lon,
+	  (max_y + min_y)/2 AS lat
 	FROM date_coord
 	</select>
 </mapper>

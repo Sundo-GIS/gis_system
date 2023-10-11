@@ -1,5 +1,8 @@
 package com.gis.service.fileUpload;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import org.springframework.stereotype.Service;
 
 import com.gis.dao.file.IFileDao;
@@ -19,8 +22,8 @@ public class FileServiceImpl implements IFileService {
 	public void uploadCsv(String[] gpsFile, String[] noiseFile, String[] rpmFile) {
 		LocalData localData = new LocalData();
 		localData.setCarNum(gpsFile[0]);
-		localData.setDate(gpsFile[1]);
-		localData.setTime(gpsFile[2]);
+		localData.setDate(LocalDate.parse(gpsFile[1]));
+		localData.setTime(LocalTime.parse(gpsFile[2]));
 		localData.setLon(Double.parseDouble(gpsFile[3]));
 		localData.setLat(Double.parseDouble(gpsFile[4]));
 		localData.setNoise(Integer.parseInt(noiseFile[3]));
