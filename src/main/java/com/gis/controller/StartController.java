@@ -37,7 +37,7 @@ public class StartController {
 	
     @GetMapping
     public String main() {
-    	return "index";
+    	return "prac";
     }
     @ResponseBody
     @GetMapping("/start")
@@ -114,7 +114,7 @@ public class StartController {
     }
     @ResponseBody
     @GetMapping("/coord")
-    public DateCoord DateCoord(@RequestBody String date, @RequestBody String carNum){
+    public DateCoord DateCoord(@RequestParam("date") String date, @RequestParam("carNum") String carNum){
     	return gisService.selectDateCoord(date, carNum);
     }
 }

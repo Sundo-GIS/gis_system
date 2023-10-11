@@ -17,9 +17,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.1.0/ol.css">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="/resources/js/prac.js"></script>
+    <script src="/resources/js/mainView/main.js"></script>
     <style>
         .map {
-            height: 1600px;
+            height: 850px;
             width: 100%;
         }
     </style>
@@ -38,6 +39,9 @@
         <button id="cheoingu">처인구</button>
         <button id="giheunggu">기흥구</button>
         <button id="sujigu">수지구</button>
+    </div>
+    <div id="download">
+        <button type="button" class="download-btn btn mt-1 b" id="download-btn">다운로드</button>
     </div>
     <div id="map" class="map"></div>
 </body>
