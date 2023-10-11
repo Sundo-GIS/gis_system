@@ -1,7 +1,7 @@
 package com.gis.service.fileUpload;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.gis.dao.file.IFileDao;
 import com.gis.dto.gis.LocalData;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -125,8 +126,50 @@ public class FileServiceImpl implements IFileService {
 	        		break;
 	        	} 
 	        }
-		} catch (Exception e) {
+        } catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 파일 다운로드 : coord 테이블에서 데이터 조회 
+	 * @author 임연서
+	 */
+	@Override
+    public List<LocalData> selectLocalData(String date, String carNum) {
+        return iFileDao.selectLocalData(date, carNum);
+    }
+	
+	/**
+	 * 파일 다운로드 : csv 생성 
+	 * @author 임연서
+	 */
+	@Override
+	public void createCsvFile(List<LocalData> dataList, PrintWriter writer) {
+        try (CSVWriter csvWriter = new CSVWriter(writer)) {
+            // CSV 파일 헤더 설정
+            String[] header = 
+            	{"carNum", "date", "time", "lon", "lat", "rpm", "noise", "is_done"};
+            csvWriter.writeNext(header);
+
+            // 데이터 리스트를 CSV 파일에 쓰기
+            for (LocalData data : dataList) {
+            	log.info("data : {}", data);
+            	String[] line = {
+            					 data.getCarNum(), 
+                				 String.valueOf(data.getDate()), 
+                				 data.getTime(),
+                                 String.valueOf(data.getLon()), 
+                                 String.valueOf(data.getLat()),
+                                 String.valueOf(data.getRpm()), 
+                                 String.valueOf(data.getNoise()),
+                                 String.valueOf(data.is_done())
+                                 };
+                csvWriter.writeNext(line);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

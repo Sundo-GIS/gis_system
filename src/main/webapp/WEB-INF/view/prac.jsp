@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.1.0/ol.css">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="/resources/js/prac.js"></script>
+    <script src="/resources/js/mainView/main.js"></script>
     <style>
         .map {
             height: 850px;
@@ -40,6 +41,9 @@
         <button id="sujigu">수지구</button>
         <button id="live_start">LIVE START</button>
         <button id="live_stop">LIVE STOP</button>
+    </div>
+    <div id="download">
+        <button type="button" class="download-btn btn mt-1 b" id="download-btn">다운로드</button>
     </div>
     <div id="map" class="map"></div>
 </body>
