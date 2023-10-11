@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gis.dao.file.IFileDao">
+
+    <!-- 데이터 삽입용 테이블 -->
+    <insert id="insertCsvData" parameterType="com.gis.dto.gis.LocalData">
+		INSERT INTO 
+			public.coord (id, car_num, date, time, lon, lat, rpm, noise, geom, is_done)
+		VALUES
+			(nextval('seq_id'),
+			#{localData.carNum},
+			#{localData.date},
+			#{localData.time},
+			#{localData.lon},
+			#{localData.lat},
+			#{localData.rpm},
+			#{localData.noise},
+			ST_SetSRID(ST_MakePoint(#{localData.lon},#{localData.lat}), 4326), 
+			#{localData.is_done})
+	</insert>
+
+</mapper>
