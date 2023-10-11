@@ -262,6 +262,7 @@
 
     <!-- local에서 갖고옴 -->
     <script src="/resources/js/mainView/mainView.js"></script>
+    <script src="/resources/js/prac.js"></script>
     <script src="/resources/js/mainView/main.js"></script>
 </body>
 
