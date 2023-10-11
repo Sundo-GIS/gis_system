@@ -73,8 +73,8 @@ public class GisServiceImpl implements IGisService {
 		int lowNoise = 60;
 		int highNoise = 140;
 		for(int i=0; i<tnd.size(); i++) {
-			if(tnd.get(i).getNoiseLevel()>lowNoise&&tnd.get(i).getNoiseLevel()<highNoise) {
-				totalNoise += tnd.get(i).getNoiseLevel();	
+			if(tnd.get(i).getNoise()>lowNoise&&tnd.get(i).getNoise()<highNoise) {
+				totalNoise += tnd.get(i).getNoise();	
 				tndSize++;
 			}
 		}
@@ -87,8 +87,8 @@ public class GisServiceImpl implements IGisService {
 		int lowRpm = 1000;
 		int highRpm = 2500;
 		for(int i=0; i<trd.size(); i++) {
-			if(trd.get(i).getRpmLevel()>lowRpm && trd.get(i).getRpmLevel() < highRpm) {
-				totalRpm += trd.get(i).getRpmLevel();
+			if(trd.get(i).getRpm()>lowRpm && trd.get(i).getRpm() < highRpm) {
+				totalRpm += trd.get(i).getRpm();
 				trdSize++;
 			}
 		}
@@ -105,8 +105,8 @@ public class GisServiceImpl implements IGisService {
 		localData.setTime(time);
 		localData.setLon(avgX);
 		localData.setLat(avgY);
-		localData.setNoiseLevel(avgNoise);
-		localData.setRpmLevel(avgRpm);
+		localData.setNoise(avgNoise);
+		localData.setRpm(avgRpm);
 		localData.set_done(is_done);
 		gisDao.insertLocalData(localData);
 	}
