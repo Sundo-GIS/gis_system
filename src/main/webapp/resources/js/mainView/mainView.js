@@ -1,4 +1,4 @@
-const baseMapBtn = document.getElementById("base-map-btn");
+	const baseMapBtn = document.getElementById("base-map-btn");
 const satelliteMapBtn = document.getElementById("satellite-map-btn");
 const hybridMapBtn = document.getElementById("hybrid-map-btn");
 const downloadBtn = document.getElementById("download-btn");
@@ -32,6 +32,7 @@ const boundary = new ol.layer.Tile({
     })
 });
 
+// 기흥구 경계
 const giheungBoundary = new ol.layer.Tile({
     source: new ol.source.TileWMS({
         url: 'http://localhost:8080/geoserver/wms',
@@ -45,6 +46,7 @@ const giheungBoundary = new ol.layer.Tile({
     })
 });
 
+// 처인구 경계
 const cheoinBoundary = new ol.layer.Tile({
     source: new ol.source.TileWMS({
         url: 'http://localhost:8080/geoserver/wms',
@@ -58,6 +60,7 @@ const cheoinBoundary = new ol.layer.Tile({
     })
 });
 
+// 수지구 경계
 const sujiBoundary = new ol.layer.Tile({
     source: new ol.source.TileWMS({
         url: 'http://localhost:8080/geoserver/wms',
@@ -105,7 +108,7 @@ function startView() {
 var myFullScreenControl = new ol.control.FullScreen();
 map.addControl(myFullScreenControl);
 
-
+// 기본 화면
 baseMapBtn.addEventListener('click', () => {
     mapType = "Base";
     imgType = "png";
@@ -119,6 +122,7 @@ baseMapBtn.addEventListener('click', () => {
     updateBackgroundLayer();
 })
 
+// 인공위성 화면
 satelliteMapBtn.addEventListener('click', () => {
     mapType = "Satellite";
     imgType = "jpeg";
@@ -132,6 +136,7 @@ satelliteMapBtn.addEventListener('click', () => {
     updateBackgroundLayer();
 })
 
+// 하이브리드 화면
 hybridMapBtn.addEventListener('click', () => {
     mapType = "Hybrid";
     imgType = "png";
@@ -166,7 +171,7 @@ cheoin.addEventListener('click', () => {
         center: ol.proj.transform([127.252989, 37.2076312], 'EPSG:4326', 'EPSG:3857'), // 포인트의 좌표로 설정
         zoom: 12,
         duration: 800
-     });
+    });
 
 
     cheoin.style.backgroundColor = '#293661';
@@ -191,7 +196,7 @@ giheung.addEventListener('click', () => {
         center: ol.proj.transform([127.125525, 37.2702214], 'EPSG:4326', 'EPSG:3857'), // 포인트의 좌표로 설정
         zoom: 12,
         duration: 800
-     });
+    });
 
     giheung.style.backgroundColor = '#293661';
     giheung.style.color = 'white';
@@ -262,12 +267,69 @@ liveBtn.addEventListener('click', () => {
 });
 
 // // 다운로드 버튼 클릭시
-// downloadBtn.addEventListener('click', downloadClick);
+downloadBtn.addEventListener('click', downloadClick);
 
 
 ////////해야함 CSV 다운로드
 
 // // csv 다운로드 클릭 함수
+function downloadClick() {
+
+    // 받아온 데이터를 JSON 형태로 파싱
+    const data = this.props.data; // 서버에서 받을 데이터
+    const jsonData = JSON.stringify(data);
+    let arrData = JSON.parse(josnData);
+    
+    // 데이터 정의 및 첫째줄에 Title 설정
+    let CSV = '';
+    CSV += "COORD" + '\r\n\n';  // 타이틀 
+
+    // JSON의 KEY를 열의 데이터 라벨로 넣기
+    let row = "";
+    for (let index in arrData[0]) {
+        row += index + ',';
+    }
+    row = row.slice(0, -1); // JSON데이터의 key값만 가져오기
+    CSV += row + '\r\n'; 
+
+    // JSON 데이터 VALUE 값 넣기
+    for (let i = 0; i< arrData.length; i++) {
+        let row = "";
+        for (let index in arrData[i]){
+            row += '"' + arrData[i][index] + '",';
+        }
+
+        row.slice(0, row.length - 1); // 마지막 ,(콤마)를 삭제하기 위함
+        CSV += row + '\r\n';
+    }
+
+    // CSV 파일이 없을때 
+    if (CSV == '') {        
+        alert("Invalid data");
+        return;
+    }   
+  
+    let fileName = "COORD_";
+    fileName += "COORD".replace(/ /g,"_");   
+    
+    
+    // URI 식별자 정의 및 다운로드 하기
+    let uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+    //let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(CSV);
+    
+    let link = document.createElement("a");    
+    link.href = uri;
+    link.style = "visibility:hidden";
+    link.download = fileName + ".csv";
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+}
+
+
+
 // function downloadClick() {
 //     let gpsDownloadFile = "gps.csv";
 //     let noiseDownloadFile = "noise.csv";
