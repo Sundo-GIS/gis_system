@@ -1,4 +1,3 @@
-/* 파일 업로드 */
 document.addEventListener('DOMContentLoaded', function () {
     const uploadForm = document.getElementById('upload-form');
     const registerButton = document.getElementById('csv-register-btn');
@@ -70,8 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
   
 });
-
-
 /*
 $(document).ready(function () {
     $("#csv-register-btn").click(function () {
