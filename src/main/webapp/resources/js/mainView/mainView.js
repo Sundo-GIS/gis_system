@@ -74,7 +74,6 @@ const sujiBoundary = new ol.layer.Tile({
     })
 });
 
-
 //  첫 화면 생성
 startView();
 

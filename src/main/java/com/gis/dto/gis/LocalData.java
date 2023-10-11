@@ -9,7 +9,7 @@ public class LocalData {
 	private String time;
 	private double lon;
 	private double lat;
-	private int noiseLevel;
-	private int rpmLevel;
+	private int noise;
+	private int rpm;
 	private boolean is_done;
 }

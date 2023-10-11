@@ -7,5 +7,5 @@ public class RpmTempData {
 	private String carNum;
 	private String date;
 	private String time;
-	private int rpmLevel;
+	private int rpm;
 }
