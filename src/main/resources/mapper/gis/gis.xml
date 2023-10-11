@@ -167,8 +167,8 @@
 	     LIMIT 1) AS max_y
 	)
 	SELECT
-	  (max_x + min_x)/2 AS x,
-	  (max_y + min_y)/2 AS y
+	  (max_x + min_x)/2 AS lon,
+	  (max_y + min_y)/2 AS lat
 	FROM date_coord
 	</select>
 </mapper>

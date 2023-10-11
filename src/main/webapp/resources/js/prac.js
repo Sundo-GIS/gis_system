@@ -10,8 +10,8 @@ window.addEventListener("load", function() {
 			})
 		],
 		view: new ol.View({
-			center: ol.proj.transform([127.1775537, 37.0410864], 'EPSG:4326', 'EPSG:3857'),
-			zoom: 11,
+			center: ol.proj.transform([127.2075537, 37.2310864], 'EPSG:4326', 'EPSG:3857'),
+			zoom: 11.5,
 			minZoom: 0,
 			maxZoom: 21
 		})
@@ -32,13 +32,13 @@ window.addEventListener("load", function() {
 	// 데이터 가져오기
 	var dateInput = document.querySelector(".selectDate")
 	var carNumInput = document.querySelector(".selectCarNum")
-	
+
 	dateInput.addEventListener('change', function(event) {
-    updateMap(); // 날짜가 변경되면 지도 업데이트
+		updateMap(); // 날짜가 변경되면 지도 업데이트
 	});
-	
+
 	carNumInput.addEventListener('change', function(event) {
-	    updateMap(); // 차량 번호가 변경되면 지도 업데이트
+		updateMap(); // 차량 번호가 변경되면 지도 업데이트
 	});
 
 	// 일자, 차량번호 선택하여 데이터 출력하기
@@ -46,14 +46,14 @@ window.addEventListener("load", function() {
 		// 사용자가 입력한 값을 가져오기
 		var date = dateInput.value;
 		var car_num = carNumInput.value;
-
+		console.log(date + " " + car_num);
 		var viewparams = 'date:' + date + ';carNum:' + car_num;
 
 		line.getSource().updateParams({ 'viewparams': viewparams });
 		point.getSource().updateParams({ 'viewparams': viewparams });
 		start_point.getSource().updateParams({ 'viewparams': viewparams });
-		end_point.getSource().updateParams({ 'viewparams': viewparams });	
-		
+		end_point.getSource().updateParams({ 'viewparams': viewparams });
+
 		// 중심 좌표 이동
 		$.ajax({
 			type: "GET",
@@ -65,12 +65,12 @@ window.addEventListener("load", function() {
 			dataType: "json",
 			success: function(data) {
 				var lon = data.lon;
-            	var lat = data.lat;
-
+				var lat = data.lat;
+				console.log(lon + " +  " + lat);
 				map.getView().animate({
 					center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
 					zoom: 15,
-					duration: 800
+					duration: 600
 				});
 			}
 		});
@@ -149,6 +149,36 @@ window.addEventListener("load", function() {
 			serverType: 'geoserver',
 		})
 	});
+	var live_start_point = new ol.layer.Tile({
+		source: new ol.source.TileWMS({
+			url: 'http://localhost:8080/geoserver/wms',
+			params: {
+				'LAYERS': 'live_start_point',
+				'TILED': true,
+			},
+			serverType: 'geoserver',
+		})
+	});
+	var live_end_point = new ol.layer.Tile({
+		source: new ol.source.TileWMS({
+			url: 'http://localhost:8080/geoserver/wms',
+			params: {
+				'LAYERS': 'live_end_point',
+				'TILED': true,
+			},
+			serverType: 'geoserver',
+		})
+	});
+	var live_coord = new ol.layer.Tile({
+		source: new ol.source.TileWMS({
+			url: 'http://localhost:8080/geoserver/wms',
+			params: {
+				'LAYERS': 'live_coord',
+				'TILED': true,
+			},
+			serverType: 'geoserver',
+		})
+	});
 	map.addLayer(boundary);
 	map.addLayer(line);
 	map.addLayer(point);
@@ -156,4 +186,60 @@ window.addEventListener("load", function() {
 	map.addLayer(end_point);
 	boundary.setOpacity(0.5)
 
+	var live_start = document.getElementById('live_start');
+	var live_stop = document.getElementById('live_stop');
+	var map1;
+	var mapCenter; // 현재 지도 중심 좌표
+	var mapZoom; // 현재 지도 줌 레벨
+	live_start.addEventListener("click", function() {
+		console.log("라이브 시작");
+		map.getView().animate({
+			center: ol.proj.transform([127.2075537, 37.2310864], 'EPSG:4326', 'EPSG:3857'),
+			zoom: 11.5,
+			duration: 600
+		});
+		liveStart();
+	})
+	function liveStart() {
+		console.log("새로고침!!");
+		map.addLayer(live_coord);
+		map.addLayer(live_start_point);
+		map.addLayer(live_end_point);
+		map.removeLayer(line);
+		map.removeLayer(point);
+		map.removeLayer(start_point);
+		map.removeLayer(end_point);
+		localStorage.setItem("previousState", "someValue");
+
+		map1.on("moveend", function() {
+			mapCenter = map.getCenter();
+			mapZoom = map.getZoom();
+		});
+
+		intervalId = setInterval(function() {
+			location.reload(); // 현재 페이지 새로고침
+		}, 10000);
+	};
+	live_stop.addEventListener("click", function() {
+		console.log("라이브 종료");
+		map.removeLayer(live_coord);
+		map.removeLayer(live_start_point);
+		map.removeLayer(live_end_point);
+		map.addLayer(line);
+		map.addLayer(point);
+		map.addLayer(start_point);
+		map.addLayer(end_point);
+		localStorage.setItem("previousState", "");
+		clearInterval(intervalId);
+
+		if (mapCenter && mapZoom) {
+			map1.setView(mapCenter, mapZoom);
+		}
+	})
+	var previousState = localStorage.getItem("previousState");
+	if (previousState === "someValue") {
+		// 이전 상태 복원
+		console.log("이전 상태 복원");
+		liveStart(); // start 함수 호출
+	}
 });

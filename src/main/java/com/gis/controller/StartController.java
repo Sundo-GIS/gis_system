@@ -37,13 +37,13 @@ public class StartController {
 	
     @GetMapping
     public String main() {
-    	return "index";
+    	return "prac";
     }
     @ResponseBody
     @GetMapping("/start")
-    public String startScheduler(@RequestParam int time) {
-    	timeScheduler.startScheduler(time);
-        return "";
+    public ResponseEntity<String> startScheduler() {
+    	timeScheduler.startScheduler();
+        return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
     /**
 	 * Car테이블에서 차량 번호 조회
@@ -90,9 +90,9 @@ public class StartController {
     }
     @ResponseBody
     @GetMapping("/stop")
-    public String stopScheduler() {
+    public ResponseEntity<String> stopScheduler() {
     	timeScheduler.stopScheduler();
-        return "";
+        return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
     @ResponseBody
     @GetMapping("/statistics")
@@ -114,7 +114,7 @@ public class StartController {
     }
     @ResponseBody
     @GetMapping("/coord")
-    public DateCoord DateCoord(@RequestBody String date, @RequestBody String carNum){
+    public DateCoord DateCoord(@RequestParam("date") String date, @RequestParam("carNum") String carNum){
     	return gisService.selectDateCoord(date, carNum);
     }
 }

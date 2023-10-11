@@ -19,7 +19,7 @@
     <script src="/resources/js/prac.js"></script>
     <style>
         .map {
-            height: 1600px;
+            height: 850px;
             width: 100%;
         }
     </style>
@@ -38,6 +38,8 @@
         <button id="cheoingu">처인구</button>
         <button id="giheunggu">기흥구</button>
         <button id="sujigu">수지구</button>
+        <button id="live_start">LIVE START</button>
+        <button id="live_stop">LIVE STOP</button>
     </div>
     <div id="map" class="map"></div>
 </body>

@@ -102,8 +102,6 @@ public class FileServiceImpl implements IFileService {
 	        	} else if(i+5>rowCount) {
 	        		int row = rowCount-i;
 	        		for(int j=i; j<rowCount; j++) {
-	        			log.info("noise1 : " + noiseRecords.get(j)[3]);
-	        			log.info("noise2 : " + Double.parseDouble(noiseRecords.get(j)[3]));
 	        			noise += Double.parseDouble(noiseRecords.get(j)[3]);
 	        			rpm += Integer.parseInt(rpmRecords.get(j)[3]);
 	        		}
