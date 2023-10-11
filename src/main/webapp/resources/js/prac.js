@@ -29,9 +29,9 @@ window.addEventListener("load", function() {
 		})
 	});
 
-	// HTML 폼 요소 가져오기
-	var dateInput = document.getElementById('date');
-	var carNumInput = document.getElementById('car_num');
+	// 데이터 가져오기
+	var dateInput = document.querySelector(".selectDate")
+	var carNumInput = document.querySelector(".selectCarNum")
 	
 	dateInput.addEventListener('change', function(event) {
     updateMap(); // 날짜가 변경되면 지도 업데이트
@@ -64,8 +64,8 @@ window.addEventListener("load", function() {
 			},
 			dataType: "json",
 			success: function(data) {
-				var lon = data.x;
-            	var lat = data.y;
+				var lon = data.lon;
+            	var lat = data.lat;
 
 				map.getView().animate({
 					center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
@@ -73,12 +73,12 @@ window.addEventListener("load", function() {
 					duration: 800
 				});
 			}
-			
 		});
 
 	};
 
 	// 구 선택 이벤트
+	/*
 	var cheoingu = document.getElementById('cheoingu');
 	var giheunggu = document.getElementById('giheunggu');
 	var sujigu = document.getElementById('sujigu');
@@ -106,6 +106,7 @@ window.addEventListener("load", function() {
 			duration: 800
 		});
 	})
+	*/
 
 
 	var point = new ol.layer.Tile({

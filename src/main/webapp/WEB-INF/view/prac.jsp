@@ -25,17 +25,15 @@
     </style>
 </head>
 <body>
-    <form id="selectForm" class="d-flex">
-        <label for="car_num">차량번호:</label>
-        <select id="car_num" name="car_num">
-        	<option>103하2414</option>
-        	<option>114하6585</option>
-        </select>
-        
-        <label for="date">일자:</label>
-        <input type="date" id="date" name="date">
+    <label for="car_num">차량번호:</label>
+    <select id="car_num" name="car_num" class="selectCarNum">
+    	<option>103하2414</option>
+    	<option>114하6585</option>
+    </select>
+    
+    <label for="date">일자:</label>
+    <input type="date" id="date" name="date" class="selectDate">
 
-    </form>
     <div id="selectGu">
         <button id="cheoingu">처인구</button>
         <button id="giheunggu">기흥구</button>
