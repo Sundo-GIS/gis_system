@@ -3,59 +3,49 @@ $(document).ready(function () {
 });
 
 
-var today = new Date();
-var date = new Date();
+let nowDate = new Date();
+const todayDate = new Date();
 
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
-  today = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+  nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, nowDate.getDate());
   makeCalendar(); //달력 cell 만들어 출력 
 }
 
-
 //  ">" 클릭시 다음달 view
 function nextCalendar() {
-  today = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+  nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
   makeCalendar();
 }
+
 
 //  달력 출력
 function makeCalendar() {
 
-  var doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  var lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1);
+  let lastDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0);
 
-  var tbCalendar = document.getElementById("calendar");
-  var tbCalendarYM = document.getElementById("tbCalendarYM");
-  tbCalendarYM.innerHTML = today.getFullYear() + "년 " + (today.getMonth() + 1) + "월";
+  const tbCalendar = document.getElementById("calendar");
+  const tbCalendarYM = document.getElementById("tbCalendarYM");
+  tbCalendarYM.innerHTML = nowDate.getFullYear() + "년 " + (nowDate.getMonth() + 1) + "월";
 
   while (tbCalendar.rows.length > 2) {
     tbCalendar.deleteRow(tbCalendar.rows.length - 1);
   }
-  var row = null;
+  let row = null;
   row = tbCalendar.insertRow();
-  var cnt = 0;
+  let cnt = 0;
   for (i = 0; i < doMonth.getDay(); i++) {
     cell = row.insertCell();
     cnt = cnt + 1;
   }
-
-
-  let carNumGroup = document.querySelector('#car_num');
-  let carNum = null;
-
-  carNumGroup.addEventListener('change', function () {
-
-    carNum = carNumGroup.options[carNumGroup.selectedIndex].text;
-    console.log("carNum = " + carNum);
-
-  });
 
   let cleanDate = [
     { date: '2023-08-10' },
     { date: '2023-08-01' },
     { date: '2023-08-12' }
   ];
+
 
   /*달력 출력*/
   for (i = 1; i <= lastDate.getDate(); i++) {
@@ -77,49 +67,68 @@ function makeCalendar() {
     }
 
 
-    for (var j = 0; j < cleanDate.length; j++) {
-      var cleanDateString = cleanDate[j].date;
-      var cleanDateObject = new Date(cleanDateString);
+    for (let j = 0; j < cleanDate.length; j++) {
+      let cleanDateString = cleanDate[j].date;
+      let cleanDateObject = new Date(cleanDateString);
 
       if (
-        today.getFullYear() == cleanDateObject.getFullYear() &&
-        today.getMonth() == cleanDateObject.getMonth() &&
+        nowDate.getFullYear() == cleanDateObject.getFullYear() &&
+        nowDate.getMonth() == cleanDateObject.getMonth() &&
         i == cleanDateObject.getDate()
       ) {
         cell.classList.add('selected');
       }
     };
 
+    /*오늘의 날짜에 표시*/
+    if (nowDate.getFullYear() == todayDate.getFullYear()
+      && nowDate.getMonth() == todayDate.getMonth()
+      && i == todayDate.getDate()) {
 
-
-    /*오늘의 날짜에 노란색 칠하기*/
-    if (today.getFullYear() == date.getFullYear()
-      && today.getMonth() == date.getMonth()
-      && i == date.getDate()) {
-  
       cell.setAttribute('id', 'today');
     }
   }
-}
 
-const selectedDate = document.querySelectorAll(".selected");
 
-for (date of selectedDate) {
-  date.addEventListener('change', function (event) {
-    updateMap(); // 날짜가 변경되면 지도 업데이트
+  // 날짜 선택, 차량 선택시 view 화면 변경
+  const selectedDates = document.querySelectorAll(".selected");
+  selectedDates.forEach(selectedDate => {
+    selectedDate.addEventListener('click', () => {
+
+      const year = nowDate.getFullYear();
+      const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
+      const date = String(selectedDate.innerHTML.padStart(2, '0'));
+      const cleanDate = `${year}-${month}-${date}`;
+
+
+      date.addEventListener('change', function (event) {
+        updateMap(); // 날짜가 변경되면 지도 업데이트
+      });
+      
+      let carNumGroup = document.querySelector('#car_num');
+      let carNum = null;
+    
+      carNum.addEventListener('change', function (event) {
+        carNum = carNumGroup.options[carNumGroup.selectedIndex].text;
+        updateMap(); // 차량 번호가 변경되면 지도 업데이트
+      });
+
+      console.log(carNum);
+      console.log(cleanDate);
+    });
   });
 
-  carNum.addEventListener('change', function (event) {
-    updateMap(); // 차량 번호가 변경되면 지도 업데이트
-  });
 }
+
 
 
 // 일자, 차량번호 선택하여 데이터 출력하기
 function updateMap() {
+  // 선택날짜 출력하기
+
   // 사용자가 입력한 값을 가져오기
 
-  var viewparams = 'date:' + date + ';carNum:' + carNum;
+  var viewparams = 'date:' + cleanDate + ';carNum:' + carNum;
   line.getSource().updateParams({ 'viewparams': viewparams });
   point.getSource().updateParams({ 'viewparams': viewparams });
   start_point.getSource().updateParams({ 'viewparams': viewparams });
@@ -130,7 +139,7 @@ function updateMap() {
     type: "GET",
     url: "/view", // 시작 요청을 보낼 엔드포인트 URL
     data: {
-      date: date,
+      date: cleanDate,
       carNum: carNum
     },
     dataType: "json",
