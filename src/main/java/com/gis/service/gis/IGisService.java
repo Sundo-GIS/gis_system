@@ -9,6 +9,11 @@ import com.gis.dto.gis.RpmTempData;
 
 public interface IGisService {
 	/**
+	 * Car테이블에서 차량 번호 조회
+	 * @author 여수한
+	 */
+	List<String> selectCar();
+	/**
 	 * Temp Table에서 차량 번호 조회
 	 * @author 여수한
 	 */

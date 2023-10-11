@@ -1,5 +1,6 @@
 package com.gis.service.gis;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +26,15 @@ public class GisServiceImpl implements IGisService {
 	private final IGisDao gisDao;
 	
 	/**
+	 * Car테이블에서 차량 번호 조회
+	 * @author 여수한
+	 */
+	@Override
+	public List<String> selectCar() {
+		List<String> carList = gisDao.selectCar();
+    	return carList;
+	}
+	/**
 	 * Temp Table에서 차량 번호 조회
 	 * @author 여수한
 	 */
@@ -37,11 +47,9 @@ public class GisServiceImpl implements IGisService {
 	 * 현재 날짜를 원하는 형식(yyyy-MM-dd)으로 포맷하려면 아래와 같이 사용할 수 있습니다.
 	 * @author 여수한
 	 */
-	public String getCurrentDateFormatted() {
+	public LocalDate getCurrentDateFormatted() {
 	    LocalDate currentDate = LocalDate.now();
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    String formattedDate = currentDate.format(formatter);
-	    return formattedDate;
+	    return currentDate;
 	}
 	/**
 	 * 현재 시간을 원하는 형식(HH:mm:ss)으로 포맷하려면 아래와 같이 사용할 수 있습니다.
@@ -50,7 +58,7 @@ public class GisServiceImpl implements IGisService {
 	public String getCurrentTimeFormatted() {
 	    LocalTime currentTime = LocalTime.now();
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-	    String formattedTime = currentTime.format(formatter);
+        String formattedTime = currentTime.format(formatter);
 	    return formattedTime;
 	}
 	/**
@@ -59,36 +67,39 @@ public class GisServiceImpl implements IGisService {
 	 */
 	@Override
 	public void selectTempData(String carNum) {
-		String date = getCurrentDateFormatted();
+		LocalDate date = getCurrentDateFormatted();
 		String time = getCurrentTimeFormatted();
 		// gps 데이터 추출 
 		List<GpsTempData> tgd = gisDao.selectTempGpsData(carNum);
+		log.info(tgd);
 		double avgX = (tgd.get(0).getLon()+tgd.get(tgd.size()-1).getLon())/ 2;
 		double avgY = (tgd.get(0).getLat()+tgd.get(tgd.size()-1).getLat())/ 2;
 		// 소음 데이터 추출
 		List<NoiseTempData> tnd = gisDao.selectTempNoiseData(carNum);
-		int totalNoise = 0;
+		log.info(tnd);
+		BigDecimal totalNoise = new BigDecimal(0);
 		int avgNoise = 0;
 		int tndSize = 0;
-		int lowNoise = 60;
-		int highNoise = 140;
+		BigDecimal lowNoise = new BigDecimal(60);
+		BigDecimal highNoise = new BigDecimal(140);
 		for(int i=0; i<tnd.size(); i++) {
-			if(tnd.get(i).getNoiseLevel()>lowNoise&&tnd.get(i).getNoiseLevel()<highNoise) {
-				totalNoise += tnd.get(i).getNoiseLevel();	
+			if(tnd.get(i).getNoise().compareTo(lowNoise)>0&&highNoise.compareTo(tnd.get(i).getNoise())>0) {
+				totalNoise = totalNoise.add(tnd.get(i).getNoise());
 				tndSize++;
 			}
 		}
-		avgNoise = totalNoise/tndSize;
+		avgNoise = totalNoise.intValue()/tndSize;
 		// 진동 데이터 추출
 		List<RpmTempData> trd = gisDao.selectTempRpmData(carNum);
+		log.info(trd);
 		int totalRpm = 0;
 		int avgRpm = 0;
 		int trdSize = 0;
 		int lowRpm = 1000;
 		int highRpm = 2500;
 		for(int i=0; i<trd.size(); i++) {
-			if(trd.get(i).getRpmLevel()>lowRpm && trd.get(i).getRpmLevel() < highRpm) {
-				totalRpm += trd.get(i).getRpmLevel();
+			if(trd.get(i).getRpm()>lowRpm && trd.get(i).getRpm() < highRpm) {
+				totalRpm += trd.get(i).getRpm();
 				trdSize++;
 			}
 		}
@@ -105,9 +116,10 @@ public class GisServiceImpl implements IGisService {
 		localData.setTime(time);
 		localData.setLon(avgX);
 		localData.setLat(avgY);
-		localData.setNoiseLevel(avgNoise);
-		localData.setRpmLevel(avgRpm);
+		localData.setRpm(avgRpm);
+		localData.setNoise(avgNoise);
 		localData.set_done(is_done);
+		log.info(localData);
 		gisDao.insertLocalData(localData);
 	}
 	/**
@@ -116,9 +128,9 @@ public class GisServiceImpl implements IGisService {
 	 */
 	@Override
 	public void deleteTempTable() {
-		gisDao.deleteTempGpsTable();
-		gisDao.deleteTempNoiseTable();
-		gisDao.deleteTempRpmTable();
+//		gisDao.deleteTempGpsTable();
+//		gisDao.deleteTempNoiseTable();
+//		gisDao.deleteTempRpmTable();
 	}
 	/**
 	 * Temp Table에 GPS, Noise, Rpm 데이터 넣기
@@ -126,26 +138,14 @@ public class GisServiceImpl implements IGisService {
 	 */
 	@Override
 	public void insertGpsTempData(GpsTempData gtd) {
-//		String date = getCurrentDateFormatted();
-//		String time = getCurrentTimeFormatted();
-//		gtd.setDate(date);
-//		gtd.setTime(time);
 		gisDao.insertGpsTempData(gtd);
 	}
 	@Override
 	public void insertNoiseTempData(NoiseTempData ntd) {
-//		String date = getCurrentDateFormatted();
-//		String time = getCurrentTimeFormatted();
-//		ntd.setDate(date);
-//		ntd.setTime(time);
 		gisDao.insertNoiseTempData(ntd);
 	}
 	@Override
 	public void insertRpmTempData(RpmTempData rtd) {
-//		String date = getCurrentDateFormatted();
-//		String time = getCurrentTimeFormatted();
-//		rtd.setDate(date);
-//		rtd.setTime(time);
 		gisDao.insertRpmTempData(rtd);
 	}
 	/**

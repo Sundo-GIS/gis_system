@@ -14,6 +14,11 @@ import com.gis.dto.gis.RpmTempData;
 @Mapper
 public interface IGisDao {
 	/**
+	 * Car테이블에서 차량 번호 조회
+	 * @author 여수한
+	 */
+	public List<String> selectCar();
+	/**
 	 * Temp_GPS Table에서 차량 번호 조회
 	 * @author 여수한
 	 */
@@ -49,9 +54,9 @@ public interface IGisDao {
 	 * Temp Table 데이터 추가
 	 * @author 여수한
 	 */
-	public void insertGpsTempData(GpsTempData gtd);
-	public void insertNoiseTempData(NoiseTempData ntd);
-	public void insertRpmTempData(RpmTempData rtd);
+	public void insertGpsTempData(@Param("gtd")GpsTempData gtd);
+	public void insertNoiseTempData(@Param("ntd")NoiseTempData ntd);
+	public void insertRpmTempData(@Param("rtd")RpmTempData rtd);
 	/**
 	 * 달력 날짜 누르면 운행 시간 계산
 	 * @author 여수한
