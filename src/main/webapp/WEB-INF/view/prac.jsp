@@ -39,6 +39,8 @@
         <button id="cheoingu">처인구</button>
         <button id="giheunggu">기흥구</button>
         <button id="sujigu">수지구</button>
+        <button id="live_start">LIVE START</button>
+        <button id="live_stop">LIVE STOP</button>
     </div>
     <div id="download">
         <button type="button" class="download-btn btn mt-1 b" id="download-btn">다운로드</button>

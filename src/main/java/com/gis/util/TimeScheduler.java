@@ -20,14 +20,15 @@ public class TimeScheduler {
 	private final IGisService gisService;
 	private ScheduledExecutorService scheduler;
 
-	public void startScheduler(int time) {
+	public void startScheduler() {
 		stopScheduler();
 		log.info("시작");
 		scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, time, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, 60000, TimeUnit.MILLISECONDS);
 	}
 	public void stopScheduler() {
 		if (scheduler != null && !scheduler.isShutdown()) {
+			gisService.deleteTempTable();
 			scheduler.shutdown();
 			try {
 				if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {

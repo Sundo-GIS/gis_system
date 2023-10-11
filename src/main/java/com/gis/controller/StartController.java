@@ -41,9 +41,9 @@ public class StartController {
     }
     @ResponseBody
     @GetMapping("/start")
-    public String startScheduler(@RequestParam int time) {
-    	timeScheduler.startScheduler(time);
-        return "";
+    public ResponseEntity<String> startScheduler() {
+    	timeScheduler.startScheduler();
+        return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
     /**
 	 * Car테이블에서 차량 번호 조회
@@ -90,9 +90,9 @@ public class StartController {
     }
     @ResponseBody
     @GetMapping("/stop")
-    public String stopScheduler() {
+    public ResponseEntity<String> stopScheduler() {
     	timeScheduler.stopScheduler();
-        return "";
+        return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
     @ResponseBody
     @GetMapping("/statistics")
