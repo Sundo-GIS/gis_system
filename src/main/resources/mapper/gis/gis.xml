@@ -171,4 +171,5 @@
 	  (max_y + min_y)/2 AS lat
 	FROM date_coord
 	</select>
+
 </mapper>

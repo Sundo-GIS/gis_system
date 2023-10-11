@@ -10,7 +10,7 @@ window.addEventListener("load", function() {
 			})
 		],
 		view: new ol.View({
-			center: ol.proj.transform([127.2075537, 37.2310864], 'EPSG:4326', 'EPSG:3857'),
+			center: ol.proj.transform([127.235537, 37.2310864], 'EPSG:4326', 'EPSG:3857'),
 			zoom: 11.5,
 			minZoom: 0,
 			maxZoom: 21
@@ -32,9 +32,9 @@ window.addEventListener("load", function() {
 	// 데이터 가져오기
 	var dateInput = document.querySelector(".selectDate")
 	var carNumInput = document.querySelector(".selectCarNum")
-
 	dateInput.addEventListener('change', function(event) {
-		updateMap(); // 날짜가 변경되면 지도 업데이트
+		console.log(dateInput.value);
+    	updateMap(); // 날짜가 변경되면 지도 업데이트
 	});
 
 	carNumInput.addEventListener('change', function(event) {
@@ -78,7 +78,7 @@ window.addEventListener("load", function() {
 	};
 
 	// 구 선택 이벤트
-	/*
+	
 	var cheoingu = document.getElementById('cheoingu');
 	var giheunggu = document.getElementById('giheunggu');
 	var sujigu = document.getElementById('sujigu');
@@ -106,7 +106,7 @@ window.addEventListener("load", function() {
 			duration: 800
 		});
 	})
-	*/
+	
 
 
 	var point = new ol.layer.Tile({
