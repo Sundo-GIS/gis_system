@@ -7,10 +7,10 @@
 		INSERT INTO 
 			public.coord (id, car_num, date, time, lon, lat, rpm, noise, geom, is_done)
 		VALUES
-			(nextval('seq_id'),
+			(nextval('coord_id_seq'),
 			#{localData.carNum},
 			#{localData.date},
-			#{localData.time},
+			#{localData.time}::TIME,
 			#{localData.lon},
 			#{localData.lat},
 			#{localData.rpm},

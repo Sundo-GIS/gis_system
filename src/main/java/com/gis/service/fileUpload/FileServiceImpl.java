@@ -63,7 +63,7 @@ public class FileServiceImpl implements IFileService {
 	        			rpm += Integer.parseInt(rpmRecords.get(j)[3]);
 	        		}
 	        		LocalData localData = new LocalData();
-	        		int noiseAvg = (int)noise/6;
+	        		int noiseAvg =(int) noise/6;
 	        		int rpmAvg = rpm/6;
 	        		localData.setCarNum(gpsRecords.get(i+3)[2]);
 	        		localData.setDate(LocalDate.parse(gpsRecords.get(i+3)[0]));
@@ -71,7 +71,7 @@ public class FileServiceImpl implements IFileService {
 	        		localData.setLon(Double.parseDouble(gpsRecords.get(i+3)[3]));
 	        		localData.setLat(Double.parseDouble(gpsRecords.get(i+3)[4]));
 	        		localData.setNoise(noiseAvg);
-	        		localData.setRpm(rpm);
+	        		localData.setRpm(rpmAvg);
 	        		boolean is_done = false;
 	        		
 	        		if (noiseAvg >= 80 && rpmAvg >= 1500) {
@@ -80,30 +80,7 @@ public class FileServiceImpl implements IFileService {
 	        		localData.set_done(is_done);
 	        		iFileDao.insertCsvData(localData);
 	        		i = i+5;
-	        	} else if(i+5>rowCount) {
-	        		int row = rowCount-i;
-	        		for(int j=0; j<row; j++) {
-	        			noise += Double.parseDouble(noiseRecords.get(j)[3]);
-	        			rpm += Integer.parseInt(rpmRecords.get(j)[3]);
-	        		}
-	        		LocalData localData = new LocalData();
-	        		int noiseAvg = (int)noise/row;
-	        		int rpmAvg = rpm/row;
-	        		localData.setCarNum(gpsRecords.get(row/2)[2]);
-	        		localData.setDate(LocalDate.parse(gpsRecords.get(row/2)[0]));
-	        		localData.setTime(gpsRecords.get(i+3)[1]);
-	        		localData.setLon(Double.parseDouble(gpsRecords.get(row/2)[3]));
-	        		localData.setLat(Double.parseDouble(gpsRecords.get(row/2)[4]));
-	        		localData.setNoise(noiseAvg);
-	        		localData.setRpm(rpm);
-	        		boolean is_done = false;
-	        		
-	        		if (noiseAvg >= 80 && rpmAvg >= 1500) {
-	        			is_done = true;
-	        		}
-	        		localData.set_done(is_done);
-	        		iFileDao.insertCsvData(localData);
-	        	} else {
+	        	} else if(i+5==rowCount){
 	        		noise = Double.parseDouble(noiseRecords.get(i)[3]);
 	        		rpm = Integer.parseInt(rpmRecords.get(i)[3]);
 	        		LocalData localData = new LocalData();
@@ -121,7 +98,34 @@ public class FileServiceImpl implements IFileService {
 	        		}
 	        		localData.set_done(is_done);
 	        		iFileDao.insertCsvData(localData);
-	        	}
+	        		break;
+	        	} else if(i+5>rowCount) {
+	        		int row = rowCount-i;
+	        		for(int j=i; j<rowCount; j++) {
+	        			log.info("noise1 : " + noiseRecords.get(j)[3]);
+	        			log.info("noise2 : " + Double.parseDouble(noiseRecords.get(j)[3]));
+	        			noise += Double.parseDouble(noiseRecords.get(j)[3]);
+	        			rpm += Integer.parseInt(rpmRecords.get(j)[3]);
+	        		}
+	        		LocalData localData = new LocalData();
+	        		int noiseAvg = ((int)noise)/row;
+	        		int rpmAvg = rpm/row;
+	        		localData.setCarNum(gpsRecords.get(rowCount-1)[2]);
+	        		localData.setDate(LocalDate.parse(gpsRecords.get(rowCount-1)[0]));
+	        		localData.setTime(gpsRecords.get(rowCount-1)[1]);
+	        		localData.setLon(Double.parseDouble(gpsRecords.get(rowCount-1)[3]));
+	        		localData.setLat(Double.parseDouble(gpsRecords.get(rowCount-1)[4]));
+	        		localData.setNoise(noiseAvg);
+	        		localData.setRpm(rpmAvg);
+	        		boolean is_done = false;
+	        		
+	        		if (noiseAvg >= 80 && rpmAvg >= 1500) {
+	        			is_done = true;
+	        		}
+	        		localData.set_done(is_done);
+	        		iFileDao.insertCsvData(localData);
+	        		break;
+	        	} 
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
