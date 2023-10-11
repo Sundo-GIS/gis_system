@@ -1,126 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gis.dao.gis.IGisDao">
-
-	<select id="selectCarNum" resultType="String">
-		SELECT
-			DISTINCT(car_num)
-		FROM
-			temp.temp_gps
-	</select>
-	
-	<select id="selectTempGpsData" resultType="com.gis.dto.gis.GpsTempData">
-		SELECT
-			lon,
-			lat
-		FROM
-			temp.temp_gps
-		WHERE
-			car = #{carNum}	
-	</select>
-	
-	<select id="selectTempNoiseData" resultType="com.gis.dto.gis.NoiseTempData">
-		SELECT
-			noise
-		FROM
-			temp.temp_noise
-		WHERE
-			car_num = #{carNum}
-	</select>
-	
-	<select id="selectTempRpmData" resultType="com.gis.dto.gis.RpmTempData">
-		SELECT
-			rpm
-		FROM
-			temp.temp_rpm
-		WHERE
-			car_num = #{carNum}
-	</select>
-	
-	<insert id="insertLocalData">
-		INSERT INTO 
-			public.coord (id, car_num, date, time, lon, lat, noise, rpm, geom, is_done
-		VALUES
-			(nextval('coord_id_seq'), #{localData.carNum},#{localData.date},#{localData.time},#{localData.lon},#{localData.lat},#{localData.noise},#{localData.rpm}, ST_SetSRID(ST_MakePoint(#{localData.lon},#{localData.lat}), 4326), #{localData.is_done})
-	</insert>
-	
-	<delete id="deleteTempGpsTable">
-		DELETE FROM temp.temp_gps
-	</delete>
-	
-	<delete id="deleteTempNoiseTable">
-		DELETE FROM temp.temp_noise
-	</delete>
-	
-	<delete id="deleteTempRpmTable">
-		DELETE FROM temp.temp_rpm
-	</delete>
-	
-	<insert id="insertGpsTempData">
-		INSERT INTO TEMP_GPS (date, time, car_num, lon, lat)
-		VALUES (#{gtd.date}, #{gtd.time}, #{gtd.carNum}, #{gtd.lon}, #{gtd.lat})
-	</insert>
-	
-	<insert id="insertNoiseTempData">
-		INSERT INTO TEMP_NOISE (date, time, car_num, noise)
-		VALUES (#{ntd.carNum}, #{ntd.date}, #{ntd.time}, #{ntd.noise})
-	</insert>
-	
-	<insert id="insertRpmTempData">
-		INSERT INTO TEMP_RPM (date, time, car_num, rpm)
-		VALUES (#{rtd.date}, #{rtd.time}, #{rtd.carNum}, #{rtd.rpm})
-	</insert>
-	
-	<select id="selectCleanTime">
-		WITH min_max_times AS (
-		  SELECT
-		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
-		     FROM coord
-		     WHERE date = #{date}
-		     ORDER BY time ASC
-		     LIMIT 1) AS min_time,
-		    (SELECT TO_TIMESTAMP(time, 'HH24:MI:SS')::TIME
-		     FROM coord
-		     WHERE date = #{date}
-		     ORDER BY time DESC
-		     LIMIT 1) AS max_time
-		)
-		SELECT
-		  max_time - min_time AS time_difference
-		FROM min_max_times
-	</select>
-	
-	<select id="selectDateCoord" resultType="com.gis.dto.gis.DateCoord">
-	WITH date_coord AS (
-	  SELECT
-		(SELECT lon
-	    FROM coord
-	    WHERE date = #{date}
-		AND car_num = #{carNum}
-	    ORDER BY lon ASC
-	    LIMIT 1) AS min_x,
-	    (SELECT lon
-	     FROM coord
-	     WHERE date = #{date}
-		 AND car_num = #{carNum}
-	     ORDER BY lon DESC
-	     LIMIT 1) AS max_x,
-		 (SELECT lat
-	     FROM coord
-	     WHERE date = #{date}
-		 AND car_num = #{carNum}
-	     ORDER BY lat ASC
-	     LIMIT 1) AS min_y,
-	    (SELECT lat
-	     FROM coord
-	     WHERE date = #{date}
-		 AND car_num = #{carNum}
-	     ORDER BY lat DESC
-	     LIMIT 1) AS max_y
-	)
-	SELECT
-	  (max_x + min_x)/2 AS lon,
-	  (max_y + min_y)/2 AS lat
-	FROM date_coord
-	</select>
+   <select id="selectCar">
+      SELECT
+         CAR_NUM
+      FROM
+         CAR
+   </select>
+   <select id="selectCarNum" resultType="String">
+      SELECT
+         DISTINCT(car_num)
+      FROM
+         temp.temp_gps
+   </select>
+   
+   <select id="selectTempGpsData" resultType="com.gis.dto.gis.GpsTempData">
+      SELECT
+         lon,
+         lat
+      FROM
+         temp.temp_gps
+      WHERE
+         car_num = #{carNum}   
+   </select>
+   
+   <select id="selectTempNoiseData" resultType="com.gis.dto.gis.NoiseTempData">
+      SELECT
+         noise
+      FROM
+         temp.temp_noise
+      WHERE
+         car_num = #{carNum}
+   </select>
+   
+   <select id="selectTempRpmData" resultType="com.gis.dto.gis.RpmTempData">
+      SELECT
+         rpm
+      FROM
+         temp.temp_rpm
+      WHERE
+         car_num = #{carNum}
+   </select>
+   
+   <insert id="insertLocalData" parameterType="com.gis.dto.gis.LocalData">
+      INSERT INTO 
+         public.coord (id, car_num, date, time, lon, lat, rpm, noise, geom, is_done)
+      VALUES
+         (nextval('coord_id_seq'), #{localData.carNum},#{localData.date},#{localData.time}::TIME,#{localData.lon},#{localData.lat},#{localData.rpm},#{localData.noise}, ST_SetSRID(ST_MakePoint(#{localData.lon},#{localData.lat}), 4326), #{localData.is_done})
+   </insert>
+   
+   <delete id="deleteTempGpsTable">
+      DELETE FROM temp.temp_gps
+   </delete>
+   
+   <delete id="deleteTempNoiseTable">
+      DELETE FROM temp.temp_noise
+   </delete>
+   
+   <delete id="deleteTempRpmTable">
+      DELETE FROM temp.temp_rpm
+   </delete>
+   
+   <insert id="insertGpsTempData" parameterType="com.gis.dto.gis.GpsTempData">
+      INSERT INTO TEMP.TEMP_GPS (date, time, car_num, lon,lat)
+      VALUES (#{gtd.date}, #{gtd.time}, #{gtd.carNum},#{gtd.lon}, #{gtd.lat})
+   </insert>
+   
+   <insert id="insertNoiseTempData" parameterType="com.gis.dto.gis.NoiseTempData">
+      INSERT INTO TEMP.TEMP_NOISE (date, time, car_num, noise)
+      VALUES (#{ntd.date}, #{ntd.time}, #{ntd.carNum},#{ntd.noise})
+   </insert>
+   
+   <insert id="insertRpmTempData" parameterType="com.gis.dto.gis.RpmTempData">
+      INSERT INTO TEMP.TEMP_RPM (date, time, car_num, rpm)
+      VALUES (#{rtd.date}, #{rtd.time}, #{rtd.carNum},#{rtd.rpm})
+   </insert>
+   
+   <select id="selectCleanTime">
+      WITH min_max_times AS (
+        SELECT
+          (SELECT time
+           FROM coord
+           WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+           AND car_num = #{carNum}
+           ORDER BY time ASC
+           LIMIT 1) AS min_time,
+          (SELECT time
+           FROM coord
+           WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+           AND car_num = #{carNum}
+           ORDER BY time DESC
+           LIMIT 1) AS max_time
+      )
+      SELECT
+        max_time - min_time AS time_difference
+      FROM min_max_times
+   </select>
+   
+   <select id="selectCleanRatio">
+      with clean_avg as(
+         select
+         (
+            select count(*)
+            from coord
+            where date = TO_DATE(#{date}, 'YYYY-MM-DD')
+            AND car_num = #{carNum}
+         ) as total,
+         (
+            select count(*)
+            from coord
+            where date = TO_DATE(#{date}, 'YYYY-MM-DD')
+            AND car_num = #{carNum}
+            and is_done = true
+         ) as is_true
+      )
+      select
+         trunc((is_true::numeric/total::numeric*100),2) as cleanRatio
+      from clean_avg
+      
+   </select>
+   
+   <select id="selectCleanDistanceGeom">
+      SELECT
+         lon,lat, is_done
+      FROM
+         COORD
+      WHERE
+         DATE = TO_DATE(#{date}, 'YYYY-MM-DD')
+      AND
+         CAR_NUM = #{carNum}
+   </select>
+   
+   <select id="selectCleanDistance" resultType="double" parameterType="double">
+      SELECT  
+          ST_DistanceSphere(
+             ST_MakePoint(#{start.lon}, #{start.lat}),
+             ST_MakePoint(#{end.lon}, #{end.lat}))
+   </select>
+   
+   <select id="selectDateCoord" resultType="com.gis.dto.gis.DateCoord">
+   WITH date_coord AS (
+     SELECT
+      (SELECT lon
+       FROM coord
+       WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+      AND car_num = #{carNum}
+       ORDER BY lon ASC
+       LIMIT 1) AS min_x,
+       (SELECT lon
+        FROM coord
+        WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+       AND car_num = #{carNum}
+        ORDER BY lon DESC
+        LIMIT 1) AS max_x,
+       (SELECT lat
+        FROM coord
+        WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+       AND car_num = #{carNum}
+        ORDER BY lat ASC
+        LIMIT 1) AS min_y,
+       (SELECT lat
+        FROM coord
+        WHERE date = TO_DATE(#{date}, 'YYYY-MM-DD')
+       AND car_num = #{carNum}
+        ORDER BY lat DESC
+        LIMIT 1) AS max_y
+   )
+   SELECT
+     (max_x + min_x)/2 AS lon,
+     (max_y + min_y)/2 AS lat
+   FROM date_coord
+   </select>
 </mapper>
