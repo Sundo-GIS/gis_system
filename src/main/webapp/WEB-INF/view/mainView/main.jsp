@@ -111,16 +111,16 @@
                                 <tr>
                                     <th class="w-25" style="background-color: #bd445b; color: white;">차량</th>
                                     <td class="dropdown" colspan="3">
-                                        <select class="col-12" name="car_num">
-                                            <option value="car_num" class="text-center">103하2414</option>
-                                            <option value="car_num" class="text-center">114하6585</option>
+                                        <select class="col-12 selectCarNum" name="car_num" id="car_num">
+                                            <option  class="text-center">103하2414</option>
+                                            <option  class="text-center">114하6585</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="w-25" style="line-height: 233px;">날짜</th>
                                     <td colspan="3">
-                                        <div type="text" class="calendar-date input-group date fs-6" id="datepicker">
+                                        <div type="text" class="calendar-date selectDate input-group date fs-6" id="datepicker" name="date">
                                         </div>
                                     </td>
                                 </tr>
@@ -164,10 +164,10 @@
                             <h5 class="modal-title offset-1">데이터 추가</h5>
                         </div>
                         <div class="modal-body container">
-                            <form class="form-group row">
+                            <form class="form-group row" id="upload-form" enctype="multipart/form-data">
                                 <!-- gps -->
                                 <div class="offset-2 col-9">
-                                    <input id="gps-csv" filestyle="" type="file" data-class-button="btn btn-default"
+                                    <input id="gps-csv" name="gpsfile" filestyle="" type="file" data-class-button="btn btn-default"
                                         data-class-input="form-control" data-button-text="" accept=".csv"
                                         data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
                                         style="position: absolute; clip: rect(0px 0px 0px 0px);">
@@ -183,7 +183,7 @@
                                 </div>
                                 <!-- noise -->
                                 <div class="offset-2 col-9 mt-4">
-                                    <input id="noise-csv" filestyle="" type="file" data-class-button="btn btn-default"
+                                    <input id="noise-csv" name="noisefile" filestyle="" type="file" data-class-button="btn btn-default"
                                         data-class-input="form-control" data-button-text="" accept=".csv"
                                         data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
                                         style="position: absolute; clip: rect(0px 0px 0px 0px);">
@@ -199,7 +199,7 @@
                                 </div>
                                 <!-- rpm -->
                                 <div class="offset-2 col-9 mt-4">
-                                    <input id="rpm-csv" filestyle="" type="file" data-class-button="btn btn-default"
+                                    <input id="rpm-csv" name="rpmfile" filestyle="" type="file" data-class-button="btn btn-default"
                                         data-class-input="form-control" data-button-text="" accept=".csv"
                                         data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
                                         style="position: absolute; clip: rect(0px 0px 0px 0px);">
@@ -262,6 +262,7 @@
 
     <!-- local에서 갖고옴 -->
     <script src="/resources/js/mainView/mainView.js"></script>
+    <script src="/resources/js/prac.js"></script>
     <script src="/resources/js/mainView/main.js"></script>
 </body>
 
