@@ -1,6 +1,8 @@
 package com.gis.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gis.dto.gis.DateCoord;
 import com.gis.dto.gis.GpsTempData;
 import com.gis.dto.gis.NoiseTempData;
@@ -48,9 +51,24 @@ public class StartController {
 	 */
     @ResponseBody
     @GetMapping("/car")
-    public List<String> selectCar() {
-    	List<String> carList = gisService.selectCar();
-    	return carList;
+    public String selectCar() {
+    	Map<String, Object> data = new HashMap<>();
+    	List<String> car = gisService.selectCar();
+    	data.put("carNum", car);
+
+        // ObjectMapper를 생성
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            // Map을 JSON 문자열로 변환
+            String jsonString = objectMapper.writeValueAsString(data);
+
+            // JSON 문자열 출력
+            return jsonString;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
     @PostMapping("/temp/gps")
     public ResponseEntity<String> insertGpsTempData(@RequestBody GpsTempData locationDto) {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gis.dto.gis.GpsTempData;
 import com.gis.service.fileUpload.IFileService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -38,37 +39,8 @@ public class FileUploadController {
         	while((line = br.readLine()) != null) {
         		rowCount++;
         	}
-        	// 파일 읽기 : opencsv 라이브러리 사용
-        	List<String[]> gpsRecords = new ArrayList<>();
-        	List<String[]> noiseRecords = new ArrayList<>();
-        	List<String[]> rpmRecords = new ArrayList<>();
-            if (!gpsFile.isEmpty()) {
-                InputStreamReader reader = new InputStreamReader(gpsFile.getInputStream(), "EUC-KR");
-                CSVReader csvReader = new CSVReader(reader);
-                gpsRecords = csvReader.readAll();
-              
-                csvReader.close();
-                reader.close();
-            }
-            if (!noiseFile.isEmpty()) {
-                InputStreamReader reader = new InputStreamReader(noiseFile.getInputStream(), "EUC-KR");
-                CSVReader csvReader = new CSVReader(reader);
-                noiseRecords = csvReader.readAll();
-                
-                csvReader.close();
-                reader.close();
-            }
-            if (!rpmFile.isEmpty()) {
-                InputStreamReader reader = new InputStreamReader(rpmFile.getInputStream(), "EUC-KR");
-                CSVReader csvReader = new CSVReader(reader);
-                rpmRecords = csvReader.readAll();
-                
-                csvReader.close();
-                reader.close();
-            }
-            for(int i = 1; i < rowCount; i++) {
-            	iFileService.uploadCsv(gpsRecords.get(i), noiseRecords.get(i), rpmRecords.get(i));
-            }
+        	iFileService.uploadCsv(rowCount, gpsFile, noiseFile, rpmFile);
+        	
             return ResponseEntity.ok("데이터가 성공적으로 추가되었습니다.");
         } catch (IOException e) {
             e.printStackTrace();
