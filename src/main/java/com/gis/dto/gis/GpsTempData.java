@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class GpsTempData {
-	private String car;
+	private String carNum;
 	private String date;
 	private String time;
-	private double x;
-	private double y;
+	private double lon;
+	private double lat;
 }

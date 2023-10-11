@@ -68,22 +68,7 @@
 			}
 		});
 	});
-	
-	$(".coord").click(function() {
-		// 날짜 데이터
-		// 차량 데이터
-		
-		$.ajax({
-			type : "GET",
-			url : "/gis/coord", // 시작 요청을 보낼 엔드포인트 URL
-			success : function(data) {
-				alert(data.x + " " + data.y);
-			},
-			error : function() {
-				alert("스케줄러 시작에 실패했습니다.");
-			}
-		});
-	});
+
 </script>
 </body>
 </html>
