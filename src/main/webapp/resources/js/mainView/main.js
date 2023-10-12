@@ -32,51 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
-/*
-$(document).ready(function () {
-	$("#csv-register-btn").click(function () {
-		var formData = new FormData($("#uploadForm")[0]);
-
-		$.ajax({
-			url: "uploadCsv", // Java 서버 업로드 엔드포인트 URL
-			type: "POST",
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (response) {
-				// 업로드 성공 처리
-				alert("데이터가 성공적으로 업로드되었습니다.");
-				$("#uploadModal").modal("hide");
-			},
-			error: function (xhr, status, error) {
-				// 업로드 실패 처리
-				alert("데이터 업로드 중 오류가 발생했습니다.");
-			}
-});*/
-// $(document).ready(function () {
-//    $("#csv-register-btn").click(function () {
-//        var formData = new FormData($("#uploadForm")[0]);
-
-//         $.ajax({
-//             url: "your-java-upload-endpoint", // Java 서버 업로드 엔드포인트 URL
-//             type: "POST",
-//             data: formData,
-//             processData: false,
-//             contentType: false,
-//             success: function (response) {
-//                 // 업로드 성공 처리
-//                 alert("데이터가 성공적으로 업로드되었습니다.");
-//                 $("#uploadModal").modal("hide");
-//             },
-//             error: function (xhr, status, error) {
-//                 // 업로드 실패 처리
-//                 alert("데이터 업로드 중 오류가 발생했습니다.");
-//             }
-//         });
-//     });
-// });
-
-
 
 // < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
 // 모달창 show
@@ -99,6 +54,38 @@ $('.csv-cancel-btn').click(function(e) {
 	rpmFile.val('');
 
 });
+/* 파일 유효성 검사 */
+async function validateFile(fileElement, fileType) {
+    const file = fileElement.files[0];
+    if (file) {
+        const content = await file.text();
+        switch (fileType) {
+            case 'gps':
+                if (!content.includes('lon') || !content.includes('lat') || !content.includes('하')) {
+                    alert('위치 파일을 확인해 주세요');
+				    // GPS 파일 초기화
+				    $('#gpsfile').val(''); // 값 초기화
+				    $('#gps-csv').val(''); // 파일 선택 초기화
+                }
+                break;
+            
+			case 'noise':
+                if (!content.includes('noise') || !content.includes('하')) {
+                    alert('소음 파일을 확인해 주세요');
+				    $('#noisefile').val(''); // 값 초기화
+				    $('#noise-csv').val(''); // 파일 선택 초기화
+                }
+                break;
+			case 'rpm':
+                if (!content.includes('rpm') || !content.includes('하')) {
+                    alert('진동 파일을 확인해 주세요');
+				    $('#rpmfile').val(''); // 값 초기화
+				    $('#rpm-csv').val(''); // 파일 선택 초기화
+                }
+                break;
+        }
+    }
+}
 
 // gps-csv
 $(document).ready(function() {
@@ -141,27 +128,6 @@ $(document).ready(function() {
 		$("#rpmfile").val(filename);
 	});
 });
-
-// csv 파일만 업로드가능
-const csvFileInputs = document.querySelectorAll('.csv-file-input');
-
-csvFileInputs.forEach((input) => {
-	input.addEventListener('change', (event) => {
-		const selectedFile = event.target.files[0];
-		if (selectedFile) {
-			const fileName = selectedFile.name;
-			if (fileName.endsWith('.csv')) {
-
-			} else {
-				alert('.csv 파일을 선택해주세요.');
-				input.value = '';
-			}
-		}
-	});
-});
-
-
-
 // < DATA 모달창 끝 !!!!!!!!!!!!!!!!!!!!!!!>
 
 // < CAR 모달창 >

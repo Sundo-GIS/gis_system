@@ -33,23 +33,6 @@
 <script src="https://kit.fontawesome.com/25046d3d52.js"
 	crossorigin="anonymous"></script>
 
-<!-- datepicker -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-	integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
-	crossorigin="anonymous" referrerpolicy="no-referrer" />
-<!-- datepicker -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
-	integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
-	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"
-	integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ=="
-	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-
 <!-- local에서 갖고옴 -->
 <link rel="stylesheet" href="/resources/css/mainView/main.css">
 <link rel="stylesheet" href="/resources/css/mainView/calendar.css">
@@ -59,6 +42,15 @@
 .b {
 	border: 1px solid black;
 }
+#download-btn:hover {
+    background-color: green; /* 호버 상태일 때 배경색 변경 */
+    color: white;
+    border: 1px solid black;
+}
+.mouse:hover { 
+    cursor: pointer; /* 호버 시 커서 설정 */
+}
+
 </style>
 </head>
 
@@ -108,21 +100,21 @@
 								<tr>
 									<th class="w-25"
 										style="background-color: #bd445b; color: white;">지도유형</th>
-									<td class="w-25" id="base-map-btn"
+									<td class="w-25 mouse" id="base-map-btn"
 										style="background-color: #293661; color: white;">기본</td>
-									<td class="w-25" id="satellite-map-btn"
+									<td class="w-25 mouse" id="satellite-map-btn"
 										style="background-color: white; color: black;">위성</td>
-									<td class="w-25" id="hybrid-map-btn"
+									<td class="w-25 mouse" id="hybrid-map-btn"
 										style="background-color: white; color: black;">하이브리드</td>
 								</tr>
 								<tr>
-									<th class="w-25"
+									<th class="w-25 mouse"
 										style="background-color: #bd445b; color: white;">권역(구)</th>
-									<td class="w-25 cheoin"
+									<td class="w-25 cheoin mouse"
 										style="background-color: white; color: black;">처인구</td>
-									<td class="w-25 giheung"
+									<td class="w-25 giheung mouse"
 										style="background-color: white; color: black;">기흥구</td>
-									<td class="w-25 suji"
+									<td class="w-25 suji mouse"
 										style="background-color: white; color: black;">수지구</td>
 								</tr>
 								<tr>
@@ -203,7 +195,7 @@
                                 <!-- gps -->
                                 <div class="offset-2 col-9">
                                     <input id="gps-csv" name="gpsfile" filestyle="" type="file" data-class-button="btn btn-default"
-                                        data-class-input="form-control" data-button-text="" accept=".csv"
+                                        data-class-input="form-control" data-button-text="" accept=".csv" onchange="validateFile(this, 'gps')" 
                                         data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
                                         style="position: absolute; clip: rect(0px 0px 0px 0px);">
                                     <div class="bootstrap-filestyle input-group">
@@ -219,7 +211,7 @@
                                 <!-- noise -->
                                 <div class="offset-2 col-9 mt-4">
                                     <input id="noise-csv" name="noisefile" filestyle="" type="file" data-class-button="btn btn-default"
-                                        data-class-input="form-control" data-button-text="" accept=".csv"
+                                        data-class-input="form-control" data-button-text="" accept=".csv" onchange="validateFile(this, 'noise')"
                                         data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
                                         style="position: absolute; clip: rect(0px 0px 0px 0px);">
                                     <div class="bootstrap-filestyle input-group">
@@ -235,7 +227,7 @@
                                 <!-- rpm -->
                                 <div class="offset-2 col-9 mt-4">
                                     <input id="rpm-csv" name="rpmfile" filestyle="" type="file" data-class-button="btn btn-default"
-                                        data-class-input="form-control" data-button-text="" accept=".csv"
+                                        data-class-input="form-control" data-button-text="" accept=".csv" onchange="validateFile(this, 'rpm')"
                                         data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
                                         style="position: absolute; clip: rect(0px 0px 0px 0px);">
                                     <div class="bootstrap-filestyle input-group">

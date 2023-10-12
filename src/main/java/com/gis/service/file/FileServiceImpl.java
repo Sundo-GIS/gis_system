@@ -34,7 +34,7 @@ public class FileServiceImpl implements IFileService {
 	            InputStreamReader reader = new InputStreamReader(gpsFile.getInputStream(), "UTF-8");
 	            CSVReader csvReader = new CSVReader(reader);
 	            gpsRecords = csvReader.readAll();
-	          
+	            
 	            csvReader.close();
 	            reader.close();
 	        }
