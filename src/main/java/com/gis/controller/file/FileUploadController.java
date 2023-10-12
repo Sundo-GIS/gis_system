@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gis.dto.gis.LocalData;
-import com.gis.service.fileUpload.IFileService;
+import com.gis.service.file.IFileService;
 import com.opencsv.exceptions.CsvException;
 
 import lombok.RequiredArgsConstructor;

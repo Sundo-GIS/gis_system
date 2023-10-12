@@ -69,7 +69,10 @@
 
 			<!-- live 버튼 -->
 			<div class="live">
-				<button type="button" class="live-btn btn b mt-1" id="live-btn">LIVE</button>
+				<button type="button" class="live-btn btn b mt-1 live_start" id="live-btn">LIVE</button>
+			</div>
+			<div class="live">
+				<button type="button" class="live-btn btn b mt-1 live_stop" id="live-btn">LIVE</button>
 			</div>
 
 			<!-- 다운로드 버튼 -->

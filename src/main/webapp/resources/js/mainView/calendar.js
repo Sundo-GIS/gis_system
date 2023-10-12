@@ -16,13 +16,13 @@ var carCheck = 0;
 var dateCheck = 0;
 const fileDownload = document.getElementById('download-btn');
 fileDownload.addEventListener("click", function() {
-   if(carCheck==0) {
-      alert("차량 데이터 없음");
-   } else {
-      if(dateCheck==0) {
-         alert("날짜 데이터 없음");
-      }
-   }
+	if (carCheck == 0) {
+		alert("차량 데이터 없음");
+	} else {
+		if (dateCheck == 0) {
+			alert("날짜 데이터 없음");
+		}
+	}
 })
 var point = new ol.layer.Tile({
 	source: new ol.source.TileWMS({
@@ -64,23 +64,18 @@ var end_point = new ol.layer.Tile({
 		serverType: 'geoserver',
 	})
 });
-
-
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, nowDate.getDate());
 	//deleteCleanData()
 	makeCalendar(); //달력 cell 만들어 출력 
 }
-
 //  ">" 클릭시 다음달 view
 function nextCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
 	//deleteCleanData()
 	makeCalendar();
 }
-
-
 //  달력 출력
 function makeCalendar() {
 	let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1);
@@ -100,7 +95,6 @@ function makeCalendar() {
 		cell = row.insertCell();
 		cnt = cnt + 1;
 	}
-
 	/*달력 출력*/
 	for (i = 1; i <= lastDate.getDate(); i++) {
 		cell = row.insertCell();
@@ -119,7 +113,6 @@ function makeCalendar() {
 
 			row = tbCalendar.insertRow();
 		}
-
 		for (let j = 0; j < CarCleanDate.length; j++) {
 			let cleanDateString = CarCleanDate[j];
 			let cleanDateObject = new Date(cleanDateString);
@@ -132,7 +125,6 @@ function makeCalendar() {
 				cell.classList.add('selected');
 			}
 		};
-
 		/*오늘의 날짜에 표시*/
 		if (nowDate.getFullYear() == todayDate.getFullYear()
 			&& nowDate.getMonth() == todayDate.getMonth()
@@ -141,7 +133,6 @@ function makeCalendar() {
 			cell.setAttribute('id', 'today');
 		}
 	}
-
 	// 차량 선택시 해당 차량에대한 청소날짜 생성
 	const carNumGroup = document.querySelector('#car_num');
 	carNumGroup.addEventListener("change", function() {
@@ -169,8 +160,6 @@ function makeCalendar() {
 			}
 		});
 	})
-
-
 	// 날짜 선택, 차량 선택시 view 화면 변경
 	const selectedDates = document.querySelectorAll(".selected");
 	selectedDates.forEach(selectedDate => {
@@ -243,4 +232,123 @@ function addCleanData() {
 	map.addLayer(point);
 	map.addLayer(start_point);
 	map.addLayer(end_point);
+}
+var live_start_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'live_start_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var live_end_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'live_end_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var live_coord = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'live_coord',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var live_start = document.querySelector('.live_start');
+var live_stop = document.querySelector('.live_stop');
+var live_lon;
+var live_lat;
+let intervalId;
+live_start.addEventListener("click", function() {
+	live_start.style.display = 'none';
+	live_stop.style.display = 'block';
+	map.addLayer(live_coord);
+	map.addLayer(live_start_point);
+	map.addLayer(live_end_point);
+	map.removeLayer(line);
+	map.removeLayer(point);
+	map.removeLayer(start_point);
+	map.removeLayer(end_point);
+	console.log("라이브 시작");
+	
+	livestart();
+	intervalId = setInterval(updateMapLayer, 12000);
+})
+function livestart() {
+	$.ajax({
+		type: 'POST',
+		url: '/gis/live',
+		success: function(data) {
+			live_lon = data.lon;
+			live_lat = data.lat;
+			console.log(live_lon + " " + live_lat);
+			map.getView().animate({
+				center: ol.proj.transform([live_lon, live_lat], 'EPSG:4326', 'EPSG:3857'),
+				zoom: 17,
+				duration: 600
+			});
+		}
+	});
+}
+live_stop.addEventListener("click", function() {
+	live_stop.style.display = 'none';
+	live_start.style.display = 'block';
+	console.log("라이브 종료");
+	map.removeLayer(live_coord);
+	map.removeLayer(live_start_point);
+	map.removeLayer(live_end_point);
+	map.addLayer(line);
+	map.addLayer(point);
+	map.addLayer(start_point);
+	map.addLayer(end_point);
+	boundary.setOpacity(0.5);
+	// 이전에 설정한 타이머 중지
+	clearInterval(intervalId);
+})
+// 실시간으로 레이어 업데이트를 수행하는 함수
+function updateMapLayer() {
+	// 맵 레이어의 소스를 업데이트
+	// 새로운 URL 및 파라미터 설정
+	const live_start_point_newParams = {
+		'LAYERS': 'live_start_point', // 새 레이어 이름
+		'TILED': true,
+		'TIME': Date.now(),
+	};
+	const live_end_point_newParams = {
+		'LAYERS': 'live_end_point', // 새 레이어 이름
+		'TILED': true,
+		'TIME': Date.now(),
+	};
+	const live_coord_newParams = {
+		'LAYERS': 'live_coord', // 새 레이어 이름
+		'TILED': true,
+		'TIME': Date.now(),
+	};
+
+	// 새로운 URL 설정
+	const newUrl = 'http://localhost:8080/geoserver/wms'; // 새로운 서버 URL
+	// live_start_point 레이어 소스 업데이트
+	live_start_point.getSource().setUrl(newUrl);
+	live_start_point.getSource().updateParams(live_start_point_newParams);
+
+	// live_end_point 레이어 소스 업데이트
+	live_end_point.getSource().setUrl(newUrl);
+	live_end_point.getSource().updateParams(live_end_point_newParams);
+
+	// live_coord 레이어 소스 업데이트
+	live_coord.getSource().setUrl(newUrl);
+	live_coord.getSource().updateParams(live_coord_newParams);
+	// map 객체 다시 그리기
+	map.render();
+	livestart();
+	console.log("새로고침!");
 }

@@ -70,6 +70,10 @@ public class StartController {
             return "";
         }
     }
+    /**
+	 * App에서 Temp Data 받아오기
+	 * @author 여수한
+	 */
     @PostMapping("/temp/gps")
     public ResponseEntity<String> insertGpsTempData(@RequestBody GpsTempData locationDto) {
     	log.info("GPS : " + locationDto);
@@ -94,27 +98,22 @@ public class StartController {
     	timeScheduler.stopScheduler();
         return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
-    @ResponseBody
-    @GetMapping("/statistics")
-    public Statistics DateStatistics(@RequestBody String date, @RequestBody String carNum){
-    	// 청소 시간
-    	String DateCleanTime = gisService.selectDateCleanTime("2023-08-29", "103하2414");
-    	// 청소 비율
-    	double DateCleanRatio = gisService.selectDateCleanRatio("2023-08-29", "103하2414");
-    	// 총 운행거리
-    	double DateTotalDistance = gisService.selectDateTotalDistance("2023-08-29", "103하2414");
-    	// 청소한 운행거리
-    	double DateCleanDistance = gisService.selectDateCleanDistance("2023-08-30", "103하2414");
-    	Statistics statistics = new Statistics();
-    	statistics.setCleanTime(DateCleanTime);
-    	statistics.setCleanDistance(DateCleanDistance);
-    	statistics.setCleanRatio(DateCleanRatio);
-    	statistics.setTotalDistance(DateTotalDistance);
-    	return statistics;
-    }
+    /**
+	 * 선택한 차량의 선택한 날짜의 센터 좌표 가져오기 
+	 * @author 여수한
+	 */
     @ResponseBody
     @GetMapping("/coord")
     public DateCoord DateCoord(@RequestParam("date") String date, @RequestParam("carNum") String carNum){
     	return gisService.selectDateCoord(date, carNum);
+    }
+    /**
+	 * 라이브 좌표 조회
+	 * @author 여수한
+	 */
+    @ResponseBody
+    @PostMapping("/live")
+    public DateCoord getLiveCoord(){
+    	return gisService.selectLiveCoord();
     }
 }
