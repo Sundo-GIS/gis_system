@@ -173,36 +173,18 @@ function makeCalendar() {
 			cell.setAttribute('id', 'today');
 		}
 	}
-	// 차량 선택시 해당 차량에대한 청소날짜 생성
-	const carNumGroup = document.querySelector('#car_num');
-	carNumGroup.addEventListener("change", function() {
-
-		const carNum = carNumGroup.value;
-		console.log(carNum)
-
-		$.ajax({
-			type: "GET",
-			url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
-			data: {
-				carNum: carNum
-			},
-			dataType: "json",
-			success: function(data) {
-				arrayTest(data);
-				deleteCleanData()
-				/*				map.removeLayer(line);
-								map.removeLayer(point);
-								map.removeLayer(start_point);
-								map.removeLayer(end_point);*/
-			}
-		});
-	})
-
 
 	// 차량 선택시 해당 차량에대한 청소날짜 생성
 	const carNumGroup = document.querySelector('#car_num');
 	carNumGroup.addEventListener("change", function() {
-
+		let cleanTime = document.getElementById("clean-time");
+		let cleanRatio = document.getElementById("clean-ratio");
+		let totalDistance = document.getElementById("total-distance");
+		let cleanDistance = document.getElementById("clean-distance");
+		cleanTime.innerText = "00:00:00";
+		cleanRatio.innerText = "0 %";
+		totalDistance.innerText = "0 km";
+		cleanDistance.innerText = "0 km";
 		const carNum = carNumGroup.value;
 
 		$.ajax({
@@ -261,10 +243,10 @@ function makeCalendar() {
 					cleanRatio.innerText = data.cleanRatio + "%";
 					totalDistance.innerText = data.totalDistance.toFixed(2) + "km";
 					cleanDistance.innerText = data.cleanDistance.toFixed(2) + "km";
-					
+
 					deleteCleanData();
 					addCleanData();
-					
+
 					map.getView().animate({
 						center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
 						zoom: 15,
