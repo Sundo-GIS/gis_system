@@ -50,46 +50,6 @@ let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
 
-var point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'clean_data',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var line = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'clean_line',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var start_point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'start_point',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var end_point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'end_point',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
 function arrayTest(data) {
 	for (var i = 0; i < data.length; i++) {
 		CarCleanDate[i] = data[i];
@@ -115,8 +75,8 @@ function nextCalendar() {
 
 //  달력 출력
 function makeCalendar() {
-	let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1);
-	let lastDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0);
+	let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1); // 보여지고 있는 화면
+	let lastDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0); // 보여지고있는 화면의 마지막 날짜
 
 	const tbCalendar = document.getElementById("calendar");
 	const tbCalendarYM = document.getElementById("tbCalendarYM");
@@ -204,13 +164,23 @@ function makeCalendar() {
 
 	// 날짜 선택, 차량 선택시 view 화면 변경
 	const selectedDates = document.querySelectorAll(".selected");
+	let preSelectedDate = null;
+
 	selectedDates.forEach(selectedDate => {
 		selectedDate.addEventListener('click', () => {
+
+			if (preSelectedDate) {
+				preSelectedDate.classList.remove("choice"); // 이전 선택을 클래스에서 제거
+			}
+
+			selectedDate.classList.add("choice");
+			preSelectedDate = selectedDate; // 이전날짜 추가하기;
 
 			const year = nowDate.getFullYear();
 			const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
 			const date = String(selectedDate.innerHTML.padStart(2, '0'));
 			const cleanDate = `${year}-${month}-${date}`;
+
 			deleteCleanData()
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;

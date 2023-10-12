@@ -35,8 +35,8 @@ public class MainViewController {
 		CleaningInfoDto cid = mainViewService.cleaningInfo(carNum, date);
 		return cid;
 	}
-
-	// 모달창 차량 추가
+	
+	// 차량 리스트 출력
 	@GetMapping("/view")
 	public String modalAddCar(Model model) {
 		List<CarNumListDto> cnldList = mainViewService.carNumList();
@@ -44,11 +44,11 @@ public class MainViewController {
 		return "mainView/main";
 	}
 
-	// 차량 리스트 출력
+	// 모달창 차량 추가
 	@PostMapping("/view")
 	public String modalCarInfo(CarDto car) {
 		mainViewService.addCar(car);
-		return "mainView/main";
+		return "redirect:/view";
 	}
 
 	// 차량 별 청소 날짜 출력
