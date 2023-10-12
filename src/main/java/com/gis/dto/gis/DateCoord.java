@@ -6,4 +6,5 @@ import lombok.Data;
 public class DateCoord {
 	private double lon;
 	private double lat;
+	private boolean is_done;
 }

@@ -14,6 +14,11 @@ import com.gis.dto.gis.RpmTempData;
 @Mapper
 public interface IGisDao {
 	/**
+	 * Car테이블에서 차량 번호 조회
+	 * @author 여수한
+	 */
+	public List<String> selectCar();
+	/**
 	 * Temp_GPS Table에서 차량 번호 조회
 	 * @author 여수한
 	 */
@@ -49,29 +54,27 @@ public interface IGisDao {
 	 * Temp Table 데이터 추가
 	 * @author 여수한
 	 */
-	public void insertGpsTempData(GpsTempData gtd);
-	public void insertNoiseTempData(NoiseTempData ntd);
-	public void insertRpmTempData(RpmTempData rtd);
+	public void insertGpsTempData(@Param("gtd")GpsTempData gtd);
+	public void insertNoiseTempData(@Param("ntd")NoiseTempData ntd);
+	public void insertRpmTempData(@Param("rtd")RpmTempData rtd);
 	/**
 	 * 달력 날짜 누르면 운행 시간 계산
 	 * @author 여수한
 	 */
-	public String selectCleanTime(@Param("date") String date);
+	public String selectCleanTime(@Param("date")String date, @Param("carNum")String carNum);
 	/**
 	 * 달력 날짜 누르면 청소 비율 계산
 	 * @author 여수한
+	 * @param carNum 
+	 * @param date 
 	 */
-	public int selectCleanRatio();
+	public double selectCleanRatio(@Param("date")String date, @Param("carNum") String carNum);
 	/**
 	 * 달력 날짜 누르면 전체 운행거리 계산
 	 * @author 여수한
 	 */
-	public int selectTotalDistance();
-	/**
-	 * 달력 날짜 누르면 청소 운행거리 계산
-	 * @author 여수한
-	 */
-	public int selectCleanDistance();
+	public List<DateCoord> selectCleanDistanceGeom(@Param("date")String date,@Param("carNum") String carNum);
+	public double selectCleanDistance(@Param("start")DateCoord start, @Param("end")DateCoord end);
 	/**
 	 * 달력 날짜 누르면 해당 날짜의 좌표 데이터 조회
 	 * @author 여수한

@@ -1,23 +1,25 @@
 package com.gis.controller.fileUpload;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.gis.dao.file.IFileDao;
 import com.gis.dto.gis.LocalData;
 import com.gis.service.fileUpload.IFileService;
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class FileUploadController {
 
 	private final IFileService iFileService;
 	
+	/* 파일 업로드 */
     @PostMapping("/uploadCsv")
     public ResponseEntity<String> uploadCsv(@RequestParam("gpsfile") MultipartFile gpsFile,
                             @RequestParam("noisefile") MultipartFile noiseFile,
@@ -41,37 +44,8 @@ public class FileUploadController {
         	while((line = br.readLine()) != null) {
         		rowCount++;
         	}
-        	// 파일 읽기 : opencsv 라이브러리 사용
-        	List<String[]> gpsRecords = new ArrayList<>();
-        	List<String[]> noiseRecords = new ArrayList<>();
-        	List<String[]> rpmRecords = new ArrayList<>();
-            if (!gpsFile.isEmpty()) {
-                InputStreamReader reader = new InputStreamReader(gpsFile.getInputStream(), "EUC-KR");
-                CSVReader csvReader = new CSVReader(reader);
-                gpsRecords = csvReader.readAll();
-              
-                csvReader.close();
-                reader.close();
-            }
-            if (!noiseFile.isEmpty()) {
-                InputStreamReader reader = new InputStreamReader(noiseFile.getInputStream(), "EUC-KR");
-                CSVReader csvReader = new CSVReader(reader);
-                noiseRecords = csvReader.readAll();
-                
-                csvReader.close();
-                reader.close();
-            }
-            if (!rpmFile.isEmpty()) {
-                InputStreamReader reader = new InputStreamReader(rpmFile.getInputStream(), "EUC-KR");
-                CSVReader csvReader = new CSVReader(reader);
-                rpmRecords = csvReader.readAll();
-                
-                csvReader.close();
-                reader.close();
-            }
-            for(int i = 1; i < rowCount; i++) {
-            	iFileService.uploadCsv(gpsRecords.get(i), noiseRecords.get(i), rpmRecords.get(i));
-            }
+        	iFileService.uploadCsv(rowCount, gpsFile, noiseFile, rpmFile);
+        	
             return ResponseEntity.ok("데이터가 성공적으로 추가되었습니다.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,8 +56,38 @@ public class FileUploadController {
         } catch(IndexOutOfBoundsException e) { 
         	e.printStackTrace();
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("누락된 파일이 있습니다");
+        } catch(Exception e) { 
+        	e.printStackTrace();
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("잘못된 요청입니다: " + e.getMessage());
         }
     	
+    }
+    
+	/**
+	 * 파일 다운로드(opencsv라이브러리 사용) : coord 테이블에서 데이터 조회하여 파일로 저장 
+	 * @author 임연서
+	 */
+    @GetMapping("/downloadCsv")
+    public void downloadCsv(@RequestParam("date") String date,
+                            @RequestParam("carNum") String carNum,
+                            HttpServletResponse response) throws IOException {
+
+    	// 데이터베이스에서 데이터를 가져오기
+        List<LocalData> dataList = iFileService.selectLocalData(date, carNum);
+
+        // HTTP 응답 헤더 및 파일 이름 설정
+        response.setContentType("text/csv; charset=UTF-8"); // UTF-8 설정
+        response.setHeader("Content-Disposition", "attachment; filename=data.csv"); // 파일 이름 설정
+
+        // CSV 파일을 생성 후 출력
+        try (PrintWriter writer 
+        		= new PrintWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8))) {
+        	writer.write("\uFEFF"); // 해당 문자가 있으면 BOM형식임을 인식
+        	iFileService.createCsvFile(dataList, writer);
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     

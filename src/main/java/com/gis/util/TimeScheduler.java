@@ -10,23 +10,25 @@ import org.springframework.stereotype.Component;
 import com.gis.service.gis.IGisService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class TimeScheduler {
 
 	private final IGisService gisService;
 	private ScheduledExecutorService scheduler;
 
-	public void startScheduler(int time) {
+	public void startScheduler() {
 		stopScheduler();
-
+		log.info("시작");
 		scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, time, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, 60000, TimeUnit.MILLISECONDS);
 	}
 	public void stopScheduler() {
-		System.out.println("스케줄러 종료");
 		if (scheduler != null && !scheduler.isShutdown()) {
+			gisService.deleteTempTable();
 			scheduler.shutdown();
 			try {
 				if (!scheduler.awaitTermination(1, TimeUnit.SECONDS)) {
@@ -36,6 +38,7 @@ public class TimeScheduler {
 				scheduler.shutdownNow();
 				Thread.currentThread().interrupt();
 			}
+			log.info("종료");
 		}
 	}
 	/**
@@ -43,7 +46,6 @@ public class TimeScheduler {
 	 * @author 여수한
 	 */
 	public void insertLocalDB() {
-		System.out.println("service 호출");
 		List<String> carNums = gisService.selectCarNumber();
 		for (int i = 0; i < carNums.size(); i++) {
 			gisService.selectTempData(carNums.get(i));

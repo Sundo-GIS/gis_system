@@ -1,3 +1,120 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const uploadForm = document.getElementById('upload-form');
+    const registerButton = document.getElementById('csv-register-btn');
+
+    registerButton.addEventListener('click', function () {
+        const formData = new FormData(uploadForm);
+
+        // 서버 엔드포인트 설정
+        const serverEndpoint = '/uploadCsv';
+
+        fetch(serverEndpoint, {
+            method: 'POST',
+            body: formData
+        })
+		.then(response => {
+		    if (response.ok) {
+		        $('#add-data-modal').modal('hide'); // 모달 닫기
+		        alert('데이터가 성공적으로 추가되었습니다!');
+				// 파일 입력 필드 초기화
+		        uploadForm.reset();
+		    } else {
+		        response.text().then(errorMessage => { // 서버 응답의 텍스트 본문을 errorMessage 변수에 저장
+		            alert(errorMessage);
+		        });
+		    }
+		})
+		.catch(error => {
+		    alert('데이터 추가를 실패하였습니다.');
+		    console.error('업로드 중 오류 발생: ', error);
+		});		
+    });
+});
+/* 파일 다운로드 */
+document.addEventListener('DOMContentLoaded', function() {
+
+	const downloadButton = document.getElementById('download-btn');
+
+	downloadButton.addEventListener('click', function() {
+	    // 입력된 차량번호와 일자를 가져옴
+		var carNumInput = document.querySelector(".selectCarNum").value;
+		var dateInput = document.querySelector(".selectDate").value;
+		// 인코딩된 문자열을 생성
+		// URL에서 사용할 수 없는 문자나 특수 문자를 인코딩하여 안전한 URL 문자열을 생성하는 데 사용
+		var dateEncoded = encodeURIComponent(dateInput);
+		var carNumEncoded = encodeURIComponent(carNumInput);
+		
+		// 동적 URL 생성
+        var downloadUrl = 'downloadCsv?date=' + encodeURIComponent(dateInput) + '&carNum=' + encodeURIComponent(carNumInput);
+
+	    // 서버로 전송할 데이터를 객체로 만들기
+	    var requestData = {
+	        date: dateEncoded,
+	        carNum: carNumEncoded
+	    };
+	
+	    // 서버로 POST 요청 보내기
+	    $.ajax({
+	        type: 'GET', 
+	        url: '/downloadCsv',
+	        data: requestData, // 서버로 전송할 데이터
+	        success: function(response) {
+				window.open(downloadUrl, '_blank');
+	        },
+	        error: function(error) {
+				alert("파일 다운로드 실패!")
+	        }
+	    });
+		
+	});
+  
+});
+/*
+$(document).ready(function () {
+    $("#csv-register-btn").click(function () {
+        var formData = new FormData($("#uploadForm")[0]);
+
+        $.ajax({
+            url: "uploadCsv", // Java 서버 업로드 엔드포인트 URL
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // 업로드 성공 처리
+                alert("데이터가 성공적으로 업로드되었습니다.");
+                $("#uploadModal").modal("hide");
+            },
+            error: function (xhr, status, error) {
+                // 업로드 실패 처리
+                alert("데이터 업로드 중 오류가 발생했습니다.");
+            }
+});*/
+// $(document).ready(function () {
+//    $("#csv-register-btn").click(function () {
+//        var formData = new FormData($("#uploadForm")[0]);
+
+//         $.ajax({
+//             url: "your-java-upload-endpoint", // Java 서버 업로드 엔드포인트 URL
+//             type: "POST",
+//             data: formData,
+//             processData: false,
+//             contentType: false,
+//             success: function (response) {
+//                 // 업로드 성공 처리
+//                 alert("데이터가 성공적으로 업로드되었습니다.");
+//                 $("#uploadModal").modal("hide");
+//             },
+//             error: function (xhr, status, error) {
+//                 // 업로드 실패 처리
+//                 alert("데이터 업로드 중 오류가 발생했습니다.");
+//             }
+//         });
+//     });
+// });
+
+
+
 // < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
 // 모달창 show
 $('#add-data-btn').click(function (e) {
@@ -79,6 +196,7 @@ csvFileInputs.forEach((input) => {
 		}
 	});
 });
+
 
 
 // < DATA 모달창 끝 !!!!!!!!!!!!!!!!!!!!!!!>
