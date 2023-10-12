@@ -23,26 +23,6 @@ import lombok.extern.log4j.Log4j2;
 public class MemberController {
 	
 	private final MemberServiceImpl memberService;
-	
-	/**
-	 * 메인 페이지(회원 전용)
-	 * @author 임연서
-	 */
-	@GetMapping("/")
-	public String memberPage(HttpServletRequest request) {
-		// 세션에서 사용자 정보 가져오기
-		HttpSession session = request.getSession();
-		MemberDto member = (MemberDto) session.getAttribute("member");
-
-        // 사용자가 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
-        if (member == null) {
-        	log.info("회원이 아님");
-            return "redirect:/login";
-        }
-        // 로그인된 사용자만 접근 가능한 페이지
-        log.info("세션: {}", session);
-		return "member/member";
-	}
 
 	/**
 	 * 로그인 화면으로 이동
@@ -74,7 +54,7 @@ public class MemberController {
 
             if (memberDTO.getPassword().equals(hashedPassword)) {
                 session.setAttribute("member", memberDTO);
-                return "redirect:/"; // 로그인 성공 시 메인 페이지로 이동
+                return "redirect:/view"; // 로그인 성공 시 메인 페이지로 이동
             }
         } 
         attributes.addFlashAttribute("error", "* 아이디 또는 비밀번호가 일치하지 않습니다.");

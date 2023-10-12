@@ -171,5 +171,21 @@
 	  (max_y + min_y)/2 AS lat
 	FROM date_coord
 	</select>
-
+	
+	<select id="selectLiveCoord">
+		SELECT
+			lon,
+			lat
+		FROM
+			live_coord
+		ORDER BY
+			time desc
+		LIMIT 1
+	</select>
+	<insert id="insertLiveData" parameterType="com.gis.dto.gis.LocalData">
+		INSERT INTO 
+			public.live_coord (id, car_num, date, time, lon, lat, rpm, noise, geom, is_done)
+		VALUES
+			(nextval('live_coord_id_seq'), #{localData.carNum},#{localData.date},#{localData.time}::TIME,#{localData.lon},#{localData.lat},#{localData.rpm},#{localData.noise}, ST_SetSRID(ST_MakePoint(#{localData.lon},#{localData.lat}), 4326), #{localData.is_done})
+	</insert>
 </mapper>

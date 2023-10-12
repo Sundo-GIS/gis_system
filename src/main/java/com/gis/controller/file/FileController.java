@@ -65,7 +65,7 @@ public class FileController {
         } catch(Exception e) { 
         	e.printStackTrace();
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("잘못된 요청입니다: " + e.getMessage());
-        }
+        } 
     	
     }
     

@@ -2,10 +2,12 @@ package com.gis.controller.mainView;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gis.dto.mainView.CarDto;
 import com.gis.dto.mainView.CarNumListDto;
 import com.gis.dto.mainView.CleaningInfoDto;
+import com.gis.dto.member.MemberDto;
 import com.gis.service.gis.IGisService;
 import com.gis.service.mainView.IMainViewService;
 
@@ -35,10 +38,19 @@ public class MainViewController {
 		CleaningInfoDto cid = mainViewService.cleaningInfo(carNum, date);
 		return cid;
 	}
-	
-	// 차량 리스트 출력
+
 	@GetMapping("/view")
-	public String modalAddCar(Model model) {
+	public String memberPage(HttpServletRequest request, Model model) {
+		// 세션에서 사용자 정보 가져오기
+		HttpSession session = request.getSession();
+		MemberDto member = (MemberDto) session.getAttribute("member");
+
+        // 사용자가 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
+        if (member == null) {
+        	log.info("회원이 아님");
+            return "redirect:/login";
+        }
+  
 		List<CarNumListDto> cnldList = mainViewService.carNumList();
 		model.addAttribute("carNumList", cnldList);
 		return "mainView/main";

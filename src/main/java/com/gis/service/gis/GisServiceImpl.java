@@ -117,6 +117,7 @@ public class GisServiceImpl implements IGisService {
 		localData.setNoise(avgNoise);
 		localData.set_done(is_done);
 		gisDao.insertLocalData(localData);
+		gisDao.insertLiveData(localData);
 	}
 	/**
 	 * Temp Table 비우기
@@ -198,5 +199,14 @@ public class GisServiceImpl implements IGisService {
 	public DateCoord selectDateCoord(String date, String carNum) {
 		DateCoord dc = gisDao.selectDateCoord(date, carNum);
 		return dc;
+	}
+	/**
+	 * 라이브 좌표 조회
+	 * @author 여수한
+	 */
+	@Override
+	public DateCoord selectLiveCoord() {
+		DateCoord liveCoord = gisDao.selectLiveCoord();
+		return liveCoord;
 	}
 }
