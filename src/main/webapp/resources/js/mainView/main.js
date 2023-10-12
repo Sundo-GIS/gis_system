@@ -108,7 +108,6 @@ $(document).ready(function() {
 	});
 });
 
-
 // < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
 // 모달창 show
 $('#add-data-btn').click(function(e) {
