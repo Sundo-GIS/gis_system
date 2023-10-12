@@ -1,4 +1,4 @@
-package com.gis.controller.fileUpload;
+package com.gis.controller.file;
 
 import java.io.BufferedReader;
 import java.io.IOException;

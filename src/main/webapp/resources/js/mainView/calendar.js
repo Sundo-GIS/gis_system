@@ -1,101 +1,69 @@
 $(document).ready(function() {
 	makeCalendar();
 });
-
-var point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'clean_data',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var line = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'clean_line',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var start_point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'start_point',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var end_point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'end_point',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-
-
-
 // ajax 자동차에 대한 날짜 데이터 배열에 저장
 let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
-
-var point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'clean_data',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var line = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'clean_line',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var start_point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'start_point',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
-var end_point = new ol.layer.Tile({
-	source: new ol.source.TileWMS({
-		url: 'http://localhost:8080/geoserver/wms',
-		params: {
-			'LAYERS': 'end_point',
-			'TILED': true,
-		},
-		serverType: 'geoserver',
-	})
-});
 function arrayTest(data) {
 	for (var i = 0; i < data.length; i++) {
 		CarCleanDate[i] = data[i];
 		makeCalendar();
 	}
 }
+// 파일 다운로드 체크
+var carCheck = 0;
+var dateCheck = 0;
+const fileDownload = document.getElementById('download-btn');
+fileDownload.addEventListener("click", function() {
+   if(carCheck==0) {
+      alert("차량 데이터 없음");
+   } else {
+      if(dateCheck==0) {
+         alert("날짜 데이터 없음");
+      }
+   }
+})
+var point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_data',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var line = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_line',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var start_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'start_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var end_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'end_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
 
 
 //  "<" 클릭시 다음달 view
@@ -177,6 +145,7 @@ function makeCalendar() {
 	// 차량 선택시 해당 차량에대한 청소날짜 생성
 	const carNumGroup = document.querySelector('#car_num');
 	carNumGroup.addEventListener("change", function() {
+		carCheck++;
 		let cleanTime = document.getElementById("clean-time");
 		let cleanRatio = document.getElementById("clean-ratio");
 		let totalDistance = document.getElementById("total-distance");
@@ -206,7 +175,7 @@ function makeCalendar() {
 	const selectedDates = document.querySelectorAll(".selected");
 	selectedDates.forEach(selectedDate => {
 		selectedDate.addEventListener('click', () => {
-
+			dateCheck++;
 			const year = nowDate.getFullYear();
 			const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
 			const date = String(selectedDate.innerHTML.padStart(2, '0'));
@@ -215,6 +184,8 @@ function makeCalendar() {
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;
 
+			console.log(cleanDate);
+			console.log(carNum);
 			// 선택날짜 출력하기
 			var viewparams = 'date:' + cleanDate + ';carNum:' + carNum;
 			line.getSource().updateParams({ 'viewparams': viewparams });
@@ -222,15 +193,11 @@ function makeCalendar() {
 			start_point.getSource().updateParams({ 'viewparams': viewparams });
 			end_point.getSource().updateParams({ 'viewparams': viewparams });
 
-
-
-
 			// 중심 좌표 이동
 			let cleanTime = document.getElementById("clean-time");
 			let cleanRatio = document.getElementById("clean-ratio");
 			let totalDistance = document.getElementById("total-distance");
 			let cleanDistance = document.getElementById("clean-distance");
-
 
 			$.ajax({
 				type: "GET",
@@ -260,11 +227,9 @@ function makeCalendar() {
 					console.log(carNum);
 				}
 			});
-
 		});
 	});
 }
-
 // 청소구역 레이어 삭제
 function deleteCleanData() {
 	map.removeLayer(line);
@@ -272,7 +237,6 @@ function deleteCleanData() {
 	map.removeLayer(start_point);
 	map.removeLayer(end_point);
 }
-
 // 청소구역 레이어 추가
 function addCleanData() {
 	map.addLayer(line);
@@ -280,6 +244,3 @@ function addCleanData() {
 	map.addLayer(start_point);
 	map.addLayer(end_point);
 }
-
-
-
