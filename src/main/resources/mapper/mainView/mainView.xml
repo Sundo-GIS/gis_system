@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gis.dao.mainView.IMainViewDao">
+
+
+	<insert id="addCar" parameterType="com.gis.dto.mainView.CarDto">
+		INSERT INTO car (car_num, car_type)
+		VALUES (#{car.carNum}, #{car.carType})
+	</insert>
+	
+	<select id="carNumList" resultType="com.gis.dto.mainView.CarDto">
+		select car_num as carNum, car_type as carType 
+		from car;
+	</select>
+	
+	<select id="selectedDate" parameterType="String" resultType="String">
+		select distinct date 
+		from coord 
+		where car_num = #{carNum}
+	</select>
+	
+</mapper>
