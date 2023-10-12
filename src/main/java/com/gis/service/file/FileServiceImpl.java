@@ -1,4 +1,4 @@
-package com.gis.service.fileUpload;
+package com.gis.service.file;
 
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -154,7 +154,6 @@ public class FileServiceImpl implements IFileService {
 
             // 데이터 리스트를 CSV 파일에 쓰기
             for (LocalData data : dataList) {
-            	log.info("data : {}", data);
             	String[] line = {
             					 data.getCarNum(), 
                 				 String.valueOf(data.getDate()), 
