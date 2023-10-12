@@ -28,16 +28,22 @@ import lombok.extern.log4j.Log4j2;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-public class FileUploadController {
+public class FileController {
 
 	private final IFileService iFileService;
 	
-	/* 파일 업로드 */
+	/**
+	 * 파일 업로드(opencsv라이브러리 사용) 
+	 * @author 임연서
+	 */
     @PostMapping("/uploadCsv")
     public ResponseEntity<String> uploadCsv(@RequestParam("gpsfile") MultipartFile gpsFile,
                             @RequestParam("noisefile") MultipartFile noiseFile,
                             @RequestParam("rpmfile") MultipartFile rpmFile) throws IOException, CsvException {
     	try(BufferedReader br = new BufferedReader(new InputStreamReader(gpsFile.getInputStream()))) {
+    		if (gpsFile.isEmpty() || noiseFile.isEmpty() || rpmFile.isEmpty()) {
+                return ResponseEntity.badRequest().body("누락된 파일이 있습니다.");
+            }
     		// 파일 행 개수 구하기
     		int rowCount=0;
         	String line;
@@ -59,7 +65,7 @@ public class FileUploadController {
         } catch(Exception e) { 
         	e.printStackTrace();
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("잘못된 요청입니다: " + e.getMessage());
-        }
+        } 
     	
     }
     

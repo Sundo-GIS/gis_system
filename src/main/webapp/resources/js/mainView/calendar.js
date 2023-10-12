@@ -5,25 +5,28 @@ $(document).ready(function() {
 let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
+
 function arrayTest(data) {
 	for (var i = 0; i < data.length; i++) {
 		CarCleanDate[i] = data[i];
 		makeCalendar();
 	}
 }
+
 // 파일 다운로드 체크
 var carCheck = 0;
 var dateCheck = 0;
 const fileDownload = document.getElementById('download-btn');
 fileDownload.addEventListener("click", function() {
 	if (carCheck == 0) {
-		alert("차량 데이터 없음");
+		alert("차량 데이터를 선택해주세요");
 	} else {
 		if (dateCheck == 0) {
-			alert("날짜 데이터 없음");
+			alert("날짜 데이터를 선택해주세요");
 		}
 	}
 })
+
 var point = new ol.layer.Tile({
 	source: new ol.source.TileWMS({
 		url: 'http://localhost:8080/geoserver/wms',
@@ -78,8 +81,8 @@ function nextCalendar() {
 }
 //  달력 출력
 function makeCalendar() {
-	let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1);
-	let lastDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0);
+	let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1); // 보여지고 있는 화면
+	let lastDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0); // 보여지고있는 화면의 마지막 날짜
 
 	const tbCalendar = document.getElementById("calendar");
 	const tbCalendarYM = document.getElementById("tbCalendarYM");
@@ -162,19 +165,62 @@ function makeCalendar() {
 	})
 	// 날짜 선택, 차량 선택시 view 화면 변경
 	const selectedDates = document.querySelectorAll(".selected");
+	let preSelectedDate = null;
+
 	selectedDates.forEach(selectedDate => {
 		selectedDate.addEventListener('click', () => {
+
 			dateCheck++;
+
+
+			if (preSelectedDate) {
+				preSelectedDate.classList.remove("choice"); // 이전 선택을 클래스에서 제거
+			}
+
+			selectedDate.classList.add("choice");
+			preSelectedDate = selectedDate; // 이전날짜 추가하기;
+
+
 			const year = nowDate.getFullYear();
 			const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
 			const date = String(selectedDate.innerHTML.padStart(2, '0'));
 			const cleanDate = `${year}-${month}-${date}`;
+
 			deleteCleanData()
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;
+			const downloadButton = document.getElementById('download-btn');
+			/* 파일 다운로드 */
+			downloadButton.addEventListener('click', function() {
+				// 인코딩된 문자열을 생성
+				// URL에서 사용할 수 없는 문자나 특수 문자를 인코딩하여 안전한 URL 문자열을 생성하는 데 사용
+				var dateEncoded = encodeURIComponent(cleanDate);
+				var carNumEncoded = encodeURIComponent(carNum);
 
-			console.log(cleanDate);
-			console.log(carNum);
+				// 동적 URL 생성
+				var downloadUrl = 'downloadCsv?date=' + dateEncoded + '&carNum=' + carNumEncoded;
+
+				// 서버로 전송할 데이터를 객체로 만들기
+				var requestData = {
+					date: dateEncoded,
+					carNum: carNumEncoded
+				};
+
+				// 서버로 POST 요청 보내기
+				$.ajax({
+					type: 'GET',
+					url: '/downloadCsv',
+					data: requestData, // 서버로 전송할 데이터
+					success: function(response) {
+						window.open(downloadUrl, '_blank');
+					},
+					error: function(error) {
+						alert("파일 다운로드 실패!")
+					}
+				});
+
+			});
+
 			// 선택날짜 출력하기
 			var viewparams = 'date:' + cleanDate + ';carNum:' + carNum;
 			line.getSource().updateParams({ 'viewparams': viewparams });
@@ -279,7 +325,7 @@ live_start.addEventListener("click", function() {
 	map.removeLayer(start_point);
 	map.removeLayer(end_point);
 	console.log("라이브 시작");
-	
+
 	livestart();
 	intervalId = setInterval(updateMapLayer, 12000);
 })

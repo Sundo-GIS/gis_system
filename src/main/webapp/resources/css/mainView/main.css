@@ -8,8 +8,11 @@ body {
 }
 
 #map {
+	width : calc(100% - 400px);
     height: 100vh;
     position: absolute;
+    right: 0;
+    transition: 0.3s ease-in-out !important;
 }
 
 .hide-btn {
@@ -70,21 +73,6 @@ body {
 .info-view {
     height: 100vh;
 }
-
-/* calendar */
-/* .datepicker-inline {
-    width: 100%;
-}
-
-.datepicker table {
-    margin: auto;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-} */
 
 
 /* 모달창 (데이터추가, 차량추가) */

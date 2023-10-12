@@ -34,3 +34,8 @@
 .selected:hover{
   cursor:pointer;
 }
+
+.choice {
+	background-color: #293661;
+	color : white;
+}

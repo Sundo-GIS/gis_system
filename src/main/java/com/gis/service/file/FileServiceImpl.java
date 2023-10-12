@@ -23,7 +23,10 @@ import lombok.extern.log4j.Log4j2;
 public class FileServiceImpl implements IFileService {
 
 	private final IFileDao iFileDao;
-
+	/**
+	 * 파일 업로드
+	 * @author 임연서
+	 */
 	@Override
 	public void uploadCsv(int rowCount, MultipartFile gpsFile, MultipartFile noiseFile, MultipartFile rpmFile) {
 		try {
@@ -34,7 +37,7 @@ public class FileServiceImpl implements IFileService {
 	            InputStreamReader reader = new InputStreamReader(gpsFile.getInputStream(), "UTF-8");
 	            CSVReader csvReader = new CSVReader(reader);
 	            gpsRecords = csvReader.readAll();
-	          
+	            
 	            csvReader.close();
 	            reader.close();
 	        }
@@ -130,7 +133,6 @@ public class FileServiceImpl implements IFileService {
 			e.printStackTrace();
 		}
 	}
-	
 	/**
 	 * 파일 다운로드 : coord 테이블에서 데이터 조회 
 	 * @author 임연서
@@ -139,7 +141,6 @@ public class FileServiceImpl implements IFileService {
     public List<LocalData> selectLocalData(String date, String carNum) {
         return iFileDao.selectLocalData(date, carNum);
     }
-	
 	/**
 	 * 파일 다운로드 : csv 생성 
 	 * @author 임연서
@@ -154,7 +155,6 @@ public class FileServiceImpl implements IFileService {
 
             // 데이터 리스트를 CSV 파일에 쓰기
             for (LocalData data : dataList) {
-            	log.info("data : {}", data);
             	String[] line = {
             					 data.getCarNum(), 
                 				 String.valueOf(data.getDate()), 
@@ -167,7 +167,6 @@ public class FileServiceImpl implements IFileService {
                                  };
                 csvWriter.writeNext(line);
             }
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
