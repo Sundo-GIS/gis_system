@@ -1,4 +1,4 @@
-package com.gis.service.fileUpload;
+package com.gis.service.file;
 
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -31,7 +31,7 @@ public class FileServiceImpl implements IFileService {
 	    	List<String[]> noiseRecords = new ArrayList<>();
 	    	List<String[]> rpmRecords = new ArrayList<>();
 	        if (!gpsFile.isEmpty()) {
-	            InputStreamReader reader = new InputStreamReader(gpsFile.getInputStream(), "EUC-KR");
+	            InputStreamReader reader = new InputStreamReader(gpsFile.getInputStream(), "UTF-8");
 	            CSVReader csvReader = new CSVReader(reader);
 	            gpsRecords = csvReader.readAll();
 	          
@@ -39,7 +39,7 @@ public class FileServiceImpl implements IFileService {
 	            reader.close();
 	        }
 	        if (!noiseFile.isEmpty()) {
-	            InputStreamReader reader = new InputStreamReader(noiseFile.getInputStream(), "EUC-KR");
+	            InputStreamReader reader = new InputStreamReader(noiseFile.getInputStream(), "UTF-8");
 	            CSVReader csvReader = new CSVReader(reader);
 	            noiseRecords = csvReader.readAll();
 	            
@@ -47,7 +47,7 @@ public class FileServiceImpl implements IFileService {
 	            reader.close();
 	        }
 	        if (!rpmFile.isEmpty()) {
-	            InputStreamReader reader = new InputStreamReader(rpmFile.getInputStream(), "EUC-KR");
+	            InputStreamReader reader = new InputStreamReader(rpmFile.getInputStream(), "UTF-8");
 	            CSVReader csvReader = new CSVReader(reader);
 	            rpmRecords = csvReader.readAll();
 	            
@@ -154,7 +154,6 @@ public class FileServiceImpl implements IFileService {
 
             // 데이터 리스트를 CSV 파일에 쓰기
             for (LocalData data : dataList) {
-            	log.info("data : {}", data);
             	String[] line = {
             					 data.getCarNum(), 
                 				 String.valueOf(data.getDate()), 

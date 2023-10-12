@@ -1,4 +1,4 @@
-package com.gis.service.fileUpload;
+package com.gis.service.file;
 
 import java.io.PrintWriter;
 import java.util.List;
