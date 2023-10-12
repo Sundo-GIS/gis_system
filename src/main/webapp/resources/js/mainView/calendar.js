@@ -2,11 +2,50 @@ $(document).ready(function() {
 	makeCalendar();
 });
 
-
 let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
 
+var point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_data',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var line = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_line',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var start_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'start_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var end_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'end_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
 function arrayTest(data) {
 	for (var i = 0; i < data.length; i++) {
 		CarCleanDate[i] = data[i];
@@ -17,12 +56,14 @@ function arrayTest(data) {
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, nowDate.getDate());
+	//deleteCleanData()
 	makeCalendar(); //달력 cell 만들어 출력 
 }
 
 //  ">" 클릭시 다음달 view
 function nextCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
+	//deleteCleanData()
 	makeCalendar();
 }
 
@@ -87,6 +128,31 @@ function makeCalendar() {
 			cell.setAttribute('id', 'today');
 		}
 	}
+	// 차량 선택시 해당 차량에대한 청소날짜 생성
+	const carNumGroup = document.querySelector('#car_num');
+	carNumGroup.addEventListener("change", function() {
+
+		const carNum = carNumGroup.value;
+		console.log(carNum)
+
+		$.ajax({
+			type: "GET",
+			url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
+			data: {
+				carNum: carNum
+			},
+			dataType: "json",
+			success: function(data) {
+				arrayTest(data);
+				deleteCleanData()
+				/*				map.removeLayer(line);
+								map.removeLayer(point);
+								map.removeLayer(start_point);
+								map.removeLayer(end_point);*/
+			}
+		});
+	})
+
 
 	// 날짜 선택, 차량 선택시 view 화면 변경
 	const selectedDates = document.querySelectorAll(".selected");
@@ -97,7 +163,7 @@ function makeCalendar() {
 			const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
 			const date = String(selectedDate.innerHTML.padStart(2, '0'));
 			const cleanDate = `${year}-${month}-${date}`;
-
+			deleteCleanData()
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;
 
@@ -112,109 +178,52 @@ function makeCalendar() {
 			start_point.getSource().updateParams({ 'viewparams': viewparams });
 			end_point.getSource().updateParams({ 'viewparams': viewparams });
 
-
+			map.addLayer(line);
+			map.addLayer(point);
+			map.addLayer(start_point);
+			map.addLayer(end_point);
 			// 중심 좌표 이동
-			/*
-			$.ajax({
-				type: "GET",
-				url: "/view", // 시작 요청을 보낼 엔드포인트 URL
-				data: {
-					date: cleanDate,
-					carNum: carNum
-				},
-				dataType: "json",
-				success: function(data) {
-					var lon = data.x;
-					var lat = data.y;
+			const cleanTime = document.getElementById("clean-time");
+			const cleanRatio = document.getElementById("clean-ratio");
+			const totalDistance = document.getElementById("total-distance");
+			const cleanDistance = document.getElementById("clean-distance");
 
-					map.getView().animate({
-						center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
-						zoom: 15,
-						duration: 800
-					});
-				}, error: function(jqXHR, textStatus, errorThrown) {
-					console.log(errorThrown);
-					console.log(jqXHR);
-					console.log(textStatus);
-					console.log(cleanDate);
-					console.log(carNum);
-				}
+
+			/*$.ajax({
+			   type: "GET",
+			   url: "/view/"+cleanDate+"/"+carNum, // 시작 요청을 보낼 엔드포인트 URL
+			   data: {
+				  date: cleanDate,
+				  carNum: carNum
+			   },
+			   dataType: "json",
+			   success: function(data) {
+				  var lon = data.x;
+				  var lat = data.y;
+   
+				  map.getView().animate({
+					 center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
+					 zoom: 15,
+					 duration: 800
+				  });
+			   }, error: function(jqXHR, textStatus, errorThrown) {
+				  console.log(errorThrown);
+				  console.log(jqXHR);
+				  console.log(textStatus);
+				  console.log(cleanDate);
+				  console.log(carNum);
+			   }
 			});
-			*/
-
+   */
 		});
 	});
-
-
-
-	var point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'clean_data',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var line = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'clean_line',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var start_point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'start_point',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var end_point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'end_point',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-
-	map.addLayer(line);
-	map.addLayer(point);
-	map.addLayer(start_point);
-	map.addLayer(end_point);
-
 }
 
-// selectedDate 갖고오기
-const selectedDates = document.querySelectorAll(".selectedDate");
-const carNumGroup = document.querySelector('#car_num');
-
-carNumGroup.addEventListener("change", function() {
-
-	const carNum = carNumGroup.value;
-	console.log(carNum)
-
-	$.ajax({
-		type: "GET",
-		url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
-		data: {
-			carNum: carNum
-		},
-		dataType: "json",
-		success: function(data) {
-			arrayTest(data);
-		}
-	});
-})
+function deleteCleanData() {
+	map.removeLayer(line);
+	map.removeLayer(point);
+	map.removeLayer(start_point);
+	map.removeLayer(end_point);
+}
 
 

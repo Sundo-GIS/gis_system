@@ -101,7 +101,6 @@
 					<h5 class="col-9 my-auto">용인시 청소차 관제 시스템</h5>
 				</div>
 
-<<<<<<< HEAD
 				<!-- 왼쪽 화면 데이터  -->
 				<div class="info-view col-12 offcanvas-body p-1" id="info-view">
 					<div class="stats-data">
@@ -301,7 +300,7 @@
 	<script src="/resources/js/mainView/mainView.js"></script>
 	<script src="/resources/js/mainView/main.js"></script>
 	<script src="/resources/js/mainView/calendar.js"></script>
-    <script src="/resources/js/prac.js"></script>
+    <!-- <script src="/resources/js/prac.js"></script> -->
 </body>
 
 </html>
