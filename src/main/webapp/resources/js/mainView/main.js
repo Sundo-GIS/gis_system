@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 	});
 });
+
 /* 파일 유효성 검사 */
 async function validateFile(fileElement, fileType) {
     const file = fileElement.files[0];

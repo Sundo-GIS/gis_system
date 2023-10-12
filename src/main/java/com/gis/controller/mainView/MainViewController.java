@@ -38,8 +38,7 @@ public class MainViewController {
 		CleaningInfoDto cid = mainViewService.cleaningInfo(carNum, date);
 		return cid;
 	}
-	
-	// 메인 뷰 + 모달창 차량 추가
+
 	@GetMapping("/view")
 	public String memberPage(HttpServletRequest request, Model model) {
 		// 세션에서 사용자 정보 가져오기

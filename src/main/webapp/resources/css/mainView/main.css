@@ -31,13 +31,6 @@ body {
         background-color: orange;
     }
 }
-
-/* 버튼에 애니메이션 */
-.blinkin-btn {
-    animation: blinkAnimation 1s infinite;
-    color: white;
-}
-
 .ol-control {
     /* margin-top : 50px; */
     transform: translateY(50px);
@@ -68,7 +61,11 @@ body {
     background-color: white;
     left: 70px;
 }
-
+.live_stop {
+	display:none;
+	animation: blinkAnimation 1s infinite;
+    color: white;
+}
 .live-btn:hover {
     background-color: royalblue;
 }
