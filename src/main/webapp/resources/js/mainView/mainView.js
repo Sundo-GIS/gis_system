@@ -1,4 +1,4 @@
-	const baseMapBtn = document.getElementById("base-map-btn");
+const baseMapBtn = document.getElementById("base-map-btn");
 const satelliteMapBtn = document.getElementById("satellite-map-btn");
 const hybridMapBtn = document.getElementById("hybrid-map-btn");
 const downloadBtn = document.getElementById("download-btn");
@@ -27,52 +27,52 @@ const boundary = new ol.layer.Tile({
             'TILED': true,
 
         },
-        projection: 'EPSG:5186',
+        // projection: 'EPSG:4326',
         serverType: 'geoserver',
     })
 });
 
-// 기흥구 경계
-const giheungBoundary = new ol.layer.Tile({
-    source: new ol.source.TileWMS({
-        url: 'http://localhost:8080/geoserver/wms',
-        params: {
-            'LAYERS': 'gihung',
-            'TILED': true,
+// // 기흥구 경계
+// const giheungBoundary = new ol.layer.Tile({
+//     source: new ol.source.TileWMS({
+//         url: 'http://localhost:8080/geoserver/wms',
+//         params: {
+//             'LAYERS': 'gihung',
+//             'TILED': true,
 
-        },
-        projection: 'EPSG:5174',
-        serverType: 'geoserver',
-    })
-});
+//         },
+//         projection: 'EPSG:5174',
+//         serverType: 'geoserver',
+//     })
+// });
 
-// 처인구 경계
-const cheoinBoundary = new ol.layer.Tile({
-    source: new ol.source.TileWMS({
-        url: 'http://localhost:8080/geoserver/wms',
-        params: {
-            'LAYERS': 'chuin',
-            'TILED': true,
+// // 처인구 경계
+// const cheoinBoundary = new ol.layer.Tile({
+//     source: new ol.source.TileWMS({
+//         url: 'http://localhost:8080/geoserver/wms',
+//         params: {
+//             'LAYERS': 'chuin',
+//             'TILED': true,
 
-        },
-        projection: 'EPSG:5174',
-        serverType: 'geoserver',
-    })
-});
+//         },
+//         projection: 'EPSG:5174',
+//         serverType: 'geoserver',
+//     })
+// });
 
-// 수지구 경계
-const sujiBoundary = new ol.layer.Tile({
-    source: new ol.source.TileWMS({
-        url: 'http://localhost:8080/geoserver/wms',
-        params: {
-            'LAYERS': 'suji',
-            'TILED': true,
+// // 수지구 경계
+// const sujiBoundary = new ol.layer.Tile({
+//     source: new ol.source.TileWMS({
+//         url: 'http://localhost:8080/geoserver/wms',
+//         params: {
+//             'LAYERS': 'suji',
+//             'TILED': true,
 
-        },
-        projection: 'EPSG:5174',
-        serverType: 'geoserver',
-    })
-});
+//         },
+//         projection: 'EPSG:5174',
+//         serverType: 'geoserver',
+//     })
+// });
 
 //  첫 화면 생성
 startView();
@@ -278,7 +278,7 @@ function downloadClick() {
     const data = this.props.data; // 서버에서 받을 데이터
     const jsonData = JSON.stringify(data);
     let arrData = JSON.parse(josnData);
-    
+
     // 데이터 정의 및 첫째줄에 Title 설정
     let CSV = '';
     CSV += "COORD" + '\r\n\n';  // 타이틀 
@@ -289,12 +289,12 @@ function downloadClick() {
         row += index + ',';
     }
     row = row.slice(0, -1); // JSON데이터의 key값만 가져오기
-    CSV += row + '\r\n'; 
+    CSV += row + '\r\n';
 
     // JSON 데이터 VALUE 값 넣기
-    for (let i = 0; i< arrData.length; i++) {
+    for (let i = 0; i < arrData.length; i++) {
         let row = "";
-        for (let index in arrData[i]){
+        for (let index in arrData[i]) {
             row += '"' + arrData[i][index] + '",';
         }
 
@@ -303,24 +303,24 @@ function downloadClick() {
     }
 
     // CSV 파일이 없을때 
-    if (CSV == '') {        
+    if (CSV == '') {
         alert("Invalid data");
         return;
-    }   
-  
+    }
+
     let fileName = "COORD_";
-    fileName += "COORD".replace(/ /g,"_");   
-    
-    
+    fileName += "COORD".replace(/ /g, "_");
+
+
     // URI 식별자 정의 및 다운로드 하기
     let uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
     //let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(CSV);
-    
-    let link = document.createElement("a");    
+
+    let link = document.createElement("a");
     link.href = uri;
     link.style = "visibility:hidden";
     link.download = fileName + ".csv";
-    
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

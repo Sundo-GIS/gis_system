@@ -22,11 +22,13 @@
 .day {
   height : 30px;
   width : 25px;
+  opacity : 0.5;
 }
 
 .selected {
   background-color: #bd445b;
   color: white;
+  opacity : 1;
 }
 
 .selected:hover{
