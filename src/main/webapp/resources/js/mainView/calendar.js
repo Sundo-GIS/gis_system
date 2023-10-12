@@ -1,10 +1,29 @@
 $(document).ready(function() {
 	makeCalendar();
 });
+// ajax 자동차에 대한 날짜 데이터 배열에 저장
 let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
-
+function arrayTest(data) {
+	for (var i = 0; i < data.length; i++) {
+		CarCleanDate[i] = data[i];
+		makeCalendar();
+	}
+}
+// 파일 다운로드 체크
+var carCheck = 0;
+var dateCheck = 0;
+const fileDownload = document.getElementById('download-btn');
+fileDownload.addEventListener("click", function() {
+   if(carCheck==0) {
+      alert("차량 데이터 없음");
+   } else {
+      if(dateCheck==0) {
+         alert("날짜 데이터 없음");
+      }
+   }
+})
 var point = new ol.layer.Tile({
 	source: new ol.source.TileWMS({
 		url: 'http://localhost:8080/geoserver/wms',
@@ -45,12 +64,7 @@ var end_point = new ol.layer.Tile({
 		serverType: 'geoserver',
 	})
 });
-function arrayTest(data) {
-	for (var i = 0; i < data.length; i++) {
-		CarCleanDate[i] = data[i];
-		makeCalendar();
-	}
-}
+
 
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
@@ -127,12 +141,20 @@ function makeCalendar() {
 			cell.setAttribute('id', 'today');
 		}
 	}
+
 	// 차량 선택시 해당 차량에대한 청소날짜 생성
 	const carNumGroup = document.querySelector('#car_num');
 	carNumGroup.addEventListener("change", function() {
 		carCheck++;
+		let cleanTime = document.getElementById("clean-time");
+		let cleanRatio = document.getElementById("clean-ratio");
+		let totalDistance = document.getElementById("total-distance");
+		let cleanDistance = document.getElementById("clean-distance");
+		cleanTime.innerText = "00:00:00";
+		cleanRatio.innerText = "0 %";
+		totalDistance.innerText = "0 km";
+		cleanDistance.innerText = "0 km";
 		const carNum = carNumGroup.value;
-		console.log(carNum)
 
 		$.ajax({
 			type: "GET",
@@ -143,11 +165,7 @@ function makeCalendar() {
 			dataType: "json",
 			success: function(data) {
 				arrayTest(data);
-				deleteCleanData()
-				/*				map.removeLayer(line);
-								map.removeLayer(point);
-								map.removeLayer(start_point);
-								map.removeLayer(end_point);*/
+				deleteCleanData();
 			}
 		});
 	})
@@ -168,7 +186,6 @@ function makeCalendar() {
 
 			console.log(cleanDate);
 			console.log(carNum);
-
 			// 선택날짜 출력하기
 			var viewparams = 'date:' + cleanDate + ';carNum:' + carNum;
 			line.getSource().updateParams({ 'viewparams': viewparams });
@@ -176,50 +193,54 @@ function makeCalendar() {
 			start_point.getSource().updateParams({ 'viewparams': viewparams });
 			end_point.getSource().updateParams({ 'viewparams': viewparams });
 
-			map.addLayer(line);
-			map.addLayer(point);
-			map.addLayer(start_point);
-			map.addLayer(end_point);
 			// 중심 좌표 이동
-			const cleanTime = document.getElementById("clean-time");
-			const cleanRatio = document.getElementById("clean-ratio");
-			const totalDistance = document.getElementById("total-distance");
-			const cleanDistance = document.getElementById("clean-distance");
+			let cleanTime = document.getElementById("clean-time");
+			let cleanRatio = document.getElementById("clean-ratio");
+			let totalDistance = document.getElementById("total-distance");
+			let cleanDistance = document.getElementById("clean-distance");
 
+			$.ajax({
+				type: "GET",
+				url: "/view/select?carNum=" + carNum + "&date=" + cleanDate, // 시작 요청을 보낼 엔드포인트 URL
+				dataType: "json",
+				success: function(data) {
+					let lon = data.lon;
+					let lat = data.lat;
+					cleanTime.innerText = data.cleanTime;
+					cleanRatio.innerText = data.cleanRatio + "%";
+					totalDistance.innerText = data.totalDistance.toFixed(2) + "km";
+					cleanDistance.innerText = data.cleanDistance.toFixed(2) + "km";
 
-			/*$.ajax({
-			   type: "GET",
-			   url: "/view/"+cleanDate+"/"+carNum, // 시작 요청을 보낼 엔드포인트 URL
-			   data: {
-				  date: cleanDate,
-				  carNum: carNum
-			   },
-			   dataType: "json",
-			   success: function(data) {
-				  var lon = data.x;
-				  var lat = data.y;
-   
-				  map.getView().animate({
-					 center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
-					 zoom: 15,
-					 duration: 800
-				  });
-			   }, error: function(jqXHR, textStatus, errorThrown) {
-				  console.log(errorThrown);
-				  console.log(jqXHR);
-				  console.log(textStatus);
-				  console.log(cleanDate);
-				  console.log(carNum);
-			   }
+					deleteCleanData();
+					addCleanData();
+
+					map.getView().animate({
+						center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
+						zoom: 15,
+						duration: 800
+					});
+				}, error: function(jqXHR, textStatus, errorThrown) {
+					console.log(errorThrown);
+					console.log(jqXHR);
+					console.log(textStatus);
+					console.log(cleanDate);
+					console.log(carNum);
+				}
 			});
-   */
 		});
 	});
 }
-
+// 청소구역 레이어 삭제
 function deleteCleanData() {
 	map.removeLayer(line);
 	map.removeLayer(point);
 	map.removeLayer(start_point);
 	map.removeLayer(end_point);
+}
+// 청소구역 레이어 추가
+function addCleanData() {
+	map.addLayer(line);
+	map.addLayer(point);
+	map.addLayer(start_point);
+	map.addLayer(end_point);
 }
