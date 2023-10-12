@@ -1,4 +1,4 @@
-package com.gis.controller.fileUpload;
+package com.gis.controller.file;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,11 +28,14 @@ import lombok.extern.log4j.Log4j2;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-public class FileUploadController {
+public class FileController {
 
 	private final IFileService iFileService;
 	
-	/* 파일 업로드 */
+	/**
+	 * 파일 업로드(opencsv라이브러리 사용) 
+	 * @author 임연서
+	 */
     @PostMapping("/uploadCsv")
     public ResponseEntity<String> uploadCsv(@RequestParam("gpsfile") MultipartFile gpsFile,
                             @RequestParam("noisefile") MultipartFile noiseFile,

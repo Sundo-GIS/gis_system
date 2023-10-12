@@ -1,3 +1,4 @@
+/* 파일 업로드 */
 document.addEventListener('DOMContentLoaded', function () {
     const uploadForm = document.getElementById('upload-form');
     const registerButton = document.getElementById('csv-register-btn');
@@ -39,6 +40,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	    // 입력된 차량번호와 일자를 가져옴
 		var carNumInput = document.querySelector(".selectCarNum").value;
 		var dateInput = document.querySelector(".selectDate").value;
+		
+		// 필수 파라미터 검증
+	    if (!dateInput || !carNumInput) {
+	        alert("일자와 차량 번호를 선택해야 합니다.");
+	        return;
+	    }
 		// 인코딩된 문자열을 생성
 		// URL에서 사용할 수 없는 문자나 특수 문자를 인코딩하여 안전한 URL 문자열을 생성하는 데 사용
 		var dateEncoded = encodeURIComponent(dateInput);
