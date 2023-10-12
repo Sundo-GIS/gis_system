@@ -71,12 +71,10 @@ public class GisServiceImpl implements IGisService {
 		String time = getCurrentTimeFormatted();
 		// gps 데이터 추출 
 		List<GpsTempData> tgd = gisDao.selectTempGpsData(carNum);
-		log.info(tgd);
 		double avgX = (tgd.get(0).getLon()+tgd.get(tgd.size()-1).getLon())/ 2;
 		double avgY = (tgd.get(0).getLat()+tgd.get(tgd.size()-1).getLat())/ 2;
 		// 소음 데이터 추출
 		List<NoiseTempData> tnd = gisDao.selectTempNoiseData(carNum);
-		log.info(tnd);
 		BigDecimal totalNoise = new BigDecimal(0);
 		int avgNoise = 0;
 		int tndSize = 0;
@@ -91,7 +89,6 @@ public class GisServiceImpl implements IGisService {
 		avgNoise = totalNoise.intValue()/tndSize;
 		// 진동 데이터 추출
 		List<RpmTempData> trd = gisDao.selectTempRpmData(carNum);
-		log.info(trd);
 		int totalRpm = 0;
 		int avgRpm = 0;
 		int trdSize = 0;
@@ -119,7 +116,6 @@ public class GisServiceImpl implements IGisService {
 		localData.setRpm(avgRpm);
 		localData.setNoise(avgNoise);
 		localData.set_done(is_done);
-		log.info(localData);
 		gisDao.insertLocalData(localData);
 	}
 	/**
@@ -128,9 +124,9 @@ public class GisServiceImpl implements IGisService {
 	 */
 	@Override
 	public void deleteTempTable() {
-//		gisDao.deleteTempGpsTable();
-//		gisDao.deleteTempNoiseTable();
-//		gisDao.deleteTempRpmTable();
+		gisDao.deleteTempGpsTable();
+		gisDao.deleteTempNoiseTable();
+		gisDao.deleteTempRpmTable();
 	}
 	/**
 	 * Temp Table에 GPS, Noise, Rpm 데이터 넣기
