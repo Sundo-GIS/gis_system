@@ -1,102 +1,57 @@
 /* 파일 업로드 */
-document.addEventListener('DOMContentLoaded', function () {
-    const uploadForm = document.getElementById('upload-form');
-    const registerButton = document.getElementById('csv-register-btn');
-
-    registerButton.addEventListener('click', function () {
-        const formData = new FormData(uploadForm);
-
-        // 서버 엔드포인트 설정
-        const serverEndpoint = '/uploadCsv';
-
-        fetch(serverEndpoint, {
-            method: 'POST',
-            body: formData
-        })
-		.then(response => {
-		    if (response.ok) {
-		        $('#add-data-modal').modal('hide'); // 모달 닫기
-		        alert('데이터가 성공적으로 추가되었습니다!');
-				// 파일 입력 필드 초기화
-		        uploadForm.reset();
-		    } else {
-		        response.text().then(errorMessage => { // 서버 응답의 텍스트 본문을 errorMessage 변수에 저장
-		            alert(errorMessage);
-		        });
-		    }
-		})
-		.catch(error => {
-		    alert('데이터 추가를 실패하였습니다.');
-		    console.error('업로드 중 오류 발생: ', error);
-		});		
-    });
-});
-/* 파일 다운로드 */
 document.addEventListener('DOMContentLoaded', function() {
+	const uploadForm = document.getElementById('upload-form');
+	const registerButton = document.getElementById('csv-register-btn');
 
-	const downloadButton = document.getElementById('download-btn');
+	registerButton.addEventListener('click', function() {
+		const formData = new FormData(uploadForm);
 
-	downloadButton.addEventListener('click', function() {
-	    // 입력된 차량번호와 일자를 가져옴
-		var carNumInput = document.querySelector(".selectCarNum").value;
-		var dateInput = document.querySelector(".selectDate").value;
-		
-		// 필수 파라미터 검증
-	    if (!dateInput || !carNumInput) {
-	        alert("일자와 차량 번호를 선택해야 합니다.");
-	        return;
-	    }
-		// 인코딩된 문자열을 생성
-		// URL에서 사용할 수 없는 문자나 특수 문자를 인코딩하여 안전한 URL 문자열을 생성하는 데 사용
-		var dateEncoded = encodeURIComponent(dateInput);
-		var carNumEncoded = encodeURIComponent(carNumInput);
-		
-		// 동적 URL 생성
-        var downloadUrl = 'downloadCsv?date=' + encodeURIComponent(dateInput) + '&carNum=' + encodeURIComponent(carNumInput);
+		// 서버 엔드포인트 설정
+		const serverEndpoint = '/uploadCsv';
 
-	    // 서버로 전송할 데이터를 객체로 만들기
-	    var requestData = {
-	        date: dateEncoded,
-	        carNum: carNumEncoded
-	    };
-	
-	    // 서버로 POST 요청 보내기
-	    $.ajax({
-	        type: 'GET', 
-	        url: '/downloadCsv',
-	        data: requestData, // 서버로 전송할 데이터
-	        success: function(response) {
-				window.open(downloadUrl, '_blank');
-	        },
-	        error: function(error) {
-				alert("파일 다운로드 실패!")
-	        }
-	    });
-		
+		fetch(serverEndpoint, {
+			method: 'POST',
+			body: formData
+		})
+			.then(response => {
+				if (response.ok) {
+					$('#add-data-modal').modal('hide'); // 모달 닫기
+					alert('데이터가 성공적으로 추가되었습니다!');
+					// 파일 입력 필드 초기화
+					uploadForm.reset();
+				} else {
+					response.text().then(errorMessage => { // 서버 응답의 텍스트 본문을 errorMessage 변수에 저장
+						alert(errorMessage);
+					});
+				}
+			})
+			.catch(error => {
+				alert('데이터 추가를 실패하였습니다.');
+				console.error('업로드 중 오류 발생: ', error);
+			});
 	});
-  
 });
 
 /*
 $(document).ready(function () {
-    $("#csv-register-btn").click(function () {
-        var formData = new FormData($("#uploadForm")[0]);
+	$("#csv-register-btn").click(function () {
+		var formData = new FormData($("#uploadForm")[0]);
 
-        $.ajax({
-            url: "uploadCsv", // Java 서버 업로드 엔드포인트 URL
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                // 업로드 성공 처리
-                alert("데이터가 성공적으로 업로드되었습니다.");
-                $("#uploadModal").modal("hide");
-            },
-            error: function (xhr, status, error) {
-                // 업로드 실패 처리
-                alert("데이터 업로드 중 오류가 발생했습니다.");
-            }
+		$.ajax({
+			url: "uploadCsv", // Java 서버 업로드 엔드포인트 URL
+			type: "POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (response) {
+				// 업로드 성공 처리
+				alert("데이터가 성공적으로 업로드되었습니다.");
+				$("#uploadModal").modal("hide");
+			},
+			error: function (xhr, status, error) {
+				// 업로드 실패 처리
+				alert("데이터 업로드 중 오류가 발생했습니다.");
+			}
 });*/
 // $(document).ready(function () {
 //    $("#csv-register-btn").click(function () {
@@ -125,13 +80,13 @@ $(document).ready(function () {
 
 // < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
 // 모달창 show
-$('#add-data-btn').click(function (e) {
+$('#add-data-btn').click(function(e) {
 	e.preventDefault();
 	$('#add-data-modal').modal("show");
 });
 
 // 모달창 hide
-$('.csv-cancel-btn').click(function (e) {
+$('.csv-cancel-btn').click(function(e) {
 	e.preventDefault();
 	$('#add-data-modal').modal("hide");
 
@@ -146,8 +101,8 @@ $('.csv-cancel-btn').click(function (e) {
 });
 
 // gps-csv
-$(document).ready(function () {
-	$("#gps-csv").on('change', function () {  // 값이 변경되면
+$(document).ready(function() {
+	$("#gps-csv").on('change', function() {  // 값이 변경되면
 		if (window.FileReader) {  // modern browser
 			var filename = $(this)[0].files[0].name;
 		} else {  // old IE
@@ -160,8 +115,8 @@ $(document).ready(function () {
 });
 
 // noise-csv
-$(document).ready(function () {
-	$("#noise-csv").on('change', function () {  // 값이 변경되면
+$(document).ready(function() {
+	$("#noise-csv").on('change', function() {  // 값이 변경되면
 		if (window.FileReader) {  // modern browser
 			var filename = $(this)[0].files[0].name;
 		} else {  // old IE
@@ -174,8 +129,8 @@ $(document).ready(function () {
 });
 
 // rpm-csv
-$(document).ready(function () {
-	$("#rpm-csv").on('change', function () {  // 값이 변경되면
+$(document).ready(function() {
+	$("#rpm-csv").on('change', function() {  // 값이 변경되면
 		if (window.FileReader) {  // modern browser
 			var filename = $(this)[0].files[0].name;
 		} else {  // old IE
@@ -211,13 +166,13 @@ csvFileInputs.forEach((input) => {
 
 // < CAR 모달창 >
 // 모달창 show
-$('#add-car-btn').click(function (e) {
+$('#add-car-btn').click(function(e) {
 	e.preventDefault();
 	$('#add-car-modal').modal("show");
 });
 
 // 모달창 hide
-$('.car-cancel-btn').click(function (e) {
+$('.car-cancel-btn').click(function(e) {
 	e.preventDefault();
 	$('#add-car-modal').modal("hide");
 });

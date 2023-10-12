@@ -264,7 +264,7 @@ liveBtn.addEventListener('click', () => {
     menuShowBtn.classList.toggle('hide-btn');
     liveBtn.classList.toggle('blinkin-btn');
 });
-
+/*
 // // 다운로드 버튼 클릭시
 downloadBtn.addEventListener('click', downloadClick);
 
@@ -326,7 +326,7 @@ function downloadClick() {
     document.body.removeChild(link);
 
 }
-
+*/
 
 
 // function downloadClick() {

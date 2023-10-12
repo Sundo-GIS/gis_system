@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gis.dto.gis.LocalData;
-import com.gis.service.fileUpload.IFileService;
+import com.gis.service.file.IFileService;
 import com.opencsv.exceptions.CsvException;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +41,9 @@ public class FileController {
                             @RequestParam("noisefile") MultipartFile noiseFile,
                             @RequestParam("rpmfile") MultipartFile rpmFile) throws IOException, CsvException {
     	try(BufferedReader br = new BufferedReader(new InputStreamReader(gpsFile.getInputStream()))) {
+    		if (gpsFile.isEmpty() || noiseFile.isEmpty() || rpmFile.isEmpty()) {
+                return ResponseEntity.badRequest().body("누락된 파일이 있습니다.");
+            }
     		// 파일 행 개수 구하기
     		int rowCount=0;
         	String line;
