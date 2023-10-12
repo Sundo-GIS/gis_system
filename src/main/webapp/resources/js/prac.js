@@ -148,36 +148,7 @@ window.addEventListener("load", function() {
 			serverType: 'geoserver',
 		})
 	});
-	var live_start_point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'live_start_point',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var live_end_point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'live_end_point',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var live_coord = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'live_coord',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
+
 	map.addLayer(boundary);
 	map.addLayer(line);
 	map.addLayer(point);
@@ -187,18 +158,26 @@ window.addEventListener("load", function() {
 
 	var live_start = document.getElementById('live_start');
 	var live_stop = document.getElementById('live_stop');
-
+	var live_lon;
+	var live_lat;
 	live_start.addEventListener("click", function() {
 		console.log("라이브 시작");
-		map.getView().animate({
-			center: ol.proj.transform([127.2075537, 37.2310864], 'EPSG:4326', 'EPSG:3857'),
-			zoom: 11.5,
-			duration: 600
-		});
 		liveStart();
 	})
 	function liveStart() {
-		console.log("새로고침!!");
+		$.ajax({
+			type: 'POST',
+			url: '/gis/live',
+			success:function(data) {
+				live_lon = data.lon;
+				live_lat = data.lat;
+			}			
+		});
+		map.getView().animate({
+			center: ol.proj.transform([live_lon, live_lat], 'EPSG:4326', 'EPSG:3857'),
+			zoom: 11.5,
+			duration: 600
+		});
 		map.addLayer(live_coord);
 		map.addLayer(live_start_point);
 		map.addLayer(live_end_point);
@@ -222,6 +201,7 @@ window.addEventListener("load", function() {
 		map.addLayer(start_point);
 		map.addLayer(end_point);
 		boundary.setOpacity(0.5)
+		previousState = "";
 	})
 	var previousState = localStorage.getItem("previousState");
 	if (previousState === "someValue") {

@@ -24,7 +24,7 @@ public class TimeScheduler {
 		stopScheduler();
 		log.info("시작");
 		scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, 60000, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, 11000, TimeUnit.MILLISECONDS);
 	}
 	public void stopScheduler() {
 		if (scheduler != null && !scheduler.isShutdown()) {

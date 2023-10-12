@@ -80,4 +80,10 @@ public interface IGisDao {
 	 * @author 여수한
 	 */
 	public DateCoord selectDateCoord(@Param("date")String date, @Param("carNum")String carNum);
+	/**
+	 * 라이브 좌표 조회
+	 * @author 여수한
+	 */
+	public DateCoord selectLiveCoord();
+	public void insertLiveData(@Param("localData")LocalData localData);
 }

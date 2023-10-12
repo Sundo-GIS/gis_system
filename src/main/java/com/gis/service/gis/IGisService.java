@@ -60,4 +60,9 @@ public interface IGisService {
 	 * @author 여수한
 	 */
 	DateCoord selectDateCoord(String date, String carNum);
+	/**
+	 * 라이브 좌표 조회
+	 * @author 여수한
+	 */
+	DateCoord selectLiveCoord();
 }
