@@ -39,7 +39,6 @@ public class MainViewController {
 		return cid;
 	}
 
-	// 메인 뷰 + 모달창 차량 추가
 	@GetMapping("/view")
 	public String memberPage(HttpServletRequest request, Model model) {
 		// 세션에서 사용자 정보 가져오기
@@ -57,11 +56,11 @@ public class MainViewController {
 		return "mainView/main";
 	}
 
-	// 차량 리스트 출력
+	// 모달창 차량 추가
 	@PostMapping("/view")
 	public String modalCarInfo(CarDto car) {
 		mainViewService.addCar(car);
-		return "mainView/main";
+		return "redirect:/view";
 	}
 
 	// 차량 별 청소 날짜 출력

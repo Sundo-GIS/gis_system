@@ -12,6 +12,7 @@ function arrayTest(data) {
 		makeCalendar();
 	}
 }
+
 // 파일 다운로드 체크
 var carCheck = 0;
 var dateCheck = 0;
@@ -68,6 +69,7 @@ var end_point = new ol.layer.Tile({
 });
 
 
+
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, nowDate.getDate());
@@ -84,8 +86,8 @@ function nextCalendar() {
 
 //  달력 출력
 function makeCalendar() {
-	let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1);
-	let lastDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0);
+	let doMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1); // 보여지고 있는 화면
+	let lastDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0); // 보여지고있는 화면의 마지막 날짜
 
 	const tbCalendar = document.getElementById("calendar");
 	const tbCalendarYM = document.getElementById("tbCalendarYM");
@@ -173,13 +175,27 @@ function makeCalendar() {
 
 	// 날짜 선택, 차량 선택시 view 화면 변경
 	const selectedDates = document.querySelectorAll(".selected");
+	let preSelectedDate = null;
+
 	selectedDates.forEach(selectedDate => {
 		selectedDate.addEventListener('click', () => {
+
 			dateCheck++;
+
+
+			if (preSelectedDate) {
+				preSelectedDate.classList.remove("choice"); // 이전 선택을 클래스에서 제거
+			}
+
+			selectedDate.classList.add("choice");
+			preSelectedDate = selectedDate; // 이전날짜 추가하기;
+
+
 			const year = nowDate.getFullYear();
 			const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
 			const date = String(selectedDate.innerHTML.padStart(2, '0'));
 			const cleanDate = `${year}-${month}-${date}`;
+
 			deleteCleanData()
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;
