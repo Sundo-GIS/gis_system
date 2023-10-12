@@ -100,8 +100,6 @@
 					<img src="/resources/img/yongin-logo.png" class="img-fluid col-3">
 					<h5 class="col-9 my-auto">용인시 청소차 관제 시스템</h5>
 				</div>
-
-<<<<<<< HEAD
 				<!-- 왼쪽 화면 데이터  -->
 				<div class="info-view col-12 offcanvas-body p-1" id="info-view">
 					<div class="stats-data">
@@ -164,20 +162,20 @@
 								</tr>
 								<tr>
 									<th class="w-25">운행시간</th>
-									<td colspan="3">HH:mm:ss</td>
+									<td colspan="3" id="clean-time">00:00:00</td>
 								</tr>
 								<tr>
 									<th class="w-25">청소비율</th>
-									<td colspan="3">0%</td>
+									<td colspan="3" id="clean-ratio">0%</td>
 								</tr>
 								<tr>
 									<th class="w-25">총 운행거리</th>
-									<td colspan="3">0 Km</td>
+									<td colspan="3" id="total-distance">0 Km</td>
 								</tr>
 								<tr>
 									<th class="w-25 p-3"><span>유효</span><br> <span>
 											운행거리</span></th>
-									<td colspan="3" style="line-height: 56px;">0 Km</td>
+									<td colspan="3" id="clean-distance" style="line-height: 56px;">0 Km</td>
 								</tr>
 							</tbody>
 						</table>
@@ -301,7 +299,8 @@
 	<script src="/resources/js/mainView/mainView.js"></script>
 	<script src="/resources/js/mainView/main.js"></script>
 	<script src="/resources/js/mainView/calendar.js"></script>
-    <script src="/resources/js/prac.js"></script>
+    
+    <!-- <script src="/resources/js/prac.js"></script> -->
 </body>
 
 </html>

@@ -2,7 +2,50 @@ $(document).ready(function() {
 	makeCalendar();
 });
 
+var point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_data',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var line = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_line',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var start_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'start_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var end_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'end_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
 
+
+
+// ajax 자동차에 대한 날짜 데이터 배열에 저장
 let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
@@ -13,6 +56,7 @@ function arrayTest(data) {
 		makeCalendar();
 	}
 }
+
 
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
@@ -88,6 +132,27 @@ function makeCalendar() {
 		}
 	}
 
+	// 차량 선택시 해당 차량에대한 청소날짜 생성
+	const carNumGroup = document.querySelector('#car_num');
+	carNumGroup.addEventListener("change", function() {
+
+		const carNum = carNumGroup.value;
+
+		$.ajax({
+			type: "GET",
+			url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
+			data: {
+				carNum: carNum
+			},
+			dataType: "json",
+			success: function(data) {
+				arrayTest(data);
+				deleteCleanData();
+			}
+		});
+	})
+
+
 	// 날짜 선택, 차량 선택시 view 화면 변경
 	const selectedDates = document.querySelectorAll(".selected");
 	selectedDates.forEach(selectedDate => {
@@ -101,10 +166,6 @@ function makeCalendar() {
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;
 
-
-			console.log(cleanDate);
-			console.log(carNum);
-
 			// 선택날짜 출력하기
 			var viewparams = 'date:' + cleanDate + ';carNum:' + carNum;
 			line.getSource().updateParams({ 'viewparams': viewparams });
@@ -113,20 +174,30 @@ function makeCalendar() {
 			end_point.getSource().updateParams({ 'viewparams': viewparams });
 
 
+
+
 			// 중심 좌표 이동
-			/*
+			let cleanTime = document.getElementById("clean-time");
+			let cleanRatio = document.getElementById("clean-ratio");
+			let totalDistance = document.getElementById("total-distance");
+			let cleanDistance = document.getElementById("clean-distance");
+
+
 			$.ajax({
 				type: "GET",
-				url: "/view", // 시작 요청을 보낼 엔드포인트 URL
-				data: {
-					date: cleanDate,
-					carNum: carNum
-				},
+				url: "/view/select?carNum=" + carNum + "&date=" + cleanDate, // 시작 요청을 보낼 엔드포인트 URL
 				dataType: "json",
 				success: function(data) {
-					var lon = data.x;
-					var lat = data.y;
-
+					let lon = data.lon;
+					let lat = data.lat;
+					cleanTime.innerText = data.cleanTime;
+					cleanRatio.innerText = data.cleanRatio + "%";
+					totalDistance.innerText = data.totalDistance.toFixed(2) + "km";
+					cleanDistance.innerText = data.cleanDistance.toFixed(2) + "km";
+					
+					deleteCleanData();
+					addCleanData();
+					
 					map.getView().animate({
 						center: ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),
 						zoom: 15,
@@ -140,81 +211,26 @@ function makeCalendar() {
 					console.log(carNum);
 				}
 			});
-			*/
 
 		});
 	});
+}
 
+// 청소구역 레이어 삭제
+function deleteCleanData() {
+	map.removeLayer(line);
+	map.removeLayer(point);
+	map.removeLayer(start_point);
+	map.removeLayer(end_point);
+}
 
-
-	var point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'clean_data',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var line = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'clean_line',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var start_point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'start_point',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-	var end_point = new ol.layer.Tile({
-		source: new ol.source.TileWMS({
-			url: 'http://localhost:8080/geoserver/wms',
-			params: {
-				'LAYERS': 'end_point',
-				'TILED': true,
-			},
-			serverType: 'geoserver',
-		})
-	});
-
+// 청소구역 레이어 추가
+function addCleanData() {
 	map.addLayer(line);
 	map.addLayer(point);
 	map.addLayer(start_point);
 	map.addLayer(end_point);
-
 }
 
-// selectedDate 갖고오기
-const selectedDates = document.querySelectorAll(".selectedDate");
-const carNumGroup = document.querySelector('#car_num');
-
-carNumGroup.addEventListener("change", function() {
-
-	const carNum = carNumGroup.value;
-	console.log(carNum)
-
-	$.ajax({
-		type: "GET",
-		url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
-		data: {
-			carNum: carNum
-		},
-		dataType: "json",
-		success: function(data) {
-			arrayTest(data);
-		}
-	});
-})
 
 
