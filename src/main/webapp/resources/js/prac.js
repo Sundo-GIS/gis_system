@@ -34,7 +34,7 @@ window.addEventListener("load", function() {
 	var carNumInput = document.querySelector(".selectCarNum")
 	dateInput.addEventListener('change', function(event) {
 		console.log(dateInput.value);
-    	updateMap(); // 날짜가 변경되면 지도 업데이트
+		updateMap(); // 날짜가 변경되면 지도 업데이트
 	});
 
 	carNumInput.addEventListener('change', function(event) {
@@ -74,11 +74,10 @@ window.addEventListener("load", function() {
 				});
 			}
 		});
-
 	};
 
 	// 구 선택 이벤트
-	
+
 	var cheoingu = document.getElementById('cheoingu');
 	var giheunggu = document.getElementById('giheunggu');
 	var sujigu = document.getElementById('sujigu');
@@ -106,7 +105,7 @@ window.addEventListener("load", function() {
 			duration: 800
 		});
 	})
-	
+
 
 
 	var point = new ol.layer.Tile({
@@ -222,10 +221,7 @@ window.addEventListener("load", function() {
 		map.addLayer(point);
 		map.addLayer(start_point);
 		map.addLayer(end_point);
-		localStorage.setItem("previousState", "");
-		clearInterval(intervalId);
-
-
+		boundary.setOpacity(0.5)
 	})
 	var previousState = localStorage.getItem("previousState");
 	if (previousState === "someValue") {
