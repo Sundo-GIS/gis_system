@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	registerButton.addEventListener('click', function() {
 		const formData = new FormData(uploadForm);
 
+
 		// 서버 엔드포인트 설정
 		const serverEndpoint = '/uploadCsv';
 
@@ -30,29 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				console.error('업로드 중 오류 발생: ', error);
 			});
 	});
-});
-
-
-// < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
-// 모달창 show
-$('#add-data-btn').click(function(e) {
-	e.preventDefault();
-	$('#add-data-modal').modal("show");
-});
-
-// 모달창 hide
-$('.csv-cancel-btn').click(function(e) {
-	e.preventDefault();
-	$('#add-data-modal').modal("hide");
-
-	var gpsFile = $('#gpsfile');
-	var noiseFile = $('#noisefile');
-	var rpmFile = $('#rpmfile');
-
-	gpsFile.val('');
-	noiseFile.val('');
-	rpmFile.val('');
-
 });
 /* 파일 유효성 검사 */
 async function validateFile(fileElement, fileType) {
@@ -128,6 +106,26 @@ $(document).ready(function() {
 		$("#rpmfile").val(filename);
 	});
 });
+
+// < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
+// 모달창 show
+$('#add-data-btn').click(function(e) {
+	e.preventDefault();
+	$('#add-data-modal').modal("show");
+});
+
+// 모달창 hide
+$('.csv-cancel-btn').click(function(e) {
+	e.preventDefault();
+	$('#add-data-modal').modal("hide");
+		$("#gps-csv").val('');
+		$("#gpsfile").val('');
+		$("#noise-csv").val('');
+		$("#noisefile").val('');
+		$("#rpm-csv").val('');
+		$("#rpmfile").val('');
+});
+
 // < DATA 모달창 끝 !!!!!!!!!!!!!!!!!!!!!!!>
 
 // < CAR 모달창 >

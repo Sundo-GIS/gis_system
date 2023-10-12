@@ -57,7 +57,7 @@
 <body>
 	<div class="container-fluid">
 		<div id="big-view" class="row">
-			<div id="map" class="col-12 p-0"></div>
+			<div id="map" class="col-12 p-0 "></div>
 
 			<!-- live 버튼 -->
 			<div class="live">
@@ -78,16 +78,18 @@
 					aria-controls="offcanvasScrolling">&gt;</button>
 			</div>
 
-			<div class="frame text-center offcanvas offcanvas-start p-0"
+			<!-- offcanvas 정보창 -->
+			<div class="frame text-center offcanvas show offcanvas-start p-0"
 				data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="false"
 				id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel"
 				style="background-color: #F2EFEC;">
 
+				<!-- offcanvas 닫기 -->
 				<div type="button" class="btn-close mt-1" id="menu-close-btn"
 					data-bs-dismiss="offcanvas" aria-label="Close"
 					style="font-size: 20px; position: absolute; right: 0;"></div>
 
-				<!-- 정보창 offcanvas -->
+				<!-- 정보창 -->
 				<div class=" offcanvas-header me-3">
 					<img src="/resources/img/yongin-logo.png" class="img-fluid col-3">
 					<h5 class="col-9 my-auto">용인시 청소차 관제 시스템</h5>
@@ -122,12 +124,13 @@
 										style="background-color: #bd445b; color: white;">차량</th>
 									<td class="dropdown" colspan="3"><select class="col-12"
 										name="car_num_list" id="car_num">
-										
+
 											<option disabled selected class="text-center">차량을
 												선택하세요.</option>
 											<c:forEach var="list" items="${carNumList}" varStatus="st">
 												<!-- <option value=${st.count} class="text-center">${list.carNum}</option> -->
-												<option value=${list.carNum } class="text-center selectedDate">${list.carNum}</option>
+												<option value=${list.carNum }
+													class="text-center selectedDate">${list.carNum}</option>
 											</c:forEach>
 									</select></td>
 								</tr>
@@ -158,7 +161,7 @@
 								</tr>
 								<tr>
 									<th class="w-25">청소비율</th>
-									<td colspan="3" id="clean-ratio">0%</td>
+									<td colspan="3" id="clean-ratio">0 %</td>
 								</tr>
 								<tr>
 									<th class="w-25">총 운행거리</th>
@@ -167,7 +170,8 @@
 								<tr>
 									<th class="w-25 p-3"><span>유효</span><br> <span>
 											운행거리</span></th>
-									<td colspan="3" id="clean-distance" style="line-height: 56px;">0 Km</td>
+									<td colspan="3" id="clean-distance" style="line-height: 56px;">0
+										Km</td>
 								</tr>
 							</tbody>
 						</table>
@@ -251,6 +255,7 @@
                     </div>
                 </div>
             </div>
+
 			<!-- 차량 추가 modal -->
 			<div class="modal fade" id="add-car-modal" tabindex="-1"
 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -286,13 +291,13 @@
 			</div>
 		</div>
 	</div>
- 	
+
 	<!-- local에서 갖고옴 -->
 	<script src="/resources/js/mainView/mainView.js"></script>
 	<script src="/resources/js/mainView/main.js"></script>
 	<script src="/resources/js/mainView/calendar.js"></script>
-    
-    <!-- <script src="/resources/js/prac.js"></script> -->
+
+	<!-- <script src="/resources/js/prac.js"></script> -->
 </body>
 
 </html>
