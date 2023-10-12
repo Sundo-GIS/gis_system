@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	makeCalendar();
 });
-
 let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
@@ -131,7 +130,7 @@ function makeCalendar() {
 	// 차량 선택시 해당 차량에대한 청소날짜 생성
 	const carNumGroup = document.querySelector('#car_num');
 	carNumGroup.addEventListener("change", function() {
-
+		carCheck++;
 		const carNum = carNumGroup.value;
 		console.log(carNum)
 
@@ -158,7 +157,7 @@ function makeCalendar() {
 	const selectedDates = document.querySelectorAll(".selected");
 	selectedDates.forEach(selectedDate => {
 		selectedDate.addEventListener('click', () => {
-
+			dateCheck++;
 			const year = nowDate.getFullYear();
 			const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
 			const date = String(selectedDate.innerHTML.padStart(2, '0'));
@@ -166,7 +165,6 @@ function makeCalendar() {
 			deleteCleanData()
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;
-
 
 			console.log(cleanDate);
 			console.log(carNum);
@@ -225,5 +223,3 @@ function deleteCleanData() {
 	map.removeLayer(start_point);
 	map.removeLayer(end_point);
 }
-
-
