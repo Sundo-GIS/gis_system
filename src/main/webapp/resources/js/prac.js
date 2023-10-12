@@ -188,9 +188,7 @@ window.addEventListener("load", function() {
 
 	var live_start = document.getElementById('live_start');
 	var live_stop = document.getElementById('live_stop');
-	var map1;
-	var mapCenter; // 현재 지도 중심 좌표
-	var mapZoom; // 현재 지도 줌 레벨
+
 	live_start.addEventListener("click", function() {
 		console.log("라이브 시작");
 		map.getView().animate({
@@ -211,11 +209,6 @@ window.addEventListener("load", function() {
 		map.removeLayer(end_point);
 		localStorage.setItem("previousState", "someValue");
 
-		map1.on("moveend", function() {
-			mapCenter = map.getCenter();
-			mapZoom = map.getZoom();
-		});
-
 		intervalId = setInterval(function() {
 			location.reload(); // 현재 페이지 새로고침
 		}, 10000);
@@ -232,9 +225,7 @@ window.addEventListener("load", function() {
 		localStorage.setItem("previousState", "");
 		clearInterval(intervalId);
 
-		if (mapCenter && mapZoom) {
-			map1.setView(mapCenter, mapZoom);
-		}
+
 	})
 	var previousState = localStorage.getItem("previousState");
 	if (previousState === "someValue") {
