@@ -50,6 +50,46 @@ let nowDate = new Date();
 const todayDate = new Date();
 const CarCleanDate = new Array();
 
+var point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_data',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var line = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'clean_line',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var start_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'start_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
+var end_point = new ol.layer.Tile({
+	source: new ol.source.TileWMS({
+		url: 'http://localhost:8080/geoserver/wms',
+		params: {
+			'LAYERS': 'end_point',
+			'TILED': true,
+		},
+		serverType: 'geoserver',
+	})
+});
 function arrayTest(data) {
 	for (var i = 0; i < data.length; i++) {
 		CarCleanDate[i] = data[i];
@@ -61,12 +101,14 @@ function arrayTest(data) {
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, nowDate.getDate());
+	//deleteCleanData()
 	makeCalendar(); //달력 cell 만들어 출력 
 }
 
 //  ">" 클릭시 다음달 view
 function nextCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
+	//deleteCleanData()
 	makeCalendar();
 }
 
@@ -131,6 +173,31 @@ function makeCalendar() {
 			cell.setAttribute('id', 'today');
 		}
 	}
+	// 차량 선택시 해당 차량에대한 청소날짜 생성
+	const carNumGroup = document.querySelector('#car_num');
+	carNumGroup.addEventListener("change", function() {
+
+		const carNum = carNumGroup.value;
+		console.log(carNum)
+
+		$.ajax({
+			type: "GET",
+			url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
+			data: {
+				carNum: carNum
+			},
+			dataType: "json",
+			success: function(data) {
+				arrayTest(data);
+				deleteCleanData()
+				/*				map.removeLayer(line);
+								map.removeLayer(point);
+								map.removeLayer(start_point);
+								map.removeLayer(end_point);*/
+			}
+		});
+	})
+
 
 	// 차량 선택시 해당 차량에대한 청소날짜 생성
 	const carNumGroup = document.querySelector('#car_num');
@@ -162,7 +229,7 @@ function makeCalendar() {
 			const month = String(nowDate.getMonth() + 1).padStart(2, '0'); // 월을 2자리 문자열로 만듭니다.
 			const date = String(selectedDate.innerHTML.padStart(2, '0'));
 			const cleanDate = `${year}-${month}-${date}`;
-
+			deleteCleanData()
 			let carNumGroup = document.querySelector('#car_num');
 			let carNum = carNumGroup.value;
 
