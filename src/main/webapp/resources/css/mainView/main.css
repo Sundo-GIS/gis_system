@@ -4,7 +4,7 @@ body {
     position: relative;
     overflow-x: hidden;
     overflow-y: hidden;
-    font-size : 13px;
+    font-size: 13px;
 }
 
 #map {
@@ -12,19 +12,23 @@ body {
     position: absolute;
 }
 
-.hide-btn{
+.hide-btn {
     display: none;
 }
 
 /* Live 버튼 애니메이션 정의 */
 @keyframes blinkAnimation {
-    0%, 100% {
+
+    0%,
+    100% {
         background-color: red;
     }
+
     50% {
         background-color: orange;
     }
 }
+
 /* 버튼에 애니메이션 */
 .blinkin-btn {
     animation: blinkAnimation 1s infinite;
@@ -34,7 +38,7 @@ body {
 .ol-control {
     /* margin-top : 50px; */
     transform: translateY(50px);
-    font-size : 20px;
+    font-size: 20px;
 }
 
 #menu-show-btn {
@@ -49,29 +53,32 @@ body {
     font-weight: 700;
     right: 10px;
 }
+
 #download-btn:hover {
     background-color: royalblue;
 }
 
-#live-btn{
+#live-btn {
     z-index: 100;
     position: absolute;
     font-weight: 700;
     background-color: white;
     left: 70px;
 }
-.live-btn:hover{
+
+.live-btn:hover {
     background-color: royalblue;
 }
 
-.info-view{
+.info-view {
     height: 100vh;
 }
 
 /* calendar */
-.datepicker-inline {
+/* .datepicker-inline {
     width: 100%;
 }
+
 .datepicker table {
     margin: auto;
     -webkit-touch-callout: none;
@@ -80,7 +87,8 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
+} */
+
 
 /* 모달창 (데이터추가, 차량추가) */
 .modal-backdrop {
