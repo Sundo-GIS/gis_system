@@ -3,12 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	const uploadForm = document.getElementById('upload-form');
 	const registerButton = document.getElementById('csv-register-btn');
 
-
-	registerButton.addEventListener('click', function() {
-		const formData = new FormData(uploadForm);
-
-
-
 	registerButton.addEventListener('click', function() {
 		const formData = new FormData(uploadForm);
 
@@ -39,62 +33,38 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
-
-
-// 파일 유효성 검사
+/* 파일 유효성 검사 */
 async function validateFile(fileElement, fileType) {
-	const file = fileElement.files[0];
-	
-	if (file) {
-		const content = await file.text();
-		switch (fileType) {
-			case 'gps':
-				if (!content.includes('lon') || !content.includes('lat')) {
-					alert('gps 파일을 확인해 주세요');
-					$("#gps-csv").val('');
-					$("#gpsfile").val('');
-				} else {
-
-				}
-				break;
-
+    const file = fileElement.files[0];
+    if (file) {
+        const content = await file.text();
+        switch (fileType) {
+            case 'gps':
+                if (!content.includes('lon') || !content.includes('lat') || !content.includes('하')) {
+                    alert('위치 파일을 확인해 주세요');
+				    // GPS 파일 초기화
+				    $('#gpsfile').val(''); // 값 초기화
+				    $('#gps-csv').val(''); // 파일 선택 초기화
+                }
+                break;
+            
 			case 'noise':
-				if (!content.includes('noise')) {
-					alert('noise 파일을 확인해 주세요');
-					$("#noise-csv").val('');
-					$("#noisefile").val('');
-				}
-				break;
+                if (!content.includes('noise') || !content.includes('하')) {
+                    alert('소음 파일을 확인해 주세요');
+				    $('#noisefile').val(''); // 값 초기화
+				    $('#noise-csv').val(''); // 파일 선택 초기화
+                }
+                break;
 			case 'rpm':
-				if (!content.includes('rpm')) {
-					alert('rpm 파일을 확인해 주세요');
-					$("#rpm-csv").val('');
-					$("#rpmfile").val('');
-				}
-				break;
-		}
-	}
+                if (!content.includes('rpm') || !content.includes('하')) {
+                    alert('진동 파일을 확인해 주세요');
+				    $('#rpmfile').val(''); // 값 초기화
+				    $('#rpm-csv').val(''); // 파일 선택 초기화
+                }
+                break;
+        }
+    }
 }
-
-
-// < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
-// 모달창 show
-$('#add-data-btn').click(function(e) {
-	e.preventDefault();
-	$('#add-data-modal').modal("show");
-});
-
-// 모달창 hide
-$('.csv-cancel-btn').click(function(e) {
-	e.preventDefault();
-	$('#add-data-modal').modal("hide");
-		$("#gps-csv").val('');
-		$("#gpsfile").val('');
-		$("#noise-csv").val('');
-		$("#noisefile").val('');
-		$("#rpm-csv").val('');
-		$("#rpmfile").val('');
-});
 
 // gps-csv
 $(document).ready(function() {
@@ -136,6 +106,26 @@ $(document).ready(function() {
 		// 추출한 파일명 삽입
 		$("#rpmfile").val(filename);
 	});
+});
+
+
+// < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
+// 모달창 show
+$('#add-data-btn').click(function(e) {
+	e.preventDefault();
+	$('#add-data-modal').modal("show");
+});
+
+// 모달창 hide
+$('.csv-cancel-btn').click(function(e) {
+	e.preventDefault();
+	$('#add-data-modal').modal("hide");
+		$("#gps-csv").val('');
+		$("#gpsfile").val('');
+		$("#noise-csv").val('');
+		$("#noisefile").val('');
+		$("#rpm-csv").val('');
+		$("#rpmfile").val('');
 });
 
 // < DATA 모달창 끝 !!!!!!!!!!!!!!!!!!!!!!!>

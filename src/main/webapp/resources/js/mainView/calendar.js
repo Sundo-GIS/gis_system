@@ -19,10 +19,10 @@ var dateCheck = 0;
 const fileDownload = document.getElementById('download-btn');
 fileDownload.addEventListener("click", function() {
    if(carCheck==0) {
-      alert("차량 데이터 없음");
+      alert("차량 데이터를 선택해주세요");
    } else {
       if(dateCheck==0) {
-         alert("날짜 데이터 없음");
+         alert("날짜 데이터를 선택해주세요");
       }
    }
 })
