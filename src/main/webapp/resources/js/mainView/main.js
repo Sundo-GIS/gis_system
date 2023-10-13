@@ -108,7 +108,6 @@ $(document).ready(function() {
 	});
 });
 
-
 // < DATA 모달창 !!!!!!!!!!!!!!!!!!!!!!!>
 // 데이터추가 모달창 오픈
 $('#add-data-btn').click(function(e) {
