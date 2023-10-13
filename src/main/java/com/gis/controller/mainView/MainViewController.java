@@ -30,7 +30,11 @@ public class MainViewController {
 	private final IGisService gisService;
 	private final IMainViewService mainViewService;
 
-	// 차량, 날짜 선택시 청소정보 및 달력에 대한 좌표 갖고오기
+	
+    /**
+	 * 차량, 날짜 선택시 청소정보 및 달력에 대한 좌표 조회
+	 * @author 고일봉
+	 */
 	@ResponseBody
 	@GetMapping("/view/select")
 	public CleaningInfoDto cleaningInfo(@RequestParam("carNum") String carNum, 
@@ -40,9 +44,15 @@ public class MainViewController {
 		return cid;
 	}
 
+	
+	
 	@GetMapping("/view")
 	public String memberPage(HttpServletRequest request, Model model) {
-		// 세션에서 사용자 정보 가져오기
+		
+		/**
+    	 * 세션에서 사용자 정보 가져오기
+    	 * @author 임연서
+    	 */
 		HttpSession session = request.getSession();
 		MemberDto member = (MemberDto) session.getAttribute("member");
 
@@ -52,12 +62,18 @@ public class MainViewController {
             return "redirect:/login";
         }
   
+        /**
+    	 * 첫 화면 차량 리스트 출력
+    	 * @author 고일봉
+    	 */
 		List<CarNumListDto> cnldList = mainViewService.carNumList();
 		model.addAttribute("carNumList", cnldList);
 		return "mainView/main";
-	}
-
-	// 모달창 차량 추가
+	}	
+	 /**
+	 * 차량추가 (모달창)
+	 * @author 고일봉
+	 */
 	@ResponseBody
 	@PostMapping("/view")
 	public List<CarNumListDto> modalCarInfo(CarDto car) {
@@ -65,8 +81,11 @@ public class MainViewController {
 		List<CarNumListDto> cnldList = mainViewService.carNumList();
 		return cnldList;
 	}
-
-	// 차량 별 청소 날짜 출력
+	
+	/**
+	 * 차량에따른 청소날짜 출력
+	 * @author 고일봉
+	 */
 	@ResponseBody
 	@GetMapping("/view/carNum")
 	public List<String> cleanDateList(@RequestParam("carNum") String carNum) {
