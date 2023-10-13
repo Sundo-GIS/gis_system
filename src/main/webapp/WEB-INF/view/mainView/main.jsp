@@ -38,20 +38,6 @@
 <link rel="stylesheet" href="/resources/css/mainView/calendar.css">
 
 <title>Main</title>
-<style>
-.b {
-	border: 1px solid black;
-}
-#download-btn:hover {
-    background-color: green; /* 호버 상태일 때 배경색 변경 */
-    color: white;
-    border: 1px solid black;
-}
-.mouse:hover { 
-    cursor: pointer; /* 호버 시 커서 설정 */
-}
-
-</style>
 </head>
 
 <body>
@@ -61,21 +47,21 @@
 
 			<!-- live 버튼 -->
 			<div class="live">
-				<button type="button" class="live-btn btn b mt-1 live_start" id="live-btn">LIVE</button>
+				<button type="button" class="live-btn btn b mt-2 live_start" id="live-btn">LIVE</button>
 			</div>
 			<div class="live">
-				<button type="button" class="live-btn btn b mt-1 live_stop" id="live-btn">LIVE</button>
+				<button type="button" class="live-btn btn b mt-2 live_stop" id="live-btn">LIVE</button>
 			</div>
 
 			<!-- 다운로드 버튼 -->
 			<div id="download">
-				<button type="button" class="download-btn btn mt-1 b"
+				<button type="button" class="download-btn btn m-3 b"
 					id="download-btn">다운로드</button>
 			</div>
 
 			<!-- 메뉴창 버튼 -->
 			<div id="menu-show">
-				<button type="button" class="menu-show-btn btn btn-success mt-1 b"
+				<button type="button" class="menu-show-btn btn mt-2 b"
 					id="menu-show-btn" data-bs-toggle="offcanvas"
 					data-bs-target="#offcanvasScrolling"
 					aria-controls="offcanvasScrolling">&gt;</button>
@@ -88,14 +74,14 @@
 				style="background-color: #F2EFEC;">
 
 				<!-- offcanvas 닫기 -->
-				<div type="button" class="btn-close mt-1" id="menu-close-btn"
+				<div type="button" class="btn-close m-2" id="menu-close-btn"
 					data-bs-dismiss="offcanvas" aria-label="Close"
 					style="font-size: 20px; position: absolute; right: 0;"></div>
 
 				<!-- 정보창 -->
 				<div class=" offcanvas-header me-3">
 					<img src="/resources/img/yongin-logo.png" class="img-fluid col-3">
-					<h5 class="col-9 my-auto">용인시 청소차 관제 시스템</h5>
+					<p class="col-9 my-auto title-name">용인시 청소차 관제 시스템</p>
 				</div>
 				<!-- 왼쪽 화면 데이터  -->
 				<div class="info-view col-12 offcanvas-body p-1" id="info-view">
@@ -113,7 +99,7 @@
 										style="background-color: white; color: black;">하이브리드</td>
 								</tr>
 								<tr>
-									<th class="w-25 mouse"
+									<th class="w-25"
 										style="background-color: #bd445b; color: white;">권역(구)</th>
 									<td class="w-25 cheoin mouse"
 										style="background-color: white; color: black;">처인구</td>
@@ -125,7 +111,7 @@
 								<tr>
 									<th class="w-25"
 										style="background-color: #bd445b; color: white;">차량</th>
-									<td class="dropdown" colspan="3"><select class="col-12"
+									<td class="dropdown" colspan="3"><select class="car-select col-12 fs-6 h-100"
 										name="car_num_list" id="car_num">
 
 											<option disabled selected class="text-center">차량을
@@ -185,6 +171,9 @@
 								style="background-color: #293661; color: white;">데이터 추가</button>
 							<button id="add-car-btn" type="button" class="btn mt-2"
 								style="background-color: #bd445b; color: white;">차량 추가</button>
+							<a href="/logout" class="btn logout-btn mt-2" style="background-color: #d3e3fd; color: black;">
+							    로그아웃
+							</a>
                         </div>
                     </div>
                 </div>

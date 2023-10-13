@@ -28,7 +28,7 @@ public class MemberController {
 	 * 로그인 화면으로 이동
 	 * @author 임연서
 	 */
-	@GetMapping("/login")
+	@GetMapping("/")
 	public String loginPage() {
 		return "member/login";
 	}
@@ -48,7 +48,7 @@ public class MemberController {
         if (memberDTO != null) {
             // 사용자의 솔트 값을 가져옴
             String salt = memberDTO.getSalt();
-            log.info("가져온 솔트 값: {}", salt);
+            
             // 사용자가 입력한 비밀번호를 해싱하여 저장된 해시와 비교
             String hashedPassword = PasswordEncoderUtil.hashPassword(password, salt);
 
