@@ -242,7 +242,7 @@ function makeCalendar() {
 					let lon = data.lon;
 					let lat = data.lat;
 					cleanTime.innerText = data.cleanTime;
-					cleanRatio.innerText = data.cleanRatio + "%";
+					cleanRatio.innerText = data.cleanRatio.toFixed(2) + "%";
 					totalDistance.innerText = data.totalDistance.toFixed(2) + "km";
 					cleanDistance.innerText = data.cleanDistance.toFixed(2) + "km";
 
@@ -315,6 +315,20 @@ var live_lon;
 var live_lat;
 let intervalId;
 live_start.addEventListener("click", function() {
+	var minute = parseInt(document.getElementById("minute").value) * 60;
+	var second = parseInt(document.getElementById("second").value);
+	var time = minute + second;
+	$.ajax({
+		type: "GET",
+		url: "/gis/start",
+		data: { time: time },
+		success: function() {
+			alert(time + "스케줄러가 시작되었습니다.");
+		},
+		error: function() {
+			alert("스케줄러 시작에 실패했습니다.");
+		}
+	});
 	live_start.style.display = 'none';
 	live_stop.style.display = 'block';
 	map.addLayer(live_coord);
@@ -332,16 +346,24 @@ live_start.addEventListener("click", function() {
 function livestart() {
 	$.ajax({
 		type: 'POST',
-		url: '/gis/live',
+		url: '/gis/livestart',
 		success: function(data) {
 			live_lon = data.lon;
 			live_lat = data.lat;
 			console.log(live_lon + " " + live_lat);
-			map.getView().animate({
-				center: ol.proj.transform([live_lon, live_lat], 'EPSG:4326', 'EPSG:3857'),
-				zoom: 17,
-				duration: 600
-			});
+			if(live_lon==null) {
+				map.getView().animate({
+					center: ol.proj.transform([127.1775537, 37.2410864], 'EPSG:4326', 'EPSG:3857'),
+					zoom: 12,
+					duration: 600
+				});		
+			} else {
+				map.getView().animate({
+					center: ol.proj.transform([live_lon, live_lat], 'EPSG:4326', 'EPSG:3857'),
+					zoom: 17,
+					duration: 600
+				});				
+			}
 		}
 	});
 }
@@ -359,6 +381,13 @@ live_stop.addEventListener("click", function() {
 	boundary.setOpacity(0.5);
 	// 이전에 설정한 타이머 중지
 	clearInterval(intervalId);
+	$.ajax({
+		type: 'POST',
+		url: '/gis/livestop',
+		success: function(data) {
+
+		}
+	});
 })
 // 실시간으로 레이어 업데이트를 수행하는 함수
 function updateMapLayer() {

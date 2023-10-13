@@ -20,11 +20,11 @@ public class TimeScheduler {
 	private final IGisService gisService;
 	private ScheduledExecutorService scheduler;
 
-	public void startScheduler() {
+	public void startScheduler(int time) {
 		stopScheduler();
 		log.info("시작");
 		scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, 11000, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(this::insertLocalDB, 0, time, TimeUnit.SECONDS);
 	}
 	public void stopScheduler() {
 		if (scheduler != null && !scheduler.isShutdown()) {

@@ -28,7 +28,7 @@ public class MemberController {
 	 * 로그인 화면으로 이동
 	 * @author 임연서
 	 */
-	@GetMapping("/login")
+	@GetMapping("/")
 	public String loginPage() {
 		return "member/login";
 	}

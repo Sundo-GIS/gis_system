@@ -59,7 +59,27 @@ body {
     position: absolute;
     font-weight: 700;
     background-color: white;
+    left: 208px;
+}
+/* 시간 */
+.live_time {
+	z-index: 99;
+    position: absolute;
+    top:4px;
     left: 70px;
+    background-color:white;
+    width:180px;
+    /* color:white */;
+    padding:0px;
+    height:38px;
+}
+.live_time input {
+	width:40px;
+	height:38px;
+	font-size:16px;
+}
+.live_time label {
+	font-size:16px;
 }
 .live_stop {
 	display:none;

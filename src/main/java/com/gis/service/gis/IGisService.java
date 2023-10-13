@@ -65,4 +65,9 @@ public interface IGisService {
 	 * @author 여수한
 	 */
 	DateCoord selectLiveCoord();
+	/**
+	 * 실시간 좌표 조회 끝
+	 * @author 여수한
+	 */
+	void deleteLiveCoord();
 }
