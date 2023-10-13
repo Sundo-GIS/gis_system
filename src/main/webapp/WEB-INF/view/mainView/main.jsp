@@ -38,6 +38,7 @@
 <link rel="stylesheet" href="/resources/css/mainView/calendar.css">
 
 <title>Main</title>
+
 </head>
 
 <body>
@@ -52,7 +53,10 @@
 			<div class="live">
 				<button type="button" class="live-btn btn b mt-2 live_stop" id="live-btn">LIVE</button>
 			</div>
-
+			<div class="live_time">
+				<input type="number" id="minute" name="time" min="0" max="59"required value="0"> <label for="minute">분</label>
+				<input type="number" id="second" name="second" min="10" max="59" step="1" required value="10"> <label for="second">초</label>
+			</div>
 			<!-- 다운로드 버튼 -->
 			<div id="download">
 				<button type="button" class="download-btn btn m-3 b"
@@ -128,9 +132,9 @@
 									<td colspan="3">
 										<table class="sec-cal col-12 mt-3" id="calendar">
 											<tr class="fs-4">
-												<td><label onclick="prevCalendar()">&lt;</label></td>
+												<td><label onclick="prevCalendar()" class="calendar-hover">&lt;</label></td>
 												<td id="tbCalendarYM" colspan="5">yyyy년 m월</td>
-												<td><label onclick="nextCalendar()">&gt;</label></td>
+												<td><label onclick="nextCalendar()" class="calendar-hover">&gt;</label></td>
 											</tr>
 											<tr style="height: 50px;">
 												<td class="text-danger">일</td>
@@ -247,37 +251,34 @@
                     </div>
                 </div>
             </div>
-
 			<!-- 차량 추가 modal -->
 			<div class="modal fade" id="add-car-modal" tabindex="-1"
 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
-						<form class="form-group row" action="/view" method="post">
-							<div class="modal-header">
-								<h5 class="modal-title offset-1">차량 추가</h5>
+						<div class="modal-header">
+							<h5 class="modal-title offset-1">차량 추가</h5>
+						</div>
+						<div class="modal-body contianer">
+							<div class="col-10">
+								<!-- 차량번호 입력 -->
+								<input type="text" class="col-11 offset-2 addCar" name="carNum">
+								<div class="text-start offset-2">※차량번호를 입력해주세요.</div>
 							</div>
-							<div class="modal-body contianer">
-								<div class="col-10">
-									<!-- 차량번호 입력 -->
-									<input type="text" class="col-11 offset-2" name="carNum">
-									<div class="text-start offset-2">※차량번호를 입력해주세요.</div>
-								</div>
-								<div class="col-10 mt-4">
-									<select name="carType" id="car-type" class="col-11 offset-2">
-										<option value="진공노면 차량">진공노면 차량</option>
-										<option value="분진흡입 차량">분진흡입 차량</option>
-									</select>
-									<div class="text-start offset-2">※차량유형을 선택해주세요.</div>
-								</div>
+							<div class="col-10 mt-4">
+								<select name="carType" id="car-type" class="col-11 offset-2">
+									<option value="진공노면 차량">진공노면 차량</option>
+									<option value="분진흡입 차량">분진흡입 차량</option>
+								</select>
+								<div class="text-start offset-2">※차량유형을 선택해주세요.</div>
 							</div>
-							<div class="modal-footer">
-								<button type="submit" class="car-register-btn btn"
-									style="background-color: #bd445b; color: white;">등록</button>
-								<button type="button" class="car-cancel-btn btn"
-									style="background-color: #bd445b; color: white;">취소</button>
-							</div>
-						</form>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="car-register-btn btn"
+								style="background-color: #bd445b; color: white;">등록</button>
+							<button type="button" class="car-cancel-btn btn"
+								style="background-color: #bd445b; color: white;">취소</button>
+						</div>
 					</div>
 				</div>
 			</div>

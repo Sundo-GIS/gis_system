@@ -35,14 +35,10 @@ public class StartController {
 	private final TimeScheduler timeScheduler;
 	private final IGisService gisService;
 	
-    @GetMapping
-    public String main() {
-    	return "prac";
-    }
     @ResponseBody
     @GetMapping("/start")
-    public ResponseEntity<String> startScheduler() {
-    	timeScheduler.startScheduler();
+    public ResponseEntity<String> startScheduler(@RequestParam("time") int time) {
+    	timeScheduler.startScheduler(time);
         return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
     /**
@@ -108,12 +104,22 @@ public class StartController {
     	return gisService.selectDateCoord(date, carNum);
     }
     /**
-	 * 라이브 좌표 조회
+	 * 실시간 좌표 조회
 	 * @author 여수한
 	 */
     @ResponseBody
-    @PostMapping("/live")
+    @PostMapping("/livestart")
     public DateCoord getLiveCoord(){
     	return gisService.selectLiveCoord();
+    }
+    /**
+	 * 실시간 좌표 조회 끝
+	 * @author 여수한
+	 */
+    @ResponseBody
+    @PostMapping("/livestop")
+    public String deleteLiveCoord(){
+    	gisService.deleteLiveCoord();
+    	return "";
     }
 }

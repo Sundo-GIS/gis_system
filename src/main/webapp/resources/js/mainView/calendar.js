@@ -1,16 +1,55 @@
 $(document).ready(function() {
 	makeCalendar();
+
+
+	// 차량 선택시 해당 차량에대한 청소날짜 생성
+	const carNumGroup = document.querySelector('#car_num');
+	carNumGroup.addEventListener("change", function() {
+		// 모든 "day" 클래스가 있는 셀에서 "selected" 클래스 제거
+		const dayCells = document.querySelectorAll('.day');
+
+		dayCells.forEach(function(cell) {
+			cell.classList.remove('selected');
+		});
+
+		carCheck++;
+		let cleanTime = document.getElementById("clean-time");
+		let cleanRatio = document.getElementById("clean-ratio");
+		let totalDistance = document.getElementById("total-distance");
+		let cleanDistance = document.getElementById("clean-distance");
+		cleanTime.innerText = "00:00:00";
+		cleanRatio.innerText = "0 %";
+		totalDistance.innerText = "0 km";
+		cleanDistance.innerText = "0 km";
+		const carNum = carNumGroup.value;
+
+		$.ajax({
+			type: "GET",
+			url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
+			data: {
+				carNum: carNum
+			},
+			dataType: "json",
+			success: function(data) {
+				arrayTest(data);
+				deleteCleanData();
+			}
+		});
+	})
 });
+
 // ajax 자동차에 대한 날짜 데이터 배열에 저장
 let nowDate = new Date();
 const todayDate = new Date();
-const CarCleanDate = new Array();
+let carCleanDate = new Array();
 
 function arrayTest(data) {
+	carCleanDate = []; // CarCleanDate 배열을 초기화
+
 	for (var i = 0; i < data.length; i++) {
-		CarCleanDate[i] = data[i];
-		makeCalendar();
+		carCleanDate[i] = data[i];
 	}
+	makeCalendar();
 }
 
 // 파일 다운로드 체크
@@ -67,6 +106,8 @@ var end_point = new ol.layer.Tile({
 		serverType: 'geoserver',
 	})
 });
+
+
 //  "<" 클릭시 다음달 view
 function prevCalendar() {
 	nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, nowDate.getDate());
@@ -116,8 +157,8 @@ function makeCalendar() {
 
 			row = tbCalendar.insertRow();
 		}
-		for (let j = 0; j < CarCleanDate.length; j++) {
-			let cleanDateString = CarCleanDate[j];
+		for (let j = 0; j < carCleanDate.length; j++) {
+			let cleanDateString = carCleanDate[j];
 			let cleanDateObject = new Date(cleanDateString);
 
 			if (
@@ -136,42 +177,14 @@ function makeCalendar() {
 			cell.setAttribute('id', 'today');
 		}
 	}
-	// 차량 선택시 해당 차량에대한 청소날짜 생성
-	const carNumGroup = document.querySelector('#car_num');
-	carNumGroup.addEventListener("change", function() {
-		carCheck++;
-		let cleanTime = document.getElementById("clean-time");
-		let cleanRatio = document.getElementById("clean-ratio");
-		let totalDistance = document.getElementById("total-distance");
-		let cleanDistance = document.getElementById("clean-distance");
-		cleanTime.innerText = "00:00:00";
-		cleanRatio.innerText = "0 %";
-		totalDistance.innerText = "0 km";
-		cleanDistance.innerText = "0 km";
-		const carNum = carNumGroup.value;
 
-		$.ajax({
-			type: "GET",
-			url: "/view/carNum", // 시작 요청을 보낼 엔드포인트 URL
-			data: {
-				carNum: carNum
-			},
-			dataType: "json",
-			success: function(data) {
-				arrayTest(data);
-				deleteCleanData();
-			}
-		});
-	})
 	// 날짜 선택, 차량 선택시 view 화면 변경
 	const selectedDates = document.querySelectorAll(".selected");
 	let preSelectedDate = null;
 
 	selectedDates.forEach(selectedDate => {
 		selectedDate.addEventListener('click', () => {
-
 			dateCheck++;
-
 
 			if (preSelectedDate) {
 				preSelectedDate.classList.remove("choice"); // 이전 선택을 클래스에서 제거
@@ -242,7 +255,7 @@ function makeCalendar() {
 					let lon = data.lon;
 					let lat = data.lat;
 					cleanTime.innerText = data.cleanTime;
-					cleanRatio.innerText = data.cleanRatio + "%";
+					cleanRatio.innerText = data.cleanRatio.toFixed(2) + "%";
 					totalDistance.innerText = data.totalDistance.toFixed(2) + "km";
 					cleanDistance.innerText = data.cleanDistance.toFixed(2) + "km";
 
@@ -258,13 +271,57 @@ function makeCalendar() {
 					console.log(errorThrown);
 					console.log(jqXHR);
 					console.log(textStatus);
-					console.log(cleanDate);
-					console.log(carNum);
 				}
 			});
 		});
 	});
 }
+
+// modal 창 차량 추가 ajax
+const carRegisterBtn = document.querySelector(".car-register-btn");
+carRegisterBtn.addEventListener("click", () => {
+	const addCarNum = document.querySelector(".addCar");
+	const addCarType = document.querySelector("#car-type");
+	const addCarNumVal = addCarNum.value;
+	const addCarTypeVal = addCarType.value;
+	console.log(addCarNumVal);
+	console.log(addCarTypeVal);
+
+	// 입력 필드가 비어 있는지 확인
+	if (addCarNumVal.trim() === '') {
+		alert("차량 번호를 입력하세요.");
+		return; // 빈 값이면 서버 요청을 보내지 않음
+	}
+
+	$.ajax({
+		type: "post",
+		url: "/view", // 시작 요청을 보낼 엔드포인트 URL
+		data: {
+			carNum: addCarNumVal,
+			carType: addCarTypeVal
+		},
+		dataType: "json",
+		success: function(data) {
+			carList(data);
+		}, error: function(error) {
+			alert("차량 번호를 확인해 주세요.");
+		}
+	});
+})
+
+// 차량 리스트 출력 ajx 사용할 함수
+function carList(data) {
+	$("#car_num").empty();
+	const option1 = $("<option disabled selected class='text-center'>차량을 선택하세요.</option>");
+	$("#car_num").append(option1);
+	$.each(data, function(index, aa) {
+		const option2 = $("<option class='text-center selectedDate'></option>").text(aa.carNum);
+		$("#car_num").append(option2);
+	});
+	$('#add-car-modal').modal("hide");
+	alert("차량이 추가되었습니다.");
+}
+
 // 청소구역 레이어 삭제
 function deleteCleanData() {
 	map.removeLayer(line);
@@ -279,6 +336,7 @@ function addCleanData() {
 	map.addLayer(start_point);
 	map.addLayer(end_point);
 }
+
 var live_start_point = new ol.layer.Tile({
 	source: new ol.source.TileWMS({
 		url: 'http://localhost:8080/geoserver/wms',
@@ -315,6 +373,20 @@ var live_lon;
 var live_lat;
 let intervalId;
 live_start.addEventListener("click", function() {
+	var minute = parseInt(document.getElementById("minute").value) * 60;
+	var second = parseInt(document.getElementById("second").value);
+	var time = minute + second;
+	$.ajax({
+		type: "GET",
+		url: "/gis/start",
+		data: { time: time },
+		success: function() {
+			alert(time + "스케줄러가 시작되었습니다.");
+		},
+		error: function() {
+			alert("스케줄러 시작에 실패했습니다.");
+		}
+	});
 	live_start.style.display = 'none';
 	live_stop.style.display = 'block';
 	map.addLayer(live_coord);
@@ -332,16 +404,24 @@ live_start.addEventListener("click", function() {
 function livestart() {
 	$.ajax({
 		type: 'POST',
-		url: '/gis/live',
+		url: '/gis/livestart',
 		success: function(data) {
 			live_lon = data.lon;
 			live_lat = data.lat;
 			console.log(live_lon + " " + live_lat);
-			map.getView().animate({
-				center: ol.proj.transform([live_lon, live_lat], 'EPSG:4326', 'EPSG:3857'),
-				zoom: 17,
-				duration: 600
-			});
+			if (live_lon == null) {
+				map.getView().animate({
+					center: ol.proj.transform([127.1775537, 37.2410864], 'EPSG:4326', 'EPSG:3857'),
+					zoom: 12,
+					duration: 600
+				});
+			} else {
+				map.getView().animate({
+					center: ol.proj.transform([live_lon, live_lat], 'EPSG:4326', 'EPSG:3857'),
+					zoom: 17,
+					duration: 600
+				});
+			}
 		}
 	});
 }
@@ -359,6 +439,13 @@ live_stop.addEventListener("click", function() {
 	boundary.setOpacity(0.5);
 	// 이전에 설정한 타이머 중지
 	clearInterval(intervalId);
+	$.ajax({
+		type: 'POST',
+		url: '/gis/livestop',
+		success: function(data) {
+
+		}
+	});
 })
 // 실시간으로 레이어 업데이트를 수행하는 함수
 function updateMapLayer() {

@@ -209,4 +209,12 @@ public class GisServiceImpl implements IGisService {
 		DateCoord liveCoord = gisDao.selectLiveCoord();
 		return liveCoord;
 	}
+	/**
+	 * 실시간 좌표 조회 끝
+	 * @author 여수한
+	 */
+	@Override
+	public void deleteLiveCoord() {
+		gisDao.deleteLiveCoord();
+	}
 }

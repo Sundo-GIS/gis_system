@@ -4,6 +4,7 @@ const hybridMapBtn = document.getElementById("hybrid-map-btn");
 const downloadBtn = document.getElementById("download-btn");
 const menuShowBtn = document.getElementById("menu-show-btn");
 const liveBtn = document.getElementById("live-btn");
+const liveBtn2 = document.querySelector(".live_stop");
 const donwloadBtn = document.getElementById('download-btn');
 
 const giheung = document.querySelector('.giheung');
@@ -185,9 +186,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		liveBtn.style.display = "";
 	}
 });
-const liveStop = document.querySelector('.live_stop');
 // 라이브 버튼 클릭
 liveBtn.addEventListener('click', () => {
+	downloadBtn.classList.toggle('hide-btn');
+	menuShowBtn.classList.toggle('hide-btn');
+	liveBtn.classList.toggle('blinkin-btn');
+});
+liveBtn2.addEventListener('click', () => {
 	downloadBtn.classList.toggle('hide-btn');
 	menuShowBtn.classList.toggle('hide-btn');
 	liveBtn.classList.toggle('blinkin-btn');
