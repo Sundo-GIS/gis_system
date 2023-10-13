@@ -38,21 +38,7 @@
 <link rel="stylesheet" href="/resources/css/mainView/calendar.css">
 
 <title>Main</title>
-<style>
-.b {
-	border: 1px solid black;
-}
 
-#download-btn:hover {
-	background-color: green; /* 호버 상태일 때 배경색 변경 */
-	color: white;
-	border: 1px solid black;
-}
-
-.mouse:hover {
-	cursor: pointer; /* 호버 시 커서 설정 */
-}
-</style>
 </head>
 
 <body>
@@ -62,12 +48,10 @@
 
 			<!-- live 버튼 -->
 			<div class="live">
-				<button type="button" class="live-btn btn b mt-1 live_start"
-					id="live-btn">LIVE</button>
+				<button type="button" class="live-btn btn b mt-2 live_start" id="live-btn">LIVE</button>
 			</div>
 			<div class="live">
-				<button type="button" class="live-btn btn b mt-1 live_stop"
-					id="live-btn">LIVE</button>
+				<button type="button" class="live-btn btn b mt-2 live_stop" id="live-btn">LIVE</button>
 			</div>
 			<div class="live_time">
 				<input type="number" id="minute" name="time" min="0" max="59"required value="0"> <label for="minute">분</label>
@@ -75,13 +59,13 @@
 			</div>
 			<!-- 다운로드 버튼 -->
 			<div id="download">
-				<button type="button" class="download-btn btn mt-1 b"
+				<button type="button" class="download-btn btn m-3 b"
 					id="download-btn">다운로드</button>
 			</div>
 
 			<!-- 메뉴창 버튼 -->
 			<div id="menu-show">
-				<button type="button" class="menu-show-btn btn btn-success mt-1 b"
+				<button type="button" class="menu-show-btn btn mt-2 b"
 					id="menu-show-btn" data-bs-toggle="offcanvas"
 					data-bs-target="#offcanvasScrolling"
 					aria-controls="offcanvasScrolling">&gt;</button>
@@ -94,14 +78,14 @@
 				style="background-color: #F2EFEC;">
 
 				<!-- offcanvas 닫기 -->
-				<div type="button" class="btn-close mt-1" id="menu-close-btn"
+				<div type="button" class="btn-close m-2" id="menu-close-btn"
 					data-bs-dismiss="offcanvas" aria-label="Close"
 					style="font-size: 20px; position: absolute; right: 0;"></div>
 
 				<!-- 정보창 -->
 				<div class=" offcanvas-header me-3">
 					<img src="/resources/img/yongin-logo.png" class="img-fluid col-3">
-					<h5 class="col-9 my-auto">용인시 청소차 관제 시스템</h5>
+					<p class="col-9 my-auto title-name">용인시 청소차 관제 시스템</p>
 				</div>
 				<!-- 왼쪽 화면 데이터  -->
 				<div class="info-view col-12 offcanvas-body p-1" id="info-view">
@@ -131,7 +115,7 @@
 								<tr>
 									<th class="w-25"
 										style="background-color: #bd445b; color: white;">차량</th>
-									<td class="dropdown" colspan="3"><select class="col-12"
+									<td class="dropdown" colspan="3"><select class="car-select col-12 fs-6 h-100"
 										name="car_num_list" id="car_num">
 
 											<option disabled selected class="text-center">차량을
@@ -148,9 +132,9 @@
 									<td colspan="3">
 										<table class="sec-cal col-12 mt-3" id="calendar">
 											<tr class="fs-4">
-												<td><label onclick="prevCalendar()">&lt;</label></td>
+												<td><label onclick="prevCalendar()" class="calendar-hover">&lt;</label></td>
 												<td id="tbCalendarYM" colspan="5">yyyy년 m월</td>
-												<td><label onclick="nextCalendar()">&gt;</label></td>
+												<td><label onclick="nextCalendar()" class="calendar-hover">&gt;</label></td>
 											</tr>
 											<tr style="height: 50px;">
 												<td class="text-danger">일</td>
@@ -191,94 +175,82 @@
 								style="background-color: #293661; color: white;">데이터 추가</button>
 							<button id="add-car-btn" type="button" class="btn mt-2"
 								style="background-color: #bd445b; color: white;">차량 추가</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- 데이터 추가 modal -->
-			<div class="modal fade" id="add-data-modal" tabindex="-1"
-				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title offset-1">데이터 추가</h5>
-						</div>
-						<div class="modal-body container">
-							<form class="form-group row" id="upload-form"
-								enctype="multipart/form-data">
-								<!-- gps -->
-								<div class="offset-2 col-9">
-									<input id="gps-csv" name="gpsfile" filestyle="" type="file"
-										data-class-button="btn btn-default"
-										data-class-input="form-control" data-button-text=""
-										accept=".csv" onchange="validateFile(this, 'gps')"
-										data-icon-name="fa fa-upload"
-										class="form-control csv-file-input" tabindex="-1"
-										style="position: absolute; clip: rect(0px, 0px, 0px, 0px);">
-									<div class="bootstrap-filestyle input-group">
-										<input type="text" id="gpsfile" class="form-control"
-											name="gpsfile" disabled=""> <span
-											class="group-span-filestyle input-group-btn" tabindex="0">
-											<label for="gps-csv" class="btn btn-default"> <i
-												class="fa-solid fa-upload"></i>
-										</label>
-										</span>
-									</div>
-									<div class="text-start">※ 위치 gps.csv</div>
-								</div>
-								<!-- noise -->
-								<div class="offset-2 col-9 mt-4">
-									<input id="noise-csv" name="noisefile" filestyle="" type="file"
-										data-class-button="btn btn-default"
-										data-class-input="form-control" data-button-text=""
-										accept=".csv" onchange="validateFile(this, 'noise')"
-										data-icon-name="fa fa-upload"
-										class="form-control csv-file-input" tabindex="-1"
-										style="position: absolute; clip: rect(0px, 0px, 0px, 0px);">
-									<div class="bootstrap-filestyle input-group">
-										<input type="text" id="noisefile" class="form-control"
-											name="noisefile" disabled=""> <span
-											class="group-span-filestyle input-group-btn" tabindex="0">
-											<label for="noise-csv" class="btn btn-default"> <i
-												class="fa-solid fa-upload"></i>
-										</label>
-										</span>
-									</div>
-									<div class="text-start">※ 소음 noise.csv</div>
-								</div>
-								<!-- rpm -->
-								<div class="offset-2 col-9 mt-4">
-									<input id="rpm-csv" name="rpmfile" filestyle="" type="file"
-										data-class-button="btn btn-default"
-										data-class-input="form-control" data-button-text=""
-										accept=".csv" onchange="validateFile(this, 'rpm')"
-										data-icon-name="fa fa-upload"
-										class="form-control csv-file-input" tabindex="-1"
-										style="position: absolute; clip: rect(0px, 0px, 0px, 0px);">
-									<div class="bootstrap-filestyle input-group">
-										<input type="text" id="rpmfile" class="form-control"
-											name="rpmfile" disabled=""> <span
-											class="group-span-filestyle input-group-btn" tabindex="0">
-											<label for="rpm-csv" class="btn btn-default"> <i
-												class="fa-solid fa-upload"></i>
-										</label>
-										</span>
-									</div>
-									<div class="text-start">※ 진동 rpm.csv</div>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="csv-register-btn btn"
-								id="csv-register-btn"
-								style="background-color: #bd445b; color: white;">등록</button>
-							<button type="button" class="csv-cancel-btn btn"
-								style="background-color: #bd445b; color: white;">취소</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
+							<a href="/logout" class="btn logout-btn mt-2" style="background-color: #d3e3fd; color: black;">
+							    로그아웃
+							</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 데이터 추가 modal -->
+            <div class="modal fade" id="add-data-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title offset-1">데이터 추가</h5>
+                        </div>
+                        <div class="modal-body container">
+                            <form class="form-group row" id="upload-form" enctype="multipart/form-data">
+                                <!-- gps -->
+                                <div class="offset-2 col-9">
+                                    <input id="gps-csv" name="gpsfile" filestyle="" type="file" data-class-button="btn btn-default"
+                                        data-class-input="form-control" data-button-text="" accept=".csv" onchange="validateFile(this, 'gps')" 
+                                        data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
+                                        style="position: absolute; clip: rect(0px 0px 0px 0px);">
+                                    <div class="bootstrap-filestyle input-group">
+                                        <input type="text" id="gpsfile" class="form-control" name="gpsfile" disabled="">
+                                        <span class="group-span-filestyle input-group-btn" tabindex="0">
+                                            <label for="gps-csv" class="btn btn-default">
+                                                <i class="fa-solid fa-upload"></i>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="text-start">※ 위치 gps.csv</div>
+                                </div>
+                                <!-- noise -->
+                                <div class="offset-2 col-9 mt-4">
+                                    <input id="noise-csv" name="noisefile" filestyle="" type="file" data-class-button="btn btn-default"
+                                        data-class-input="form-control" data-button-text="" accept=".csv" onchange="validateFile(this, 'noise')"
+                                        data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
+                                        style="position: absolute; clip: rect(0px 0px 0px 0px);">
+                                    <div class="bootstrap-filestyle input-group">
+                                        <input type="text" id="noisefile" class="form-control" name="noisefile" disabled="">
+                                        <span class="group-span-filestyle input-group-btn" tabindex="0">
+                                            <label for="noise-csv" class="btn btn-default">
+                                                <i class="fa-solid fa-upload"></i>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="text-start">※ 소음 noise.csv</div>
+                                </div>
+                                <!-- rpm -->
+                                <div class="offset-2 col-9 mt-4">
+                                    <input id="rpm-csv" name="rpmfile" filestyle="" type="file" data-class-button="btn btn-default"
+                                        data-class-input="form-control" data-button-text="" accept=".csv" onchange="validateFile(this, 'rpm')"
+                                        data-icon-name="fa fa-upload" class="form-control csv-file-input" tabindex="-1"
+                                        style="position: absolute; clip: rect(0px 0px 0px 0px);">
+                                    <div class="bootstrap-filestyle input-group">
+                                        <input type="text" id="rpmfile" class="form-control" name="rpmfile" disabled="">
+                                        <span class="group-span-filestyle input-group-btn" tabindex="0">
+                                            <label for="rpm-csv" class="btn btn-default">
+                                                <i class="fa-solid fa-upload"></i>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="text-start">※ 진동 rpm.csv</div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="csv-register-btn btn" id="csv-register-btn"
+                                style="background-color: #bd445b; color:white;">등록</button>
+                            <button type="button" class="csv-cancel-btn btn"
+                                style="background-color: #bd445b; color:white;">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 			<!-- 차량 추가 modal -->
 			<div class="modal fade" id="add-car-modal" tabindex="-1"
 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
