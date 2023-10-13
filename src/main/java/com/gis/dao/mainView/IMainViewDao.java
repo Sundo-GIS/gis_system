@@ -10,14 +10,21 @@ import com.gis.dto.mainView.CleanDateDto;
 
 @Mapper
 public interface IMainViewDao {
-	
-	// 모달창 차량 추가
+	/**
+	 * 모달창 차량 추가
+	 * @author 고일봉
+	 */
 	public void addCar(@Param("car") CarDto car); 
 
-	// 차량 리스트 출력
+	/**
+	 * 차량 리스트 출력
+	 * @author 고일봉
+	 */
 	public List<CarDto> carNumList();
 	
-	// 차량 별 청소 날짜 출력
-//	public List<CleanDateDto> selectedDate(@Param("carNum") String carNum);
+	/**
+	 * 차량별 청소 날짜 출력
+	 * @author 고일봉
+	 */
 	public List<String> selectedDate(@Param("carNum") String carNum);
 }
