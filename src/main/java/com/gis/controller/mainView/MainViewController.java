@@ -36,6 +36,7 @@ public class MainViewController {
 	public CleaningInfoDto cleaningInfo(@RequestParam("carNum") String carNum, 
 										@RequestParam("date") String date ) {
 		CleaningInfoDto cid = mainViewService.cleaningInfo(carNum, date);
+
 		return cid;
 	}
 
@@ -57,17 +58,19 @@ public class MainViewController {
 	}
 
 	// 모달창 차량 추가
+	@ResponseBody
 	@PostMapping("/view")
-	public String modalCarInfo(CarDto car) {
+	public List<CarNumListDto> modalCarInfo(CarDto car) {
 		mainViewService.addCar(car);
-		return "redirect:/view";
+		List<CarNumListDto> cnldList = mainViewService.carNumList();
+		return cnldList;
 	}
 
 	// 차량 별 청소 날짜 출력
 	@ResponseBody
 	@GetMapping("/view/carNum")
 	public List<String> cleanDateList(@RequestParam("carNum") String carNum) {
-		List<String> cddList = mainViewService.selectedDate(carNum);
+		List<String> cddList = mainViewService.selectedDate(carNum);	
 
 		return cddList;
 	}

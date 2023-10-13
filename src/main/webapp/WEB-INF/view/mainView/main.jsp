@@ -119,7 +119,7 @@
 										style="background-color: white; color: black;">하이브리드</td>
 								</tr>
 								<tr>
-									<th class="w-25 mouse"
+									<th class="w-25"
 										style="background-color: #bd445b; color: white;">권역(구)</th>
 									<td class="w-25 cheoin mouse"
 										style="background-color: white; color: black;">처인구</td>
@@ -284,31 +284,29 @@
 				role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
-						<form class="form-group row" action="/view" method="post">
-							<div class="modal-header">
-								<h5 class="modal-title offset-1">차량 추가</h5>
+						<div class="modal-header">
+							<h5 class="modal-title offset-1">차량 추가</h5>
+						</div>
+						<div class="modal-body contianer">
+							<div class="col-10">
+								<!-- 차량번호 입력 -->
+								<input type="text" class="col-11 offset-2 addCar" name="carNum">
+								<div class="text-start offset-2">※차량번호를 입력해주세요.</div>
 							</div>
-							<div class="modal-body contianer">
-								<div class="col-10">
-									<!-- 차량번호 입력 -->
-									<input type="text" class="col-11 offset-2" name="carNum">
-									<div class="text-start offset-2">※차량번호를 입력해주세요.</div>
-								</div>
-								<div class="col-10 mt-4">
-									<select name="carType" id="car-type" class="col-11 offset-2">
-										<option value="진공노면 차량">진공노면 차량</option>
-										<option value="분진흡입 차량">분진흡입 차량</option>
-									</select>
-									<div class="text-start offset-2">※차량유형을 선택해주세요.</div>
-								</div>
+							<div class="col-10 mt-4">
+								<select name="carType" id="car-type" class="col-11 offset-2">
+									<option value="진공노면 차량">진공노면 차량</option>
+									<option value="분진흡입 차량">분진흡입 차량</option>
+								</select>
+								<div class="text-start offset-2">※차량유형을 선택해주세요.</div>
 							</div>
-							<div class="modal-footer">
-								<button type="submit" class="car-register-btn btn"
-									style="background-color: #bd445b; color: white;">등록</button>
-								<button type="button" class="car-cancel-btn btn"
-									style="background-color: #bd445b; color: white;">취소</button>
-							</div>
-						</form>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="car-register-btn btn"
+								style="background-color: #bd445b; color: white;">등록</button>
+							<button type="button" class="car-cancel-btn btn"
+								style="background-color: #bd445b; color: white;">취소</button>
+						</div>
 					</div>
 				</div>
 			</div>
