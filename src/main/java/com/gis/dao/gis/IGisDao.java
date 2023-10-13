@@ -1,5 +1,6 @@
 package com.gis.dao.gis;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -91,4 +92,6 @@ public interface IGisDao {
 	 * @author 여수한
 	 */
 	public void deleteLiveCoord();
+	public List<LocalData> selectCoord(@Param("date")LocalDate date);
+	public void insertCleanLine(@Param("start")LocalData start, @Param("end")LocalData end, @Param("isDone") boolean is_done);
 }
