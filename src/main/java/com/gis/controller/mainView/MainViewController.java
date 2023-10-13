@@ -49,7 +49,7 @@ public class MainViewController {
         // 사용자가 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
         if (member == null) {
         	log.info("회원이 아님");
-            return "redirect:/login";
+            return "redirect:/";
         }
   
 		List<CarNumListDto> cnldList = mainViewService.carNumList();
