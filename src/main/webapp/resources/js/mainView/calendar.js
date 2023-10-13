@@ -409,18 +409,18 @@ function livestart() {
 			live_lon = data.lon;
 			live_lat = data.lat;
 			console.log(live_lon + " " + live_lat);
-			if(live_lon==null) {
+			if (live_lon == null) {
 				map.getView().animate({
 					center: ol.proj.transform([127.1775537, 37.2410864], 'EPSG:4326', 'EPSG:3857'),
 					zoom: 12,
 					duration: 600
-				});		
+				});
 			} else {
 				map.getView().animate({
 					center: ol.proj.transform([live_lon, live_lat], 'EPSG:4326', 'EPSG:3857'),
 					zoom: 17,
 					duration: 600
-				});				
+				});
 			}
 		}
 	});
