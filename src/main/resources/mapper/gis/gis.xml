@@ -93,7 +93,7 @@
 		     LIMIT 1) AS max_time
 		)
 		SELECT
-		  max_time - min_time AS time_difference
+			TO_CHAR(max_time - min_time, 'HH24:MI:SS') AS time_difference
 		FROM min_max_times
 	</select>
 	
