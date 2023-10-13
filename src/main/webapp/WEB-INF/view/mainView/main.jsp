@@ -69,7 +69,10 @@
 				<button type="button" class="live-btn btn b mt-1 live_stop"
 					id="live-btn">LIVE</button>
 			</div>
-
+			<div class="live_time">
+				<input type="number" id="minute" name="time" min="0" max="59"required value="0"> <label for="minute">:분</label>
+				<input type="number" id="second" name="second" min="10" max="59" step="1" required value="10"> <label for="second">:초</label>
+			</div>
 			<!-- 다운로드 버튼 -->
 			<div id="download">
 				<button type="button" class="download-btn btn mt-1 b"

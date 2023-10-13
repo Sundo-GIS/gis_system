@@ -86,4 +86,9 @@ public interface IGisDao {
 	 */
 	public DateCoord selectLiveCoord();
 	public void insertLiveData(@Param("localData")LocalData localData);
+	/**
+	 * 실시간 좌표 조회 끝
+	 * @author 여수한
+	 */
+	public void deleteLiveCoord();
 }

@@ -188,4 +188,9 @@
 		VALUES
 			(nextval('live_coord_id_seq'), #{localData.carNum},#{localData.date},#{localData.time}::TIME,#{localData.lon},#{localData.lat},#{localData.rpm},#{localData.noise}, ST_SetSRID(ST_MakePoint(#{localData.lon},#{localData.lat}), 4326), #{localData.is_done})
 	</insert>
+	
+	<delete id="deleteLiveCoord">
+		DELETE FROM
+			LIVE_COORD
+	</delete>
 </mapper>

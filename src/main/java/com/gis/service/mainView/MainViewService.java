@@ -57,16 +57,12 @@ public class MainViewService implements IMainViewService {
 		// 달력 날짜 누르면 운행 시간 계산
 		String cleanTime = gisDao.selectCleanTime(date,carNum);
 		
-		// 달력 날짜 누르면 청소 비율 계산
-		double cleanRatio = gisDao.selectCleanRatio(date, carNum);
-		
 		// 달력 날짜 누르면 전체 운행거리 계산
 		List<DateCoord> cleanDistanceGeom = gisDao.selectCleanDistanceGeom(date, carNum);
 		double totalDistance = 0;
 		for(int i=0; i<cleanDistanceGeom.size()-1; i++) {
 			totalDistance += gisDao.selectCleanDistance(cleanDistanceGeom.get(i), cleanDistanceGeom.get(i+1));
-		}
-//		return totalDistance/1000;
+		}		
 		
 		// 달력 날짜 누르면 청소 운행거리 계산
 		List<DateCoord> cleanDistanceResult = gisDao.selectCleanDistanceGeom(date, carNum);
@@ -76,7 +72,9 @@ public class MainViewService implements IMainViewService {
 				cleanDistance += gisDao.selectCleanDistance(cleanDistanceResult.get(i), cleanDistanceResult.get(i+1));
 			}
 		}
-//		return cleanDistance/1000;
+		
+		// 달력 날짜 누르면 청소 비율 계산
+		double cleanRatio = (cleanDistance/totalDistance)*100;
 		
 		// 달력 날짜 누르면 해당 날짜의 좌표 데이터 조회
 		DateCoord dc = gisDao.selectDateCoord(date, carNum);
