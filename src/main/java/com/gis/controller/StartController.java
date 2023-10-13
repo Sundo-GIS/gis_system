@@ -92,6 +92,7 @@ public class StartController {
     @GetMapping("/stop")
     public ResponseEntity<String> stopScheduler() {
     	timeScheduler.stopScheduler();
+    	gisService.deleteLiveCoord();
         return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
     /**
@@ -111,15 +112,5 @@ public class StartController {
     @PostMapping("/livestart")
     public DateCoord getLiveCoord(){
     	return gisService.selectLiveCoord();
-    }
-    /**
-	 * 실시간 좌표 조회 끝
-	 * @author 여수한
-	 */
-    @ResponseBody
-    @PostMapping("/livestop")
-    public String deleteLiveCoord(){
-    	gisService.deleteLiveCoord();
-    	return "";
     }
 }

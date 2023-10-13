@@ -381,7 +381,7 @@ live_start.addEventListener("click", function() {
 		url: "/gis/start",
 		data: { time: time },
 		success: function() {
-			alert(time + "스케줄러가 시작되었습니다.");
+			alert(time + "초마다 차량의 위치 데이터를 갱신합니다.");
 		},
 		error: function() {
 			alert("스케줄러 시작에 실패했습니다.");
@@ -440,8 +440,8 @@ live_stop.addEventListener("click", function() {
 	// 이전에 설정한 타이머 중지
 	clearInterval(intervalId);
 	$.ajax({
-		type: 'POST',
-		url: '/gis/livestop',
+		type: 'GET',
+		url: '/gis/stop',
 		success: function(data) {
 
 		}
