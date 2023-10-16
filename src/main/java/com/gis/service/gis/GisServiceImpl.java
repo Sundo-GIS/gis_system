@@ -235,4 +235,22 @@ public class GisServiceImpl implements IGisService {
 			}
 		}
 	}
+	/**
+	 * 청소 유무 라인 넣기 - 파일 업로드 시 
+	 * @author 임연서
+	 */
+	@Override
+	public void selectCoordData(LocalData ld) {
+		List<LocalData> ldList = gisDao.selectCoordData(ld.getCarNum(), ld.getDate());
+		for(int i=0; i<ldList.size()-1; i++) {
+			boolean is_done = false;
+			if(!(ldList.get(i).is_done() == false && ldList.get(i+1).is_done() == false)) {
+				is_done = true;
+				gisDao.insertCleanLine(ldList.get(i), ldList.get(i+1),is_done);
+			} else {
+				gisDao.insertCleanLine(ldList.get(i), ldList.get(i+1),is_done);
+			}
+		}
+		
+	}
 }
