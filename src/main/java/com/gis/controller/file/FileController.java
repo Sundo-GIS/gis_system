@@ -50,7 +50,7 @@ public class FileController {
         	while((line = br.readLine()) != null) {
         		rowCount++;
         	}
-        	iFileService.uploadCsv(rowCount, gpsFile, noiseFile, rpmFile);
+        	List<String> cd = iFileService.uploadCsv(rowCount, gpsFile, noiseFile, rpmFile);
         	
             return ResponseEntity.ok("데이터가 성공적으로 추가되었습니다.");
         } catch (IOException e) {
@@ -65,8 +65,7 @@ public class FileController {
         } catch(Exception e) { 
         	e.printStackTrace();
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("잘못된 요청입니다: " + e.getMessage());
-        } 
-    	
+        }	
     }
     
 	/**

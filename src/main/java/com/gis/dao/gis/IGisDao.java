@@ -92,6 +92,6 @@ public interface IGisDao {
 	 * @author 여수한
 	 */
 	public void deleteLiveCoord();
-	public List<LocalData> selectCoord(@Param("date")LocalDate date);
-	public void insertCleanLine(@Param("start")LocalData start, @Param("end")LocalData end, @Param("isDone") boolean is_done);
+	public List<LocalData> selectLiveCoordData(@Param("date")LocalDate date);
+	public void insertLiveCleanLine(@Param("start")LocalData start, @Param("end")LocalData end, @Param("isDone") boolean is_done);
 }

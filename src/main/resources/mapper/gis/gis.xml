@@ -194,7 +194,7 @@
 			LIVE_COORD
 	</delete>
 	
-	<select id="selectCoord">
+	<select id="selectLiveCoordData">
 		SELECT
 			car_num AS carNum,
 			date,
@@ -206,8 +206,8 @@
 		WHERE
 			date = #{date}
 	</select>
-	<insert id="insertCleanLine">
-		insert into 
+	<insert id="insertLiveCleanLine">
+		insert into
 			route(id,car_num, date, clean_line, is_done)
 		values
 			(nextval('route_id_seq'),#{start.carNum},#{start.date},(select st_makeline(ST_MakePoint(#{start.lon},#{start.lat}),ST_MakePoint(#{end.lon},#{end.lat}))),#{isDone});

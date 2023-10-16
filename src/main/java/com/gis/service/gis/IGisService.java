@@ -74,5 +74,5 @@ public interface IGisService {
 	 * 청소 유무 라인 넣기
 	 * @author 여수한
 	 */
-	void insertCleanLine();
+	void insertLiveCleanLine();
 }

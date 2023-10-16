@@ -28,7 +28,7 @@ public class FileServiceImpl implements IFileService {
 	 * @author 임연서
 	 */
 	@Override
-	public void uploadCsv(int rowCount, MultipartFile gpsFile, MultipartFile noiseFile, MultipartFile rpmFile) {
+	public List<String> uploadCsv(int rowCount, MultipartFile gpsFile, MultipartFile noiseFile, MultipartFile rpmFile) {
 		try {
 			List<String[]> gpsRecords = new ArrayList<>();
 	    	List<String[]> noiseRecords = new ArrayList<>();
@@ -129,9 +129,14 @@ public class FileServiceImpl implements IFileService {
 	        		break;
 	        	} 
 	        }
+	        List<String> cd = new ArrayList<>();
+	        cd.add(1, gpsRecords.get(1)[2]);
+	        cd.add(2, gpsRecords.get(1)[0]);
+	        return cd;
         } catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	/**
 	 * 파일 다운로드 : coord 테이블에서 데이터 조회 

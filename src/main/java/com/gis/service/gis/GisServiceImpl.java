@@ -222,16 +222,16 @@ public class GisServiceImpl implements IGisService {
 	 * @author 여수한
 	 */
 	@Override
-	public void insertCleanLine() {
+	public void insertLiveCleanLine() {
 		LocalDate date = getCurrentDateFormatted();
-		List<LocalData> ld = gisDao.selectCoord(date);
+		List<LocalData> ld = gisDao.selectLiveCoordData(date);
 		for(int i=0; i<ld.size()-1; i++) {
 			boolean is_done = false;
 			if(!(ld.get(i).is_done() == false && ld.get(i+1).is_done() == false)) {
 				is_done = true;
-				gisDao.insertCleanLine(ld.get(i), ld.get(i+1),is_done);
+				gisDao.insertLiveCleanLine(ld.get(i), ld.get(i+1),is_done);
 			} else {
-				gisDao.insertCleanLine(ld.get(i), ld.get(i+1),is_done);
+				gisDao.insertLiveCleanLine(ld.get(i), ld.get(i+1),is_done);
 			}
 		}
 	}

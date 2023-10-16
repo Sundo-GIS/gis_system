@@ -93,7 +93,7 @@ public class StartController {
     public ResponseEntity<String> stopScheduler() {
     	timeScheduler.stopScheduler();
     	gisService.deleteLiveCoord();
-    	gisService.insertCleanLine();
+    	gisService.insertLiveCleanLine();
         return new ResponseEntity<>("Success message", HttpStatus.OK);
     }
     /**
