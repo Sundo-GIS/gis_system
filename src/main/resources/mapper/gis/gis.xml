@@ -212,4 +212,18 @@
 		values
 			(nextval('route_id_seq'),#{start.carNum},#{start.date},(select st_makeline(ST_MakePoint(#{start.lon},#{start.lat}),ST_MakePoint(#{end.lon},#{end.lat}))),#{isDone});
 	</insert>
+	
+	<select id="selectCoordData">
+		SELECT
+			car_num AS carNum,
+			date,
+			lon,
+			lat,
+			is_done
+		FROM
+			coord
+		WHERE
+			date = #{date}
+		AND car_num = #{carNum}
+	</select>
 </mapper>

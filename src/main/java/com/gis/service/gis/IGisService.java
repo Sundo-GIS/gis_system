@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gis.dto.gis.DateCoord;
 import com.gis.dto.gis.GpsTempData;
+import com.gis.dto.gis.LocalData;
 import com.gis.dto.gis.NoiseTempData;
 import com.gis.dto.gis.RpmTempData;
 
@@ -75,4 +76,5 @@ public interface IGisService {
 	 * @author 여수한
 	 */
 	void insertCleanLine();
+	void selectCoordData(LocalData ld);
 }
