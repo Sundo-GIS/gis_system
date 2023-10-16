@@ -93,5 +93,10 @@ public interface IGisDao {
 	 */
 	public void deleteLiveCoord();
 	public List<LocalData> selectLiveCoordData(@Param("date")LocalDate date);
-	public void insertLiveCleanLine(@Param("start")LocalData start, @Param("end")LocalData end, @Param("isDone") boolean is_done);
+	public void insertCleanLine(@Param("start")LocalData start, @Param("end")LocalData end, @Param("isDone") boolean is_done);
+	/**
+	 * 청소 유무 라인 넣기 - 파일 업로드 시 
+	 * @author 임연서
+	 */
+	public List<LocalData> selectCoordData(@Param("carNum")String carNum, @Param("date")LocalDate date);
 }

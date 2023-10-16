@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.gis.dto.gis.LocalData;
 import com.gis.service.file.IFileService;
+import com.gis.service.gis.IGisService;
 import com.opencsv.exceptions.CsvException;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ import lombok.extern.log4j.Log4j2;
 public class FileController {
 
 	private final IFileService iFileService;
+	private final IGisService iGisService;
 	
 	/**
 	 * 파일 업로드(opencsv라이브러리 사용) 
@@ -50,8 +52,10 @@ public class FileController {
         	while((line = br.readLine()) != null) {
         		rowCount++;
         	}
-        	List<String> cd = iFileService.uploadCsv(rowCount, gpsFile, noiseFile, rpmFile);
-        	
+        	// 파일 읽어서 넣기
+        	LocalData ld = iFileService.uploadCsv(rowCount, gpsFile, noiseFile, rpmFile);
+        	// 청소 유무 선 표시
+        	iGisService.selectCoordData(ld);
             return ResponseEntity.ok("데이터가 성공적으로 추가되었습니다.");
         } catch (IOException e) {
             e.printStackTrace();

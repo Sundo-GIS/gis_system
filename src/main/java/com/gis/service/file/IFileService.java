@@ -9,7 +9,7 @@ import com.gis.dto.gis.LocalData;
 
 public interface IFileService {
 
-	List<String> uploadCsv(int rowCount, MultipartFile gpsFile, MultipartFile noiseFile, MultipartFile rpmFile);
+	LocalData uploadCsv(int rowCount, MultipartFile gpsFile, MultipartFile noiseFile, MultipartFile rpmFile);
 	
 	/**
 	 * 파일 다운로드 : coord 테이블에서 데이터 조회 
