@@ -502,6 +502,8 @@ function updateMapLayer() {
 		'TIME': Date.now(),
 	};
 
+
+
 	// 새로운 URL 설정
 	const newUrl = 'http://localhost:8080/geoserver/wms'; // 새로운 서버 URL
 	// live_start_point 레이어 소스 업데이트
