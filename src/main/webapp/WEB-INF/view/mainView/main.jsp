@@ -195,7 +195,7 @@
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title offset-1">데이터 추가</h5>
+							<h5 class="modal-title mx-2">데이터 추가</h5>
 						</div>
 						<div class="modal-body container">
 							<form class="form-group row" id="upload-form"
@@ -267,7 +267,7 @@
 								id="csv-register-btn"
 								style="background-color: #bd445b; color: white;">등록</button>
 							<button type="button" class="csv-cancel-btn btn"
-								style="background-color: #bd445b; color: white;">취소</button>
+								style="background-color: #00418c; color: white;">취소</button>
 						</div>
 					</div>
 				</div>
@@ -278,7 +278,7 @@
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title offset-1">차량 추가</h5>
+							<h5 class="modal-title mx-2">차량 추가</h5>
 						</div>
 						<div class="modal-body contianer">
 							<div class="col-10">
@@ -287,7 +287,7 @@
 								<div class="text-start offset-2">※차량번호를 입력해주세요.</div>
 							</div>
 							<div class="col-10 mt-4">
-								<select name="carType" id="car-type" class="col-11 offset-2">
+								<select name="carType" id="car-type" class="col-11 offset-2 fs-6 addCar text-center">
 									<option value="진공노면 차량">진공노면 차량</option>
 									<option value="분진흡입 차량">분진흡입 차량</option>
 								</select>
@@ -298,17 +298,16 @@
 							<button type="submit" class="car-register-btn btn"
 								style="background-color: #bd445b; color: white;">등록</button>
 							<button type="button" class="car-cancel-btn btn"
-								style="background-color: #bd445b; color: white;">취소</button>
+								style="background-color: #00418c; color: white;">취소</button>
 						</div>
-						<hr>
 						<div class="modal-header">
-							<h5 class="modal-title offset-1">차량 삭제</h5>
+							<h5 class="modal-title mx-2">차량 삭제</h5>
 						</div>
 						<div class="modal-body contianer">
 
 							<div class="dropdown col-10">
 							<select
-								class="car-select col-11 offset-2 fs-6 h-100" name="car_num_list"
+								class="addCar car-select col-11 offset-2 fs-6" name="car_num_list"
 								id="delete-car">
 									<option disabled selected class="text-center delete-car-sub">차량을
 										선택하세요.</option>
@@ -316,22 +315,21 @@
 										<!-- <option value=${st.count} class="text-center">${list.carNum}</option> -->
 										<option value=${list.carNum } class="text-center selectedDate">${list.carNum}</option>
 									</c:forEach>
-							</select></td>
-							
+							</select>
 							<div class="col-10 mt-4"></div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="submit" class="car-delete-btn btn"
 								style="background-color: #bd445b; color: white;">삭제</button>
 							<button type="button" class="car-cancel-btn btn"
-								style="background-color: #bd445b; color: white;">취소</button>
-						</div>
+								style="background-color: #00418c; color: white;">취소</button>
+						</div>					
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 	<!-- local에서 갖고옴 -->
 	<script src="/resources/js/mainView/mainView.js"></script>
 	<script src="/resources/js/mainView/main.js"></script>
