@@ -64,7 +64,7 @@
 			</div>
 			<!-- 통계자료 버튼 -->
 			<div id="statistic">
-				<button type="button" class="download-btn btn m-3 b" id="stats-btn">통계자료</button>
+				<button type="button" class="download-btn btn m-3 b" id="stats-btn">기간별 조회</button>
 			</div>
 
 			<!-- 다운로드 버튼 -->

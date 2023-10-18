@@ -17,7 +17,7 @@ checkBtn.addEventListener('click', () => {
 
 	if (!(firstDate == "") && !(lastDate == "")) {
 		if (firstDate < lastDate) {
-			if (statsCar!=="차량을 선택하세요."){
+			if (statsCar !== "차량을 선택하세요.") {
 				$.ajax({
 					type: "GET",
 					url: "/stats/select", // 시작 요청을 보낼 엔드포인트 URL
@@ -46,3 +46,11 @@ checkBtn.addEventListener('click', () => {
 		alert("날짜를 선택해주세요.");
 	}
 })
+
+// 차량 바꿀때 초기화 
+statsCarList.addEventListener('change', () => {
+	cleanTime.innerText = "00:00:00";
+	cleanRatio.innerText = "0 %";
+	totalDistance.innerText = "0 km";
+	cleanDistance.innerText = "0 km";
+});
