@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gis.dao.stats.IStatsDao">
+
+
+	<select id="selectCar"
+		parameterType="com.gis.dto.stats.SelectCarDto"
+		resultType="com.gis.dto.stats.CarDateDto">
+		<![CDATA[
+		SELECT DISTINCT car_num AS carNum, date
+		FROM coord
+		WHERE
+		date >= to_date(#{selectCarDto.firstDate}, 'yyyy-MM-dd')
+		AND
+		date <= to_date(#{selectCarDto.lastDate}, 'yyyy-MM-dd')
+		AND car_num = #{selectCarDto.carNum}
+		]]>
+	</select>
+</mapper>

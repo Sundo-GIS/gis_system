@@ -38,15 +38,7 @@ body {
 	cursor: default; 
 }
 
-#download-btn {
-	background-color: #00418c !important;
-	color: white;
-}
-#download-btn:hover, #add-data-btn:hover, .menu-show-btn:hover {
-    background-color: #000080 !important;
-    color: white;
-    border: 1px solid black;
-}
+
 .car-select:hover {
 	cursor: pointer;	
 }
@@ -109,11 +101,38 @@ body {
 	top: 7px;
 }
 
+#stats-btn {
+    z-index: 100;
+    position: absolute;
+    font-weight: 700;
+    right: 100px;
+}
+
+#stats-btn {
+	background-color: #00418c !important;
+	color: white;
+}
+#stats-btn:hover, #add-data-btn:hover, .menu-show-btn:hover {
+    background-color: #000080 !important;
+    color: white;
+    border: 1px solid black;
+}
+
 #download-btn {
     z-index: 100;
     position: absolute;
     font-weight: 700;
     right: 10px;
+}
+
+#download-btn {
+	background-color: #00418c !important;
+	color: white;
+}
+#download-btn:hover, #add-data-btn:hover, .menu-show-btn:hover {
+    background-color: #000080 !important;
+    color: white;
+    border: 1px solid black;
 }
 
 #live-btn {

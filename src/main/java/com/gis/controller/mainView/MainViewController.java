@@ -28,8 +28,8 @@ import lombok.extern.log4j.Log4j2;
 public class MainViewController {
 
 	private final IGisService gisService;
-	private final IMainViewService mainViewService;
-
+	private final IMainViewService mainViewService;	
+	
 	/**
 	 * 차량, 날짜 선택시 청소정보 및 달력에 대한 좌표 조회
 	 * 
@@ -91,7 +91,6 @@ public class MainViewController {
 	@ResponseBody
 	@PostMapping("/view/deleteCar")
 	public List<CarNumListDto> deleteCar(String carNum) {
-		// 차량 데이터도 삭제
 		mainViewService.deleteCarData(carNum);
 		mainViewService.deleteCar(carNum);
 		
