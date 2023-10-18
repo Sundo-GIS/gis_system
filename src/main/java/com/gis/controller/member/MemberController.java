@@ -58,7 +58,7 @@ public class MemberController {
             }
         } 
         attributes.addFlashAttribute("error", "* 아이디 또는 비밀번호가 일치하지 않습니다.");
-        return "redirect:/login"; // 로그인 실패 시 다시 로그인 페이지로 이동
+        return "redirect:/"; // 로그인 실패 시 다시 로그인 페이지로 이동
     }
 	
 	/**
@@ -69,7 +69,7 @@ public class MemberController {
     public String logout(HttpServletRequest request) {
         // 세션에서 사용자 정보 삭제
         request.getSession().invalidate();
-        return "redirect:/login"; // 로그아웃 후 로그인 페이지로 이동
+        return "redirect:/"; // 로그아웃 후 로그인 페이지로 이동
     }
     
     
@@ -107,6 +107,6 @@ public class MemberController {
 			attributes.addFlashAttribute("error", "* 이미 사용 중인 아이디입니다.");
 			return "redirect:/signup";
 		}
-		return "redirect:/login";
+		return "redirect:/";
 	}
 }

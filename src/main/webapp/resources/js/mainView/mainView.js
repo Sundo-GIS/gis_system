@@ -6,6 +6,7 @@ const menuShowBtn = document.getElementById("menu-show-btn");
 const liveBtn = document.getElementById("live-btn");
 const liveBtn2 = document.querySelector(".live_stop");
 const donwloadBtn = document.getElementById('download-btn');
+const offcanvasStart = document.querySelector(".offcanvas-start");
 
 const giheung = document.querySelector('.giheung');
 const cheoin = document.querySelector('.cheoin');
@@ -113,13 +114,56 @@ function updateBackgroundLayer() {
 	});
 	map.getLayers().setAt(0, newBackgroundLayer); // 현재 첫 번째 레이어를 교체
 }
+
+// 수지구 경계
+const sujigu = new ol.layer.Tile({
+   source: new ol.source.TileWMS({
+      url: 'http://localhost:8080/geoserver/wms',
+      params: {
+         'LAYERS': 'suji',
+         'TILED': true,
+
+      },
+      serverType: 'geoserver',
+   })
+});
+// 기흥구 경계
+const giheunggu = new ol.layer.Tile({
+   source: new ol.source.TileWMS({
+      url: 'http://localhost:8080/geoserver/wms',
+      params: {
+         'LAYERS': 'giheung',
+         'TILED': true,
+
+      },
+      serverType: 'geoserver',
+   })
+});
+// 처인구 경계
+const cheoingu = new ol.layer.Tile({
+   source: new ol.source.TileWMS({
+      url: 'http://localhost:8080/geoserver/wms',
+      params: {
+         'LAYERS': 'cheoin',
+         'TILED': true,
+
+      },
+      serverType: 'geoserver',
+   })
+});
+
 // 처인구 클릭
 cheoin.addEventListener('click', () => {
+
+	map.removeLayer(sujigu);
+	map.removeLayer(giheunggu);
+
 	map.getView().animate({
-		center: ol.proj.transform([127.252989, 37.2076312], 'EPSG:4326', 'EPSG:3857'), // 포인트의 좌표로 설정
+		center: ol.proj.transform([127.252989, 37.2076312], 'EPSG:4326', 'EPSG:3857'),
 		zoom: 12,
 		duration: 800
 	});
+
 	cheoin.style.backgroundColor = '#293661';
 	cheoin.style.color = 'white';
 	giheung.style.background = 'white';
@@ -127,10 +171,18 @@ cheoin.addEventListener('click', () => {
 	suji.style.background = 'white';
 	suji.style.color = 'black';
 
+	// 처인구 레이어를 추가
+	map.addLayer(cheoingu);
+	chuinBoundary.setOpacity(0.3);
 
 })
+
 // 기흥구 클릭
 giheung.addEventListener('click', () => {
+
+	map.removeLayer(sujigu);
+	map.removeLayer(cheoingu);
+
 	map.getView().animate({
 		center: ol.proj.transform([127.125525, 37.2702214], 'EPSG:4326', 'EPSG:3857'), // 포인트의 좌표로 설정
 		zoom: 12,
@@ -142,10 +194,18 @@ giheung.addEventListener('click', () => {
 	cheoin.style.color = 'black';
 	suji.style.background = 'white';
 	suji.style.color = 'black';
+
+	// 기흥 레이어를 추가
+	map.addLayer(giheunggu);
+	gihungBoundary.setOpacity(0.8);
 })
+
 // 수지구 클릭
 suji.addEventListener('click', () => {
-	;
+
+	map.removeLayer(cheoingu);
+	map.removeLayer(giheunggu);
+
 	map.getView().animate({
 		center: ol.proj.transform([127.068532, 37.3323845], 'EPSG:4326', 'EPSG:3857'), // 포인트의 좌표로 설정
 		zoom: 12,
@@ -157,7 +217,12 @@ suji.addEventListener('click', () => {
 	cheoin.style.color = 'black';
 	giheung.style.background = 'white';
 	giheung.style.color = 'black';
+
+	// 기흥 레이어를 추가
+	map.addLayer(sujigu);
+	sujiBoundary.setOpacity(0.8);
 })
+
 // 지도 유형 클릭 초기화 작업중
 function mapTypeClick(layer) {
 	// 모든 레이어를 지도에서 제거
@@ -168,6 +233,8 @@ function mapTypeClick(layer) {
 	// 선택한 레이어를 지도에 추가
 	map.addLayer(layer);
 }
+
+
 // offcanvas 사용시 화면 비율 조정
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -191,6 +258,7 @@ liveBtn.addEventListener('click', () => {
 	downloadBtn.classList.toggle('hide-btn');
 	menuShowBtn.classList.toggle('hide-btn');
 	liveBtn.classList.toggle('blinkin-btn');
+
 });
 liveBtn2.addEventListener('click', () => {
 	downloadBtn.classList.toggle('hide-btn');
