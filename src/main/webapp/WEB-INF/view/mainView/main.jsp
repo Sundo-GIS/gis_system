@@ -64,7 +64,8 @@
 			</div>
 			<!-- 통계자료 버튼 -->
 			<div id="statistic">
-				<button type="button" class="download-btn btn m-3 b" id="stats-btn">기간별 조회</button>
+				<button type="button" class="download-btn btn m-3 b" id="stats-btn">기간별
+					조회</button>
 			</div>
 
 			<!-- 다운로드 버튼 -->
@@ -293,7 +294,8 @@
 								<div class="text-start offset-2">※차량번호를 입력해주세요.</div>
 							</div>
 							<div class="col-10 mt-4">
-								<select name="carType" id="car-type" class="col-11 offset-2 fs-6 addCar text-center">
+								<select name="carType" id="car-type"
+									class="col-11 offset-2 fs-6 addCar text-center">
 									<option value="진공노면 차량">진공노면 차량</option>
 									<option value="분진흡입 차량">분진흡입 차량</option>
 								</select>
@@ -323,22 +325,23 @@
 								</select>
 								<div class="col-10 mt-4"></div>
 							</div>
-							<div class="modal-footer">
-								<button type="submit" class="car-delete-btn btn"
-									style="background-color: #bd445b; color: white;">삭제</button>
-								<button type="button" class="car-cancel-btn btn"
-									style="background-color: #bd445b; color: white;">취소</button>
-							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="car-delete-btn btn"
+								style="background-color: #bd445b; color: white;">삭제</button>
+							<button type="button" class="car-cancel-btn btn"
+								style="background-color: #bd445b; color: white;">취소</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<!-- local에서 갖고옴 -->
-		<script src="/resources/js/mainView/mainView.js"></script>
-		<script src="/resources/js/mainView/main.js"></script>
-		<script src="/resources/js/mainView/calendar.js"></script>
+	<!-- local에서 갖고옴 -->
+	<script src="/resources/js/mainView/mainView.js"></script>
+	<script src="/resources/js/mainView/main.js"></script>
+	<script src="/resources/js/mainView/calendar.js"></script>
 </body>
 
 </html>
