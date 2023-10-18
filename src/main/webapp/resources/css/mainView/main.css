@@ -199,3 +199,10 @@ body {
 .modal-backdrop.show {
     opacity: var(--bs-backdrop-opacity);
 }
+.addCar {
+	height: 30px;
+}
+.modal-header {
+	background-color: #e6e8f0;
+	margin-bottom: 20px;
+}

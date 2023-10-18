@@ -76,5 +76,10 @@ public interface IGisService {
 	 * @author 여수한
 	 */
 	void insertLiveCleanLine();
+	
+	/**
+	 * 청소 유무 라인 넣기 - 파일 업로드 시 
+	 * @author 임연서
+	 */
 	void selectCoordData(LocalData ld);
 }
