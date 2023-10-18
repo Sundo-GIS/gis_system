@@ -5,6 +5,7 @@ const downloadBtn = document.getElementById("download-btn");
 const menuShowBtn = document.getElementById("menu-show-btn");
 const liveBtn = document.getElementById("live-btn");
 const liveBtn2 = document.querySelector(".live_stop");
+const statsBtn = document.getElementById("stats-btn");
 const donwloadBtn = document.getElementById('download-btn');
 const offcanvasStart = document.querySelector(".offcanvas-start");
 
@@ -12,7 +13,10 @@ const giheung = document.querySelector('.giheung');
 const cheoin = document.querySelector('.cheoin');
 const suji = document.querySelector('.suji');
 
+// 통계창 팝업 주소변수
+const statsUrl = 'http://localhost/stats'
 
+// 오픈레이어 key 변수
 const apiKey = '01FC9396-78C3-3A58-99A4-EF97461DFFEE';
 
 let map;
@@ -258,10 +262,21 @@ liveBtn.addEventListener('click', () => {
 	downloadBtn.classList.toggle('hide-btn');
 	menuShowBtn.classList.toggle('hide-btn');
 	liveBtn.classList.toggle('blinkin-btn');
-
+	statsBtn.style.display = "none";
 });
 liveBtn2.addEventListener('click', () => {
 	downloadBtn.classList.toggle('hide-btn');
 	menuShowBtn.classList.toggle('hide-btn');
 	liveBtn.classList.toggle('blinkin-btn');
+	statsBtn.style.display = "";
 });
+
+
+// 통계자료 버튼 클릭시 stats popup 창 출력
+function openPop(){
+	const popup =window.open(statsUrl, '', fullscreen=1);
+}
+
+statsBtn.addEventListener('click',()=>{
+	openPop();
+})
