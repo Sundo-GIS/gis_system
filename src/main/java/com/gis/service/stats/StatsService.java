@@ -72,8 +72,8 @@ public class StatsService implements IStatsService {
 			// 날짜에 따른 청소 운행거리 계산
 			List<DateCoord> cleanDistanceResult = gisDao.selectCleanDistanceGeom(selectDate, selectCarNum);
 			for (int j = 0; j < cleanDistanceResult.size() - 1; j++) {
-				if (!(cleanDistanceResult.get(i).is_done() == false && cleanDistanceResult.get(i + 1).is_done() == false)) {
-					cleanDistance += gisDao.selectCleanDistance(cleanDistanceResult.get(i), cleanDistanceResult.get(i + 1));
+				if (!(cleanDistanceResult.get(j).is_done() == false && cleanDistanceResult.get(j + 1).is_done() == false)) {
+					cleanDistance += gisDao.selectCleanDistance(cleanDistanceResult.get(j), cleanDistanceResult.get(j + 1));
 				}
 			}		
 			
