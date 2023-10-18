@@ -149,4 +149,5 @@ $('.car-cancel-btn').click(function(e) {
 // Modal이 숨겨질 때 초기화
 $('#add-car-modal').on('hidden.bs.modal', function() {
 	$(".addCar").val('');
+	$('#delete-car').val('차량을 선택하세요.');
 });

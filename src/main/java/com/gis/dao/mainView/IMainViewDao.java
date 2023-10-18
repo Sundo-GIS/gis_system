@@ -17,6 +17,19 @@ public interface IMainViewDao {
 	public void addCar(@Param("car") CarDto car); 
 
 	/**
+	 * 모달창 차량 삭제
+	 * @author 고일봉
+	 */
+	public void deleteCar(String carNum);
+	
+	/**
+	 * 차량 데이터 삭제
+	 * @author 고일봉
+	 */
+	public void deleteCarData(String carNum);
+
+
+	/**
 	 * 차량 리스트 출력
 	 * @author 고일봉
 	 */
