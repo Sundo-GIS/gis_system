@@ -33,6 +33,24 @@ public class MainViewService implements IMainViewService {
 	}
 
 	/**
+	 * 모달창 차량 삭제
+	 * 
+	 * @author 고일봉
+	 */
+	public void deleteCar(String carNum) {
+		mainViewDao.deleteCar(carNum);
+	}
+
+	/**
+	 * 차량 데이터 삭제
+	 * 
+	 * @author 고일봉
+	 */
+	public void deleteCarData(String carNum) {
+		mainViewDao.deleteCarData(carNum);
+	}
+
+	/**
 	 * 차량 리스트 출력
 	 * 
 	 * @author 고일봉

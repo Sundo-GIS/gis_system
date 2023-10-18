@@ -222,9 +222,9 @@ public class GisServiceImpl implements IGisService {
 	 * @author 여수한
 	 */
 	@Override
-	public void insertCleanLine() {
+	public void insertLiveCleanLine() {
 		LocalDate date = getCurrentDateFormatted();
-		List<LocalData> ld = gisDao.selectCoord(date);
+		List<LocalData> ld = gisDao.selectLiveCoordData(date);
 		for(int i=0; i<ld.size()-1; i++) {
 			boolean is_done = false;
 			if(!(ld.get(i).is_done() == false && ld.get(i+1).is_done() == false)) {
@@ -252,6 +252,5 @@ public class GisServiceImpl implements IGisService {
 				gisDao.insertCleanLine(ldList.get(i), ldList.get(i+1),is_done);
 			}
 		}
-		
 	}
 }

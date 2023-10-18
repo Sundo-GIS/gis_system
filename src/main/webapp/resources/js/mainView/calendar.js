@@ -303,8 +303,34 @@ carRegisterBtn.addEventListener("click", () => {
 		dataType: "json",
 		success: function(data) {
 			carList(data);
+			deleteCarList(data);
+			alert("차량이 추가되었습니다.");
 		}, error: function(error) {
 			alert("차량 번호를 확인해 주세요.");
+		}
+	});
+})
+
+// modal 창 차량 삭제 ajax
+const carDeleteBtn = document.querySelector(".car-delete-btn");
+carDeleteBtn.addEventListener("click", () => {
+	const deleteCar = document.querySelector("#delete-car");
+	const selectedCarnNum = deleteCar.value;
+	console.log(selectedCarnNum);
+
+	$.ajax({
+		type: "post",
+		url: "/view/deleteCar", // 시작 요청을 보낼 엔드포인트 URL
+		data: {
+			carNum: selectedCarnNum,
+		},
+		dataType: "json",
+		success: function(data) {
+			carList(data);
+			deleteCarList(data);
+			alert("차량이 삭제되었습니다.");
+		}, error: function(error) {
+			alert("삭제 실패!!!!!!!!!!!!!!!!!!!!!!!");
 		}
 	});
 })
@@ -319,7 +345,16 @@ function carList(data) {
 		$("#car_num").append(option2);
 	});
 	$('#add-car-modal').modal("hide");
-	alert("차량이 추가되었습니다.");
+}
+
+function deleteCarList(data) {
+	$("#delete-car").empty();
+	const option1 = $("<option disabled selected class='text-center'>차량을 선택하세요.</option>");
+	$("#delete-car").append(option1);
+	$.each(data, function(index, aa) {
+		const option2 = $("<option class='text-center selectedDate'></option>").text(aa.carNum);
+		$("#delete-car").append(option2);
+	});
 }
 
 // 청소구역 레이어 삭제
@@ -466,6 +501,8 @@ function updateMapLayer() {
 		'TILED': true,
 		'TIME': Date.now(),
 	};
+
+
 
 	// 새로운 URL 설정
 	const newUrl = 'http://localhost:8080/geoserver/wms'; // 새로운 서버 URL

@@ -4,19 +4,34 @@
 
 
 	<insert id="addCar" parameterType="com.gis.dto.mainView.CarDto">
-		INSERT INTO car (car_num, car_type)
+		INSERT INTO car (car_num,
+		car_type)
 		VALUES (#{car.carNum}, #{car.carType})
 	</insert>
-	
+
 	<select id="carNumList" resultType="com.gis.dto.mainView.CarDto">
-		select car_num as carNum, car_type as carType 
+		select car_num as carNum,
+		car_type as carType
 		from car;
 	</select>
-	
-	<select id="selectedDate" parameterType="String" resultType="String">
-		select distinct date 
-		from coord 
+
+	<select id="selectedDate" parameterType="String"
+		resultType="String">
+		select distinct date
+		from coord
 		where car_num = #{carNum}
 	</select>
-	
+
+	<delete id="deleteCar" parameterType="String">
+		delete
+		from car
+		where car_num = #{carNum}
+	</delete>
+
+	<delete id="deleteCarData" parameterType="String">
+		delete
+		from coord
+		where car_num = #{carNum}
+	</delete>
+
 </mapper>

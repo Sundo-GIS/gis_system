@@ -56,7 +56,6 @@ public class FileController {
         	LocalData ld = iFileService.uploadCsv(rowCount, gpsFile, noiseFile, rpmFile);
         	// 청소 유무 선 표시
         	iGisService.selectCoordData(ld);
-       
             return ResponseEntity.ok("데이터가 성공적으로 추가되었습니다.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,8 +69,7 @@ public class FileController {
         } catch(Exception e) { 
         	e.printStackTrace();
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("잘못된 요청입니다: " + e.getMessage());
-        } 
-    	
+        }	
     }
     
 	/**
