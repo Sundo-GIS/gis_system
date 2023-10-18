@@ -229,6 +229,7 @@ public class GisServiceImpl implements IGisService {
 			boolean is_done = false;
 			if(!(ld.get(i).is_done() == false && ld.get(i+1).is_done() == false)) {
 				is_done = true;
+				
 				gisDao.insertCleanLine(ld.get(i), ld.get(i+1),is_done);
 			} else {
 				gisDao.insertCleanLine(ld.get(i), ld.get(i+1),is_done);

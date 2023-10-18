@@ -37,6 +37,9 @@
                 <div class="d-flex text-center w-50 mx-auto">
                     <input type="submit" class="signup-btn rounded" value="가입하기">
                 </div>
+                <div class="d-flex text-center w-50 mx-auto">
+                    <button type="button" class="btn login-btn rounded" onclick="window.location.href='/'">로그인</button>
+                </div>
             </form>
         </div>
     </div>
