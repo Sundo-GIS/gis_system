@@ -59,7 +59,7 @@
 			<div class="live_time">
 				<input type="number" id="minute" name="time" min="0" max="59"
 					required value="0"> <label for="minute">분</label> <input
-					type="number" id="second" name="second" min="10" max="59" step="1"
+					type="number" id="second" name="second" min="0" max="59" step="1"
 					required value="10"> <label for="second">초</label>
 			</div>
 			<!-- 통계자료 버튼 -->
