@@ -330,7 +330,7 @@
 							<button type="submit" class="car-delete-btn btn"
 								style="background-color: #bd445b; color: white;">삭제</button>
 							<button type="button" class="car-cancel-btn btn"
-								style="background-color: #bd445b; color: white;">취소</button>
+								style="background-color: #00418c; color: white;">취소</button>
 						</div>
 					</div>
 				</div>
