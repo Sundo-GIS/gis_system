@@ -34,7 +34,10 @@ public class StartController {
 	
 	private final TimeScheduler timeScheduler;
 	private final IGisService gisService;
-	
+    /**
+	 * 변동 가능한 시간 주기로 스케줄러 실행 
+	 * @author 여수한
+	 */
     @ResponseBody
     @GetMapping("/start")
     public ResponseEntity<String> startScheduler(@RequestParam("time") int time) {
@@ -88,6 +91,10 @@ public class StartController {
     	gisService.insertRpmTempData(vibrationDto);
     	return  new ResponseEntity<>("Success message", HttpStatus.OK);
     }
+    /**
+	 * 스케줄러 종료
+	 * @author 여수한
+	 */
     @ResponseBody
     @GetMapping("/stop")
     public ResponseEntity<String> stopScheduler() {

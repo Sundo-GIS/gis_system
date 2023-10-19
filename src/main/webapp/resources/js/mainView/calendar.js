@@ -411,30 +411,34 @@ live_start.addEventListener("click", function() {
 	var minute = parseInt(document.getElementById("minute").value) * 60;
 	var second = parseInt(document.getElementById("second").value);
 	var time = minute + second;
-	$.ajax({
-		type: "GET",
-		url: "/gis/start",
-		data: { time: time },
-		success: function() {
-			alert(time + "초마다 차량의 위치 데이터를 갱신합니다.");
-		},
-		error: function() {
-			alert("스케줄러 시작에 실패했습니다.");
-		}
-	});
-	live_start.style.display = 'none';
-	live_stop.style.display = 'block';
-	map.addLayer(live_coord);
-	map.addLayer(live_start_point);
-	map.addLayer(live_end_point);
-	map.removeLayer(line);
-	map.removeLayer(point);
-	map.removeLayer(start_point);
-	map.removeLayer(end_point);
-	console.log("라이브 시작");
+	if (time == 0) {
+		alert("시간을 입력하세요.");
+	} else {
+		$.ajax({
+			type: "GET",
+			url: "/gis/start",
+			data: { time: time },
+			success: function() {
+				alert(time + "초마다 차량의 위치 데이터를 갱신합니다.");
+			},
+			error: function() {
+				alert("스케줄러 시작에 실패했습니다.");
+			}
+		});
+		live_start.style.display = 'none';
+		live_stop.style.display = 'block';
+		map.addLayer(live_coord);
+		map.addLayer(live_start_point);
+		map.addLayer(live_end_point);
+		map.removeLayer(line);
+		map.removeLayer(point);
+		map.removeLayer(start_point);
+		map.removeLayer(end_point);
+		console.log("라이브 시작");
 
-	livestart();
-	intervalId = setInterval(updateMapLayer, 12000);
+		livestart();
+		intervalId = setInterval(updateMapLayer, 5000);
+	}
 })
 function livestart() {
 	$.ajax({
@@ -501,9 +505,6 @@ function updateMapLayer() {
 		'TILED': true,
 		'TIME': Date.now(),
 	};
-
-
-
 	// 새로운 URL 설정
 	const newUrl = 'http://localhost:8080/geoserver/wms'; // 새로운 서버 URL
 	// live_start_point 레이어 소스 업데이트
