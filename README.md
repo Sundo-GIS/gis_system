@@ -8,7 +8,7 @@
 - 노면 청소차량 작업여부 확인과 GIS 관제시스템 구축
 - 더욱 안전하고 깨끗한 도시환경 조성을 위한 체계적인 운영과 관리지원
 <div align="center>
-  <img src="https://github.com/Sundo-GIS/gis_system/assets/140502553/19e2c6d6-87d1-4aef-bb74-d8f5dfa33f5a"/>
+  <img src="https://github.com/Sundo-GIS/gis_system/assets/140502553/19e2c6d6-87d1-4aef-bb74-d8f5dfa33f5a" />
 </div>
 
 <h1>🎉Tech Stack🎉</h1>
